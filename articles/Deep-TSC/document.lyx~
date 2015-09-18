@@ -1,0 +1,8680 @@
+#LyX 2.1 created this file. For more info see http://www.lyx.org/
+\lyxformat 474
+\begin_document
+\begin_header
+\textclass IEEEtran
+\begin_preamble
+% *** CITATION PACKAGES ***
+\usepackage{cite}
+  % declare the path(s) where your graphic files are
+  % \graphicspath{{../pdf/}{../jpeg/}}
+  % and their extensions so you won't have to specify these with
+  % every instance of \includegraphics
+  % \DeclareGraphicsExtensions{.pdf,.jpeg,.png}
+
+
+% *** SPECIALIZED PACKAGES ***
+\usepackage{algorithmic}
+\usepackage{url}
+\usepackage{colortbl}
+\usepackage{balance}
+\definecolor{gray0}{cmyk}{0,0,0,0.05}
+\definecolor{gray1}{cmyk}{0,0,0,0.1}
+\definecolor{gray2}{cmyk}{0,0,0,0.2}
+\end_preamble
+\options conference
+\use_default_options false
+\maintain_unincluded_children false
+\language english
+\language_package none
+\inputencoding auto
+\fontencoding default
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_math auto
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing double
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 0
+\use_package mathtools 1
+\use_package mhchem 0
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Towards deep learning for simultaneous time series classification and motif
+ discovery
+\end_layout
+
+\begin_layout Author
+Name(s) omitted for blind review
+\end_layout
+
+\begin_layout Abstract
+Time Series Classification (TSC) has attracted a growing interest over the
+ past years.
+ Distance-based approaches such as the 1-Nearest-Neighbor (1-NN) classifier
+ with Dynamic Time Warping (DTW) or constructing Time Series Ensembles (TSE)
+ merging several distance measures remain the leading methods for TSC.
+ However, the computational complexity of TSE makes them intractable for
+ larger real-life datasets.
+ Up to now, machine learning approaches applied to TSC have been mostly
+ unsuccessful because of their inability to handle the 
+\emph on
+curse of dimensionnality
+\emph default
+.
+ In this paper, we provide the first evidence that carefully trained models
+ of 
+\emph on
+deep learning 
+\emph default
+can successfully be applied to univariate time series classification.
+ By benchmarking an extensive set of simple models and analyzing several
+ of their properties, we show that these methods can provide a new leap
+ in both 
+\emph on
+accuracy, computational efficiency 
+\emph default
+and also 
+\emph on
+interpretability
+\emph default
+.
+ By comparing various parameter settings and network structures, we demonstrate
+ that the architecture of these networks is the most critical component
+ to their overall success.
+ We show that these approaches are the first to 
+\emph on
+significantly
+\emph default
+ and 
+\emph on
+critically 
+\emph default
+outperform all previous state-of-art methods on both the complete UCR archive
+ and an overall collection of 75 time series datasets.
+ Furthermore, these enhanced accuracies are obtained for only a small fraction
+ of the computational cost.
+ We also show that deep networks implicitly perform a simultaneous assessment
+ of time series motifs discovery, even across a large number of heterogeneous
+ datasets.
+ We hope that this paper open new avenues of research for deep learning
+ applied to time series data mining.
+\end_layout
+
+\begin_layout Section
+Introduction
+\end_layout
+
+\begin_layout Standard
+Time Series Classification (TSC) is a research stream that has witnessed
+ a flourishing interest in a wide variety of scientific topics such as
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ speaker identification 
+\begin_inset CommandInset citation
+LatexCommand citet
+key "hammami2009tree"
+
+\end_inset
+
+, optical character recognition 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "perina2009new"
+
+\end_inset
+
+ or cardiology 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "xia2012computer"
+
+\end_inset
+
+.
+
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\strikeout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+ Given sets of labeled time series belonging to different classes, the TSC
+ task aims at training a classifier in order to label new time series of
+ unknown class.
+ An early approach to TSC was presented in 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "bakshi1994representation"
+
+\end_inset
+
+ and since then, a variety of approaches have been applied to this topic
+ ranging from 1-NN 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "xi2006fast"
+
+\end_inset
+
+ to more complex statistical models such as Auto-Regressive Moving Average
+ (ARMA) or Hidden Markov Models (HMM) 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "zhong2002hmms"
+
+\end_inset
+
+.
+ In the context of TSC, it has been shown that the 1-NN classifier is extremely
+ hard to overpower 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "xi2006fast"
+
+\end_inset
+
+.
+ Several studies subsequently confirmed that the DTW-based 1-NN classification
+ remained the best performing TSC method for almost a decade 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "gudmundsson2008support,radovanovic2010hubs,ding2008querying"
+
+\end_inset
+
+.
+ This comes from the fact that time series are inherently high-dimensional
+ data.
+ Therefore, it is very difficult to devise statistical methods that can
+ avoid this 
+\emph on
+curse of dimensionality
+\emph default
+.
+ Recently, the idea of building 
+\emph on
+time series ensembles 
+\emph default
+(TSE) of classifiers based on multiple distance measures has been proposed
+ 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "lines2014time"
+
+\end_inset
+
+, where the classification decision is based on a weighted sum of these.
+ This method was shown to provide a significant improvement in accuracy
+ over the 1-NN with DTW classifier.
+\end_layout
+
+\begin_layout Standard
+Several drawbacks can be outlined from the literature in TSC research.
+ First, despite recurrent efforts in the definition of novel distance measures,
+ most seem to be converging towards pervasive performance ceilings which
+ stands under satisfactory accuracies 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "ding2008querying"
+
+\end_inset
+
+.
+ Hence, most distance measures introduced in the past years are still outperform
+ed by the 30-years old DTW approach 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "berndt1994using"
+
+\end_inset
+
+.
+ This can be related to the sub-optimality and limitations of hand-designing
+ distance measures.
+ Indeed, manually crafted distances are inherently limited, if not only
+ by the knowledge of their designer, but also in their restricted ability
+ to generalize and adapt to different problems and datasets 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "humphrey2013feature"
+
+\end_inset
+
+.
+ Furthermore, current classification systems are restricted to shallow 2-layers
+ (compare patterns and match) architectures which are inherently limited.
+ The idea of TSE provides a gain in accuracy as it adds a layer of processing
+ (merging various distances) prior to class selection.
+ This seems to confirm the general idea that depth of the classifying architectu
+re might be crucial to its success.
+ However, it requires the computation a set of (
+\emph on
+quadratic
+\emph default
+ or even 
+\emph on
+cubic
+\emph default
+) distance measures against the complete
+\emph on
+ 
+\emph default
+training dataset, which makes it impracticable for most real-life applications
+ both in terms of computational complexity and memory requirements.
+\end_layout
+
+\begin_layout Standard
+Recently, the field of 
+\emph on
+deep learning 
+\emph default
+
+\begin_inset CommandInset citation
+LatexCommand cite
+key "bengio2009learning"
+
+\end_inset
+
+ has witnessed a flourishing interest amongst the machine learning community.
+ Its goal is to train connexionist architectures analoguous to the well-known
+ neural networks.
+ However, the typical feed-forward perceptrons are usually bound to small
+ depth (number of layers) because of the 
+\emph on
+gradient diffusion 
+\emph default
+problem that lead to inefficient learning in deeper networks.
+ The recent breakthrough of 
+\emph on
+greedy layer-wise pre-training
+\emph default
+ 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "bengio2007greedy"
+
+\end_inset
+
+ allows to train each layer of the network independently and in an unsupervised
+ manner.
+ This leads to various types of architectures such as 
+\emph on
+deep belief networks 
+\emph default
+that can display an extensive number of layers 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "hinton2006fast"
+
+\end_inset
+
+, similar to those found in the brain for perceptual task such as visual
+ or auditory processing.
+ This approach appears as a valid candidate to learn AI models that could
+ bypass the 
+\emph on
+curse of dimensionnality
+\emph default
+, but also to learn automatically higher-level abstractions fit to various
+ problems of time series data mining as exhibited in Figure
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Deep-learning-TSC"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement h
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename graphics/TS_Deep_Learning.pdf
+	scale 35
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Deep-learning-TSC"
+
+\end_inset
+
+The adequacy of 
+\emph on
+deep learning
+\emph default
+ models to perform simultaneous time series classification and motif discovery.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+In this paper, we provide the first evidence that ML approaches through
+ deep learning can provide a new leap in time series classification and
+ outperform existing approaches both in 
+\emph on
+accuracy
+\emph default
+, 
+\emph on
+computational efficiency 
+\emph default
+and 
+\emph on
+interpretability
+\emph default
+.
+ Our goal was to rely solely on the simplest deep learning models and show
+ that by carefully investigating and adapting their architecture, properties
+ and parameters to the intrinsic caracteristics of time series, we could
+ obtain extremely powerful time series data mining methods.
+ We investigated the major deep learning algorithms 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "bengio2009learning"
+
+\end_inset
+
+ and compared the probabilistic and computational view over these connexionnist
+ architectures.
+ For all of the benchmarked models, we analyzed different variants, types
+ of computation units and influence of various learning parameters on the
+ success of these approaches.
+ Finally, we extensively studied the impact of various architecture shapes
+ (connection patterns) and depth of the networks.
+ In this, we show that the architecture and its shape are of paramount importanc
+e to the success of learning.
+ 
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+(?? MAYBE TRASH IF CLUSTER TIME UNSUFFICIENT ??) 
+\end_layout
+
+\begin_layout Standard
+We also introduce two mecanisms specifically targeted at time series processing.
+ First, the 
+\emph on
+manifold densification 
+\emph default
+aims at balancing the number of examples from each dataset in the pre-training
+ step while accounting for the notion of temporal warping.
+ The idea is that this densification avoids the algorithm to focus on only
+ the most represented sets.
+ 
+\series bold
++ Warp in DAE
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+(?? MAYBE TRASH IF CLUSTER TIME UNSUFFICIENT ??) 
+\end_layout
+
+\begin_layout Standard
+We show that carefully selected deep learning approaches provide a strongly
+ better accuracy and only for a small fraction of the computational complexity
+ at testing time.
+ We further show that these classifiers outperform all competing approaches
+ and state-of-art results 
+\emph on
+significantly 
+\emph default
+and 
+\emph on
+critically 
+\emph default
+on the complete 46 UCR time series datasets 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "keoghUCR"
+
+\end_inset
+
+ and the additional 29 datasets used for evaluating time series ensembles
+ 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "lines2014time"
+
+\end_inset
+
+.
+ Furthermore, relying on deep networks provides several paramount advantages
+ over existing approaches.
+ First, regarding computational complexity, the computations required for
+ classification consist in a single forward pass through the network.
+ Therefore, it is independent of the size of the training set and can also
+ easily be applied in real-time or streaming situations.
+ Finally, the computational units in deep learning provide an extremely
+ more significant interpretability by providing a direct access to automatically
+ learned time series motifs.
+ Hence, we provide evidence that this approach can simultaneously lead to
+ powerful time series motif discovery mechanisms without any additionnal
+ computations.
+ By feeding various unifromly warped versions of the series, we can simultaneous
+ly discover (through learning) and detect (through activations) of the motifs
+ with obtained correlations implied by each computation unit.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+(??? HERE DEPENDS ON CLUSTER RESULTS ???)
+\end_layout
+
+\begin_layout Standard
+* We show that (? archi > parameters ?), random (? Maybe not ?) and DAE
+ vs.
+ RBM
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+(??? HERE DEPENDS ON CLUSTER RESULTS ???)
+\end_layout
+
+\begin_layout Standard
+The remainder of this paper is organized as follows.
+ We start by outlining previous work and necessary background in time series
+ classification and deep learning (Section
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:State-of-arts"
+
+\end_inset
+
+).
+ Then, we detail our evaluation methodology and corresponding measures of
+ statistical significance (Section
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:Evaluation"
+
+\end_inset
+
+).
+ We provide an in-depth evaluation of our results over all datasets (Section
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:Results"
+
+\end_inset
+
+) and separate the analysis of the results by first comparing various models,
+ architectures and parameters (Section
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sub:Deep-learning-benchmarking"
+
+\end_inset
+
+), then comparing our results to the state-of-art methods (Section
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sub:Global-scale"
+
+\end_inset
+
+) and also discussing their differences in complexity and interpretability.
+ Then, we provide our results on time series motif mining based on the same
+ approach (Section
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sub:Motif-discovery"
+
+\end_inset
+
+).
+ Finally, we provide our conclusions and directions of future work (Section
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:Conclusion"
+
+\end_inset
+
+).
+\end_layout
+
+\begin_layout Section
+State of the art
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:State-of-arts"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+A time series 
+\begin_inset Formula $T$
+\end_inset
+
+ is a collection of values obtained from sequential measurements over time.
+ It can be defined as an ordered sequence of 
+\begin_inset Formula $n$
+\end_inset
+
+ real-valued variables
+\begin_inset Formula 
+\[
+T=\left(t_{1},\ldots,t_{n}\right),t_{i}\in\mathbb{R}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+A time series is often related to a process observed at uniformly spaced
+ 
+\emph on
+time instants
+\emph default
+ at a given 
+\emph on
+sampling rate
+\emph default
+.
+ The critical aspect for TSC lies in defining an adequate 
+\emph on
+dissimilarity measure
+\emph default
+ 
+\begin_inset Formula $\mathcal{D}\left(S,Q\right)$
+\end_inset
+
+ between series.
+\end_layout
+
+\begin_layout Definition
+A 
+\emph on
+dissimilarity measure
+\emph default
+ 
+\begin_inset Formula $\mathcal{D}\left(S,Q\right)$
+\end_inset
+
+ between series 
+\begin_inset Formula $S$
+\end_inset
+
+ and 
+\begin_inset Formula $Q$
+\end_inset
+
+ is a function taking two series as inputs and returning a non-negative
+ real value.
+ If the measure also provides the properties of 
+\emph on
+symmetry
+\emph default
+ (
+\begin_inset Formula $\mathcal{D}\left(S,Q\right)=\mathcal{D}\left(S,Q\right)$
+\end_inset
+
+)
+\emph on
+ 
+\emph default
+and
+\emph on
+ subadditivity
+\emph default
+ 
+\begin_inset Formula $\left(\mathcal{D}\left(Q,T\right)\leq\mathcal{D}\left(Q,S\right)+\mathcal{D}\left(S,T\right)\right)$
+\end_inset
+
+, it is said to be a 
+\emph on
+metric
+\emph default
+.
+ 
+\end_layout
+
+\begin_layout Standard
+An ideal time series distance measure should be robust to distortions such
+ as amplitude, scaling, warping, noise and outliers.
+ Hence, a similarity measure should be consistent with human intuition and
+ provide recognition of perceptually similar objects, even though they are
+ not mathematically identical.
+ Many authors have reported various transformation invariances required
+ for similarity measures.
+ We recently proposed four properties expressing robustness for 
+\emph on
+scaling
+\emph default
+ (amplitude modifications), 
+\emph on
+warping
+\emph default
+ (temporal modifications), 
+\emph on
+noise
+\emph default
+ and 
+\emph on
+outliers
+\emph default
+.
+ We direct interested readers to the formal definition of these robustness
+ properties 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "esling2012time"
+
+\end_inset
+
+.
+ The Euclidean distance is unable to reach such a level of abstraction and
+ numerous authors have pointed out the pitfalls of using 
+\begin_inset Formula $\ell^{p}$
+\end_inset
+
+ distances 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "ding2008querying,keogh2003need"
+
+\end_inset
+
+.
+ 
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+Hence a wide variety of distance measures have been developed deriving from
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\strikeout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+ Dynamic Time Warping (DTW) 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "berndt1994using"
+
+\end_inset
+
+ such as Weighted DTW (WDTW) 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "jeong2011weighted"
+
+\end_inset
+
+, Optimal Subsequence Bijection (OSB) 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "latecki2007optimal"
+
+\end_inset
+
+ or from the edit (Levenshtein) distance such as the Longest Common SubSequence
+ (LCSS) 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "das1997finding"
+
+\end_inset
+
+, Edit with Real Penalty (ERP) 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "chen2004marriage"
+
+\end_inset
+
+.
+ Other types of time series distances such as a Fast Fourier Transform (FFT),
+ AutoCorrelation Function (ACF) 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "bagnall2012transformation"
+
+\end_inset
+
+ and Compression-based Dissimilarity Measure (CDM) 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "keogh2004towards"
+
+\end_inset
+
+ have also been proposed for TSC.
+ As a complete review of time series distance measures is outside the scope
+ of this article, we direct interested readers to 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "ding2008querying,esling2012time"
+
+\end_inset
+
+ for more information.
+\end_layout
+
+\begin_layout Subsection
+Time series classification
+\end_layout
+
+\begin_layout Standard
+The goal of TSC is to assign labels to a set of time series of unknown classes,
+ given a training set of series with known classes.
+ The idea is first to learn what are the distinctive 
+\emph on
+features
+\emph default
+ that distinguish classes apart from each other.
+ Then, when an unlabeled set is input to the system, it can try to automatically
+ assign each series to one class from the set of predefined classes.
+\end_layout
+
+\begin_layout Standard
+An early approach to time series classification was proposed in 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "bakshi1994representation"
+
+\end_inset
+
+.
+ However, it was based on simple trends whose results are therefore hard
+ to apply to more complex data.
+ A piecewise representation was later proposed in 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "keogh1998enhanced"
+
+\end_inset
+
+ which provides robustness to noise but also allows relevance feedback.
+ To overcome the obstacle of high dimensionality, Jeng and Huang 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "jeng2008time"
+
+\end_inset
+
+ used Singular Value Decomposition to select essential frequencies.
+ However, it implies higher computational costs.
+ Several other techniques have been introduced, such as Hidden Markov Models
+ (HMM) 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "zhong2002hmms"
+
+\end_inset
+
+, which can be enhanced by using discriminative HMMs in order to maximize
+ inter-classes differences 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "lin2008alignment"
+
+\end_inset
+
+.
+ Several machine-learning techniques have also been introduced such as Neural
+ Networks or Bayesian classification 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "bagnall2012transformation"
+
+\end_inset
+
+.
+ However, all of these proposals have been repeatedly shown to be overpowered
+ by a simple 1NN-DTW classifier 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "xi2006fast"
+
+\end_inset
+
+ in terms of accuracy (while computing speed is significantly affected by
+ repeated DTW computations).
+ Recently, the idea of building time series 
+\emph on
+ensembles 
+\emph default
+has been proposed 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "lines2014time"
+
+\end_inset
+
+.
+ This approach computes a whole set of distance measures and performs the
+ classification decision based on a weighted sum of these measures.
+ This method was shown to outperform previous state-of-art approaches and
+ will be used as a baseline for comparison in our experiments.
+ However, it should be noted that this method implies a very heavy computational
+ cost, as it requires to compute several (quadratic or even cubic) distance
+ measures against the 
+\emph on
+complete 
+\emph default
+training dataset (which might also be kept in live memory).
+ Therefore, even though this approach provides an increased classification
+ accuracy, it appears impracticable for most real-life applications.
+\end_layout
+
+\begin_layout Standard
+As listed in the previous section, a variety of distance measures have been
+ devised but all seem to converge towards performance ceilings.
+ The only advance in TSC accuracy comes from merging several distance measures
+ which is computationally inefficient.
+ This points out to a limitation in hand-crafted distance measures.
+ Finally, the apparent inadequacy of machine learning approaches for TSC
+ problems stems from their inability to handle the curse of dimensionality.
+ All these problems are directly addressed by the recent advances in deep
+ learning, which is yet to be applied adequatly to univariate TSC.
+\end_layout
+
+\begin_layout Subsection
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:Deep learning"
+
+\end_inset
+
+Deep learning
+\end_layout
+
+\begin_layout Standard
+The aim of deep learning is to construct neural networks (similar to the
+ well-known multi-layer perceptron) but with a deeper architecture (higher
+ number of layers).
+ The general idea is that with multiple hidden layers, each provides increasingl
+y higher-level and complex features over the input by uncovering correlations
+ through non-linear transformations of the previous layer.
+ Although this idea of depth was long-going in the neural network community,
+ training seemed infeasible because of the gradient diffusion problem.
+ However, the recent breakthrough of
+\emph on
+ unsupervised layer-wise pre-training
+\emph default
+ 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "bengio2007greedy"
+
+\end_inset
+
+ allows to learn each layer at a time, by training each layer to minimize
+ the reconstruction of the hidden representation output by the previous
+ layer.
+ Furthermore, this also provides a way to train the networks in a purely
+ unsupervised manner.
+\end_layout
+
+\begin_layout Standard
+Overall, two interpretations can be given to these connexionnist architectures.
+ First, the probabilistic view lead to models driven by probabilistic graphical
+ models, interpreting the hidden units as latent random variables.
+ Second, the computational view following neural networks lead to model
+ constructed through computation graphs, where hidden units are considered
+ as computational nodes.
+ These two views are not entirely dichotomic as their similarities seem
+ to outweigh their differences and can in fact become almost equivalent
+ under certain assumptions 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "vincent2011connection"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsubsection
+Auto-encoders
+\end_layout
+
+\begin_layout Standard
+The Auto-Encoder (AE) was first introduced
+\series bold
+ 
+\series default
+as a dimensionnality reduction technique 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "rumelhart1988learning"
+
+\end_inset
+
+, where an encoder provides a reduced (compressed) representation of the
+ input, while a decoder allows to reconstruct the orginal input from this
+ encoded representation.
+ The main idea is that if you are able to deconstruct an object in fewer
+ components and then reconstruct it, you are grasping some aspects of its
+ inner structure.
+ Hence, it tries to exploit statistical correlations inside the data to
+ find a higher-level representation by decomposing and then reconstructing
+ the input, as depicted in Figure
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:An-auto-encoder-is"
+
+\end_inset
+
+.
+ As opposed to their historical dimensionality-reduction architectures,
+ current auto-encoders are instantiated as 
+\emph on
+over-complete
+\emph default
+ (with an encoder layer of higher dimensionality than the input), in order
+ to learn increasingly higher-level abstractions.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename graphics/Auto-encoders.pdf
+	scale 40
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:An-auto-encoder-is"
+
+\end_inset
+
+An auto-encoder is composed of an encoding and a decoding layer.
+ The aim is to find a way to reconstruct the input from a reduced representation
+, thus exploiting statistical correlations inside the input.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Hence, the goal is to learn an encoding function 
+\begin_inset Formula $e$
+\end_inset
+
+ and a decoding function 
+\begin_inset Formula $d$
+\end_inset
+
+ such that 
+\begin_inset Formula ${\textstyle d\left(e\left(\mathbf{x}\right)\right)=\tilde{\mathbf{x}}\approx\mathbf{x}}$
+\end_inset
+
+, therefore, being able to reconstruct an 
+\begin_inset Formula ${\textstyle \tilde{\mathbf{x}}}$
+\end_inset
+
+ similar to the input 
+\begin_inset Formula $\mathbf{{\textstyle x}}$
+\end_inset
+
+ via a hidden representation.
+ The encoding function 
+\begin_inset Formula $e:\mathbb{R}^{d_{x}}\rightarrow\mathbb{R}^{d_{h}}$
+\end_inset
+
+ maps an input 
+\begin_inset Formula $\mathbf{x}\in\mathbb{R}^{d_{x}}$
+\end_inset
+
+ to an hidden representation 
+\begin_inset Formula $\mathbf{h}_{\mathbf{x}}\in\mathbb{R}^{d_{h}}$
+\end_inset
+
+ by producing a deterministic mapping 
+\begin_inset Formula 
+\[
+\mathbf{h}_{\mathbf{x}}=e\left(\mathbf{x}\right)=s_{e}\left(\mathbf{W_{e}}\mathbf{x}+\mathbf{b}_{e}\right)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+where 
+\begin_inset Formula $s_{e}$
+\end_inset
+
+ is a nonlinear activation function (usually the 
+\emph on
+sigmoid 
+\emph default
+function), 
+\begin_inset Formula $\mathbf{W}_{e}$
+\end_inset
+
+ is a weight matrix , and 
+\begin_inset Formula $\mathbf{b}_{e}$
+\end_inset
+
+ is a bias vector.
+ The decoding function 
+\begin_inset Formula $d:\mathbb{R}^{d_{h}}\rightarrow\mathbb{R}^{d_{x}}$
+\end_inset
+
+ then maps back this encoded representation 
+\begin_inset Formula $\mathbf{h_{x}}$
+\end_inset
+
+ into a reconstruction 
+\begin_inset Formula $\mathbf{y}$
+\end_inset
+
+ of the same dimensionnality as 
+\begin_inset Formula $\mathbf{x}$
+\end_inset
+
+ 
+\begin_inset Formula 
+\[
+\mathbf{y}=d\left(\mathbf{h_{x}}\right)=s_{d}\left(\mathbf{W}_{d}\mathbf{h_{x}}+\mathbf{b}_{d}\right)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+where 
+\begin_inset Formula $s_{d}$
+\end_inset
+
+ is the activation function of the decoder.
+ Hence, training an auto-encoder consists in finding the set of parameters
+ 
+\begin_inset Formula $\theta$
+\end_inset
+
+ that minimizes the reconstruction error of a training dataset 
+\begin_inset Formula $\mathcal{D}_{n}$
+\end_inset
+
+ 
+\begin_inset Formula 
+\[
+\mathcal{J}_{AE}\left(\theta\right)=\sum_{\mathbf{x}\in\mathcal{D}_{n}}\mathcal{L}\left(\mathbf{x},d\left(e\left(\mathbf{x}\right)\right)\right)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+where the reconstruction error function 
+\begin_inset Formula $\mathcal{L}$
+\end_inset
+
+ is usually the squared error 
+\begin_inset Formula $\mathcal{L}(x,y)=\left\Vert x-y\right\Vert ^{2}$
+\end_inset
+
+ or the cross-entropy loss 
+\begin_inset Formula $\mathcal{L}(x,y)=−\sum_{i=1}^{d_{x}}x_{i}log\left(y_{i}\right)+\left(1-x_{i}\right)log\left(1-y_{i}\right)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Unfortunately, based on the objective function solely minimizing the reconstruct
+ion error, nothing prevents an over-complete auto-encoder with an encoding
+ layer of the same (or higher) dimensionnality as the input to simply learn
+ the identity function 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "bengio2007greedy"
+
+\end_inset
+
+.
+ Therefore, various regularization techniques have been introduced to skew
+ the learning towards useful representation
+\emph on
+.
+\end_layout
+
+\begin_layout Paragraph
+Sparse auto-encoders
+\end_layout
+
+\begin_layout Standard
+One solution to avoid the identity function degeneracy is to add a 
+\emph on
+sparsity
+\emph default
+ constraint to the cost function 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "ranzato2007sparse,lee2008sparse"
+
+\end_inset
+
+.
+ The goal is to ensure that hidden units are mostly inactive for a large
+ portion of the dataset (ie.
+ features learned are 
+\emph on
+specific
+\emph default
+).
+ By computing the average activation of each hidden unit 
+\begin_inset Formula $i$
+\end_inset
+
+ across the dataset 
+\begin_inset Formula 
+\begin{align*}
+\hat{\rho}_{i}=\frac{1}{n}\sum_{j=1}^{n}\left[a_{i}(\mathbf{x}_{j})\right]
+\end{align*}
+
+\end_inset
+
+we can add a penalty term to the objective that penalizes the unit which
+ mean activation 
+\begin_inset Formula ${\textstyle \hat{\rho}_{i}}$
+\end_inset
+
+ deviates from a 
+\emph on
+target
+\emph default
+ sparsity 
+\begin_inset Formula ${\textstyle \rho}$
+\end_inset
+
+.
+ This is achieved by minimizing the Kullback-Leibler (KL) divergence between
+ all 
+\begin_inset Formula ${\textstyle \hat{\rho}_{i}}$
+\end_inset
+
+ and the target 
+\begin_inset Formula $\rho$
+\end_inset
+
+.
+ Therefore, the complete cost function is defined by the sum of the normal
+ cost function and this sparsity constraint
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\mathcal{J}_{{\rm sparse}}\left(\theta\right)=\mathcal{J}\left(\theta\right)+\beta\sum_{i}{\rm KL}\left(\rho,\hat{\rho}_{i}\right)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+where 
+\begin_inset Formula $\beta$
+\end_inset
+
+ controls the influence of the sparsity on the global cost.
+ Overcomplete sparse AEs can be seen as an attempt to learn a series of
+ traditionnal AE for different types of training data, while sharing some
+ of their hidden structures.
+\end_layout
+
+\begin_layout Paragraph
+Denoising auto-encoders
+\end_layout
+
+\begin_layout Standard
+Another successful way to regularize AEs is the concept of Denoising Auto-Encode
+rs (DAE) 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "vincent2010stacked"
+
+\end_inset
+
+.
+ Intuitively, the idea is to corrupt the input 
+\begin_inset Formula $\mathbf{x}$
+\end_inset
+
+ to obtain
+\series bold
+ 
+\series default
+a 
+\begin_inset Quotes eld
+\end_inset
+
+noisy
+\begin_inset Quotes erd
+\end_inset
+
+ version 
+\begin_inset Formula $\tilde{\mathbf{x}}$
+\end_inset
+
+ that is passed to the AE, but the goal of the network is to reconstruct
+ the original (clean) version of 
+\begin_inset Formula $\mathbf{x}$
+\end_inset
+
+ (producing an overall denoising process).
+ Training the autoencoder to reconstruct a clean input from a corrupted
+ version of itself forces the hidden layer to uncover robust features but
+ also inherently prevents it from learning the identity function.
+ Hence, the objective function for the DAE is defined as
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\mathcal{J}_{DAE}\left(\theta\right)=\sum_{\mathbf{x}\in\mathcal{D}_{n}}\mathbb{E}_{\tilde{\mathbf{x}}\sim q\left(\mathbf{x}\mid\tilde{\mathbf{x}}\right)}\left[\mathcal{L}\left(\mathbf{x},d\left(e\left(\tilde{\mathbf{x}}\right)\right)\right)\right]
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+where the corrupted versions 
+\begin_inset Formula $\tilde{\mathbf{x}}$
+\end_inset
+
+ are obtained by applying a stochastic function 
+\begin_inset Formula $q\left(\tilde{\mathbf{x}}\mid\mathbf{x}\right)$
+\end_inset
+
+ to the examples 
+\begin_inset Formula $\mathbf{x}$
+\end_inset
+
+.
+ The corruption processes are typically additive Gaussian noise and binary
+ masking (a randomly selected subset of input components are set to 0).
+ Variable amounts of corruption (variance of the Gaussian noise or number
+ of dropped components) can be considered to control the degree of regularizatio
+n.
+\end_layout
+
+\begin_layout Paragraph
+Contractive auto-encoders
+\end_layout
+
+\begin_layout Standard
+Another form of regularization called 
+\emph on
+contractive 
+\emph default
+
+\begin_inset CommandInset citation
+LatexCommand cite
+key "rifai2011contractive"
+
+\end_inset
+
+ have been proposed.
+ The main idea is to add a penalty based on the derivative of the representation
+ with respect to the input.
+ This encourages the learned features to have low variations in the directions
+ found in the data.
+ This penalty term can be computed through the Frobenius norm of the Jacobian
+ matrix 
+\begin_inset Formula $J_{e}\left(\mathbf{x}\right)$
+\end_inset
+
+ of the activations with respect to the input.
+ Formally, given an input 
+\begin_inset Formula $\mathbf{x}\in\mathbb{R}^{d_{x}}$
+\end_inset
+
+ mapped to a hidden representation 
+\begin_inset Formula $\mathbf{h}\in\mathbb{R}^{d_{h}}$
+\end_inset
+
+, the contractive penalty term is given by
+\begin_inset Formula 
+\[
+\left\Vert J_{e}\left(\mathbf{x}\right)\right\Vert _{F}^{2}=\sum_{ij}\left(\frac{\partial h_{j}\left(\mathbf{x}\right)}{\partial x_{i}}\right)^{2}=\sum_{i=1}^{d_{h}}\left(h_{i}\left(1-h_{i}\right)\right)^{2}\sum_{j=1}^{d_{x}}W_{ij}^{2}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+While DAEs (indirectly) encourages the robustness of the reconstruction
+ through corruption, CAEs tries to analytically encourage the robustness
+ of the representation itself by penalizing its variations in the neighborhood
+ of training points.
+ One problem with the penalty introduced by CAE is that it might be limited
+ to only 
+\emph on
+infinitesimal 
+\emph default
+variations in the input (because of the use of the first-order derivative).
+ An extension to all higher-order derivatives has been proposed 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "rifai2011higher"
+
+\end_inset
+
+ leading to the CAE+H model.
+\end_layout
+
+\begin_layout Subsubsection
+Restricted Boltzmann Machine
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename graphics/DBM_train.pdf
+	scale 35
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:A-Restricted-Boltzmann"
+
+\end_inset
+
+A Restricted Boltzmann Machine (RBM) is composed of a visible and a hidden
+ layer, which are densely connected by undirected and weighted links.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+A Restricted Boltzmann Machine (RBM) is a particular type of Markov random
+ field composed of one layer of binary stochastic hidden units and another
+ layer of stochastic visible units 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "hinton2006fast"
+
+\end_inset
+
+.
+ Visible and hidden units are densely connected by undirected weighted links
+ as depicted in Figure
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:A-Restricted-Boltzmann"
+
+\end_inset
+
+.
+ The joint probability distribution 
+\begin_inset Formula $p\left(v,h;\theta\right)$
+\end_inset
+
+ of the visible units 
+\begin_inset Formula $v$
+\end_inset
+
+ and hidden units 
+\begin_inset Formula $h$
+\end_inset
+
+, given the model parameters 
+\begin_inset Formula $\theta$
+\end_inset
+
+ is defined through an energy function 
+\begin_inset Formula $E\left(v,h;\theta\right)$
+\end_inset
+
+ such that
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+p\left(v,h;\theta\right)=\frac{e^{-E\left(v,h;\theta\right)}}{Z}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+where 
+\begin_inset Formula $Z=\sum_{v}\sum_{h}e^{-E\left(v,h;\theta\right)}$
+\end_inset
+
+ is a normalization factor called the 
+\emph on
+partition function.
+
+\emph default
+ In the case where all units are considered binary variables, the energy
+ function of 
+\begin_inset Formula $I$
+\end_inset
+
+ visible and 
+\begin_inset Formula $J$
+\end_inset
+
+ hidden units is defined as
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+E\left(v,h;\theta\right)=\sum_{i=1}^{I}\sum_{j=1}^{J}w_{ij}v_{i}h_{j}-\sum_{i=1}^{I}b_{i}v_{i}-\sum_{j=1}^{J}a_{j}h_{j}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+where 
+\begin_inset Formula $w_{ij}$
+\end_inset
+
+ is the symmetric weight between visible unit 
+\begin_inset Formula $v_{i}$
+\end_inset
+
+ and hidden unit 
+\begin_inset Formula $h_{j}$
+\end_inset
+
+, and 
+\begin_inset Formula $b_{i}$
+\end_inset
+
+, and 
+\begin_inset Formula $a_{j}$
+\end_inset
+
+ are their biases.
+ Similarly to the AE, the conditional probabilities that an hidden or visible
+ unit is active is given by the sigmoid applied to the sum of its weighted
+ input.
+ The probability that the network assigns to an input vector can be raised
+ by lowering its energy (by adjusting the weights and biases of various
+ units).
+ Hence, the goal of learning is that the network places high probabilities
+ to the vectors that are part of the input dataset and low probabilities
+ to the vectors that are not.
+ The gradient of the log-likelihood of an input vector with respect to a
+ weight 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "hinton2006fast"
+
+\end_inset
+
+ is surprisingly simple.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\frac{\partial\mbox{log }p\left(v;\theta\right)}{\partial w_{ij}}=\mathbb{E}_{data}\left[v_{i}h_{j}\right]-\mathbb{E}_{model}\left[v_{i}h_{j}\right]
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+where 
+\begin_inset Formula $\mathbb{E}_{data}\left[v_{i}h_{j}\right]$
+\end_inset
+
+ denotes the expectation under the distribution of the training data and
+ 
+\begin_inset Formula $\mathbb{E}_{model}\left[v_{i}h_{j}\right]$
+\end_inset
+
+ is that same expectation under the distribution defined by the model.
+ Unfortunately, the expectation under the distribution of the model 
+\begin_inset Formula $\mathbb{E}_{model}\left[v_{i}h_{j}\right]$
+\end_inset
+
+ is intractable.
+ Hinton et al.
+ 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "hinton2006fast"
+
+\end_inset
+
+ proposed a Contrastive Divergence (CD) approximation to the gradient, where
+ 
+\begin_inset Formula $\mathbb{E}_{model}\left[v_{i}h_{j}\right]$
+\end_inset
+
+ is replaced by running a Gibbs chain initialized at the data.
+ Interestingly, it appears that a single full step of the Gibbs chain is
+ sufficient to obtain satisfactory results.
+\end_layout
+
+\begin_layout Subsubsection
+Multi-layer stacking and perceptrons
+\end_layout
+
+\begin_layout Standard
+The DAE and RBM models are the building blocks of deep networks in which
+ a single layer of hidden activations provides the set of learned features.
+ However, the goal of deep networks is to learn a structured hierarchy,
+ based on the hypothesis that higher-level concepts can be formed by grouping
+ lower-level ones.
+ Hence, each layer forms increasingly complex features by exploiting the
+ statistical regularities and learning how to optimally group lower-level
+ concepts formed at the previous layer.
+\end_layout
+
+\begin_layout Standard
+Hence, we could construct a deep network by stacking these single-layer
+ models and feeding the hidden representation of a specific layer as input
+ to its following layer.
+ In that case, the stacked layers can be interpreted as a traditional 
+\emph on
+Multi-Layer Perceptron
+\emph default
+ (MLP).
+ After all layers have been trained iteratively, the full network is trained
+ through a 
+\emph on
+fine-tuning
+\emph default
+ step, usually by minimizing the error rate of a supervised task.
+ In that case, a classification layer can be added on top of the network
+ in order to perform back-propagation on all layers of the network (which
+ makes it exactly similar to the learning procedure of a traditional MLP).
+\end_layout
+
+\begin_layout Subsubsection
+Stacked auto-encoders
+\end_layout
+
+\begin_layout Standard
+A stacked autoencoder is formed from a set of 
+\begin_inset Formula $k$
+\end_inset
+
+ autoencoders, each parametrized by its own weight matrix 
+\begin_inset Formula $\mathbf{W}_{e}^{(l)}$
+\end_inset
+
+ and bias vector 
+\begin_inset Formula $b_{e}^{(l)}$
+\end_inset
+
+.
+ The output (activation) of each layer is produced by performing a forward
+ pass of the encoding step from one layer to the next
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray*}
+a^{(l)} & = & \phi\left(\mathbf{W}_{e}^{(l-1)}\mathbf{a}^{(l-1)}+b_{e}^{(l-1)}\right)
+\end{eqnarray*}
+
+\end_inset
+
+by considering that the first layer receives the output 
+\begin_inset Formula $\mathbf{a}^{(0)}=\mathbf{x}$
+\end_inset
+
+.
+ The stacked auto-encoder ultimately produces a representation 
+\begin_inset Formula $a^{(n)}$
+\end_inset
+
+ (activations of the deepest hidden units), which can be seen as the highest-ord
+er features extracted from the input.
+ These can be used for classification problems which allow to perform a
+ finetuning of this deep model.
+ The error gradients from the supervised classification can then be backpropagat
+ed into all the encoding layers together.
+ This global network can thus be trained altogether by improving upon the
+ weights of all layers at each iteration.
+\end_layout
+
+\begin_layout Subsubsection
+Deep Belief Network
+\end_layout
+
+\begin_layout Standard
+Deep Belief Networks (DBNs) 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "hinton2006fast"
+
+\end_inset
+
+ are a class generative models formed by multiple layers of stochastic computati
+on units.
+ The lowest layers are connected with directed top-down connections while
+ the two upper layers are created with a dense array of undirected symmetric
+ connections, which form an associative memory.
+ Hence a 
+\begin_inset Formula $l$
+\end_inset
+
+-layers DBN models the joint distribution between all hidden layers 
+\begin_inset Formula $\mathbf{h}^{k}$
+\end_inset
+
+ and the observed data 
+\begin_inset Formula $\mathbf{x}$
+\end_inset
+
+
+\begin_inset Formula 
+\[
+P\left(\mathbf{x},\mathbf{h}^{1},\ldots,\mathbf{h}^{k}\right)=\left(\prod_{k=0}^{(l-2)}P\left(\mathbf{h}^{k}\mid\mathbf{h}^{k+1}\right)\right)P\left(\mathbf{h}^{l-1},\mathbf{h}^{l}\right)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+with 
+\begin_inset Formula $\mathbf{h}^{0}=\mathbf{x}$
+\end_inset
+
+.
+ Hence, stacking layers of RBMs from the lowest (
+\emph on
+visible 
+\emph default
+data) to the upper (
+\emph on
+associative memory
+\emph default
+) layer can provide a DBN architecture.
+ In that case, we consider that the activation probabilities of the hidden
+ layer of one RBM becomes the visible data for the next RBM layer.
+ It has been shown that this stacking procedure improves the variational
+ lower bound of the data log-likelihood 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "hinton2006fast"
+
+\end_inset
+
+.
+ This means that learning a DBN with this procedure provides a close approximati
+on to the true maximum likelihood learning.
+\end_layout
+
+\begin_layout Subsubsection
+Deep Boltzmann Machine
+\end_layout
+
+\begin_layout Standard
+The joint training of layers in a DBN is problematic as its inference problem
+ is often intractable.
+ The Deep Boltzmann Machine (DBM) has been proposed to allow a joint training
+ of all layers in a purely unsupervised manner 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "salakhutdinov2009deep"
+
+\end_inset
+
+.
+ Similarly to the RBM, a DBM is a specific type of Boltzmann machine with
+ layered hidden units.
+ However, the DBM is composed of multiple layers, in which conditionnal
+ independence is imposed between odd-numbered layers and even-numbered layers.
+ Unlike DBN, their inference procedure can incorporate top-down feedback,
+ which allows performing a better propagation of uncertainty.
+\end_layout
+
+\begin_layout Standard
+A 2-layer DBM (with one visible and two hidden layers 
+\begin_inset Formula $\left\{ \mathbf{v},\mathbf{h}^{1},\mathbf{h}^{2}\right\} $
+\end_inset
+
+) can be defined by specifying its energy function
+\begin_inset Formula 
+\[
+E\left(\mathbf{v},\mathbf{h}^{1},\mathbf{h}^{2};\theta\right)=-\mathbf{v}^{T}\mathbf{W}^{1}\mathbf{h}^{1}-\mathbf{h}^{1T}\mathbf{W}^{2}\mathbf{h}^{2}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The probability assigned to a visible vector is given by
+\begin_inset Formula 
+\[
+p\left(\mathbf{v},\theta\right)=\frac{1}{Z}\sum_{\mathbf{h}^{1},\mathbf{h}^{2}}\mbox{exp}\left(-E\left(\mathbf{v},\mathbf{h}^{1},\mathbf{h}^{2};\theta\right)\right)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Even though the conditional distributions over the visible and last hidden
+ units are defined similarly to the RBM, the distribution over the 
+\begin_inset Quotes eld
+\end_inset
+
+middle
+\begin_inset Quotes erd
+\end_inset
+
+ layer of hidden units is defined as
+\begin_inset Formula 
+\[
+p\left(h_{j}^{1}\mid\mathbf{v},\mathbf{h}^{2}\right)=\sigma\left(\sum_{i}W_{ij}^{1}v_{i}+\sum_{m}W_{jm}^{2}h_{j}^{2}\right)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Hence, the major problem with DBM is that these interactions between hidden
+ units make the posterior of hidden units untractable.
+ To solve this problem, 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "salakhutdinov2009deep"
+
+\end_inset
+
+ propose to rely on a mean-field approximation (similar to the ideas of
+ 
+\emph on
+variational learning
+\emph default
+), where the posterior distribution 
+\begin_inset Formula $P\left(\mathbf{h}^{1},\mathbf{h}^{2}\mid\mathbf{v}\right)$
+\end_inset
+
+ is approximated with a factored distribution 
+\begin_inset Formula $Q\left(\mathbf{h}^{1},\mathbf{h}^{2}\right)=\prod_{j}Q\left(h_{j}^{1}\right)\prod_{i}Q\left(h_{i}^{2}\right)$
+\end_inset
+
+ such that the KL divergence between the real and approximated distributions
+ 
+\begin_inset Formula $KL\left(P\left(\mathbf{h}^{1},\mathbf{h}^{2}\mid\mathbf{v}\right)\parallel Q\left(\mathbf{h}^{1},\mathbf{h}^{2}\right)\right)$
+\end_inset
+
+ is minimized.
+\end_layout
+
+\begin_layout Section
+Evaluation
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:Evaluation"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Datasets
+\end_layout
+
+\begin_layout Standard
+We evaluate the algorithms on the complete UCR time series datasets 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "keoghUCR"
+
+\end_inset
+
+, which is the reference collection for TSC evaluation and also include
+ all datasets used for the evaluation of the time series ensembles 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "lines2014time"
+
+\end_inset
+
+.
+ Overall, our collection contains 75 datasets, coming from a variety of
+ scientific fields.
+ All datasets are composed of univariate time series separated into 
+\emph on
+training 
+\emph default
+and 
+\emph on
+testing
+\emph default
+ dataset with disparate characteristics.
+ Their properties range from 2 to 60 classes (mean 7.72, median 4), from
+ 16 to 8926 training samples (mean 583.6, median 322) and from 28 to 8926
+ testing samples (mean 1109.3, median 390) with a train-to-test ratio between
+ 0.01 and 4.49 (mean 0.9, median 0.98).
+ The time series themselves also have a wide distribution of length ranging
+ from 24 to 1882 points (mean 386.9, median 300).
+\end_layout
+
+\begin_layout Subsection
+Experimental procedure
+\end_layout
+
+\begin_layout Standard
+In order to evaluate our approach, we follow an experimental procedure similar
+ to previous benchmarking studies 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "bagnall2012transformation,ding2008querying"
+
+\end_inset
+
+.
+ We underline the argument put forward by Keogh and Kasetty 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "keogh2003need"
+
+\end_inset
+
+ that such comparisons should try to be free of both 
+\emph on
+implementation 
+\emph default
+and 
+\emph on
+data bias
+\emph default
+.
+ Hence, we rely on all state-of-art datasets and report the error rates
+ from other authors' implementations.
+ This implies that we avoid any form of cherry-picking (against data bias)
+ and that implementation problems can only hamper our own results.
+ We compute the error rates of each dataset by following the established
+ train/test datasets, as detailed in 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "keoghUCR"
+
+\end_inset
+
+ and 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "lines2014time"
+
+\end_inset
+
+.
+ This allows us to directly compare our error rates to previously published
+ results from 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "keoghUCR"
+
+\end_inset
+
+ and 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "lines2014time"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+
+\series bold
+Input
+\end_layout
+
+\begin_layout Plain Layout
+Dataset 
+\begin_inset Formula $\mathcal{S}_{train}=\left\langle \mathcal{S}_{train}^{1},\ldots,\mathcal{S}_{train}^{n}\right\rangle $
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+Dataset 
+\begin_inset Formula $\mathcal{S}_{test}=\left\langle \mathcal{S}_{test}^{1},\ldots,\mathcal{S}_{test}^{m}\right\rangle $
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+Distances set 
+\begin_inset Formula $\mathcal{D}_{set}$
+\end_inset
+
+ (section
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sub:Time-series-similarity"
+
+\end_inset
+
+)
+\end_layout
+
+\begin_layout Plain Layout
+Criterias 
+\begin_inset Formula $\mathcal{C}_{set}$
+\end_inset
+
+ (section
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sub:Classification-criteria"
+
+\end_inset
+
+)
+\end_layout
+
+\begin_layout Plain Layout
+1:
+\begin_inset space ~
+\end_inset
+
+
+\series bold
+for 
+\series default
+each distance 
+\begin_inset Formula $\mathcal{D}_{i}$
+\end_inset
+
+ in 
+\begin_inset Formula $\mathcal{D}_{set}$
+\end_inset
+
+ 
+\series bold
+do
+\end_layout
+
+\begin_layout Plain Layout
+2:
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
+
+\series bold
+if 
+\series default
+
+\begin_inset Formula $\mathcal{D}_{i}$
+\end_inset
+
+ requires parameters 
+\begin_inset Formula $\mathcal{P}_{\mathcal{D}_{i}}$
+\end_inset
+
+ 
+\series bold
+then
+\end_layout
+
+\begin_layout Plain Layout
+3:
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
+optimize parameters 
+\begin_inset Formula $\mathcal{P}_{\mathcal{D}_{i}}$
+\end_inset
+
+ through LOO on 
+\begin_inset Formula $\mathcal{S}_{train}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+4:
+\begin_inset space ~
+\end_inset
+
+
+\series bold
+for 
+\series default
+each criteria 
+\begin_inset Formula $\mathcal{C}_{i}$
+\end_inset
+
+ in 
+\begin_inset Formula $\mathcal{C}_{set}$
+\end_inset
+
+ 
+\series bold
+do
+\end_layout
+
+\begin_layout Plain Layout
+5:
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
+optimize space 
+\begin_inset Formula $\mathcal{M}_{\mathcal{C}_{i}}$
+\end_inset
+
+ through LOO on 
+\begin_inset Formula $\mathcal{S}_{train}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+7:
+\begin_inset space ~
+\end_inset
+
+classify 
+\begin_inset Formula $\mathcal{S}_{test}$
+\end_inset
+
+ with parameters 
+\begin_inset Formula $\left\{ \mathcal{M}_{\mathcal{C}_{i}},\mathcal{P}_{\mathcal{D}_{i}}\right\} $
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+8:
+\begin_inset space ~
+\end_inset
+
+
+\series bold
+return 
+\series default
+error rate on 
+\begin_inset Formula $\mathcal{S}_{test}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "alg:Experimental-procedure"
+
+\end_inset
+
+Experimental evaluation procedure
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The evaluation procedure takes as input a training dataset 
+\begin_inset Formula $\mathcal{S}_{train}$
+\end_inset
+
+ and a testing dataset 
+\begin_inset Formula $\mathcal{S}_{test}$
+\end_inset
+
+ of time series, a set of [...]
+\end_layout
+
+\begin_layout Subsubsection
+Models
+\end_layout
+
+\begin_layout Standard
+For the models, we explore the different variants described in Section
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:Deep learning"
+
+\end_inset
+
+.
+ First, we evaluate both AE and RBM as single-layer models.
+ Once these are pre-trained following a specific architecture (topology
+ of connexions, detailed in the following section), we add a logistic classifier
+ layer and evaluate their classification accuracy by considering the whole
+ network as an MLP.
+ These models are simply termed AE and RBM in the following.
+ For the AE, we further tested its various regularizations, by comparing
+ both DAE and CAE with the same parameters.
+\end_layout
+
+\begin_layout Standard
+Second, we investigate more advanced multi-layer models, based on the same
+ pre-trained layers.
+ Hence, after the pre-training operation, we instantiate an SAE, DBM or
+ DBN (depending on whether the pre-trained layers are AE or RBM).
+ All the models are summarized in Table
+\end_layout
+
+\begin_layout Subsubsection
+Architectures
+\end_layout
+
+\begin_layout Standard
+The architecture of the network can be of crucial importance, but is also
+ a complex set of parameters that can hardly be driven by the data.
+ Three major factors come into play regarding the architecture of connexions
+ inside the network.
+ First, the 
+\emph on
+depth 
+\emph default
+of the network is defined by the number of layers it contains.
+ Second, the 
+\emph on
+width 
+\emph default
+of the network is defined by the number of units contained in the layers.
+ Finally, the 
+\emph on
+topology 
+\emph default
+of the network can be loosely defined as the relative size of layers from
+ one to another.
+ We delineated four major categories, namely 
+\emph on
+linear, increasing
+\emph default
+, 
+\emph on
+decreasing 
+\emph default
+and 
+\emph on
+bottleneck
+\emph default
+.
+ In order to test various combinations of parameters, we instantiated a
+ set of architectures detailed in Table
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float table
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Tabular
+<lyxtabular version="3" rows="13" columns="3">
+<features rotate="0" tabularvalignment="middle">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+4
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+inc
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+1000 1500
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+4
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+dec
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+1500 1000
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+4
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+lin
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+1500 1500
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+5
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+inc
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+500 1000 1500
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+5
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+dec
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+1500 1000 500
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+5
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+lin
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+1000 1000 1000
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+5
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+inc
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+500 1000 1500 2000
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+6
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+bot
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+500 1500 1000 2000
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+6
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+dec
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+2000 1500 1000 500
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+6
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+lin
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+1000 1000 1000 1000
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+7
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+bot
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+250 500 1000 2000 250
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+7
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+inc
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+500 1500 1000 2000 250
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Architectures evaluated
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection
+Computational units
+\end_layout
+
+\begin_layout Standard
+Regarding computational units, several choices can be made.
+ Primarly, the type of uits is conditionned by whether the variables are
+ considered as being real or binary.
+ As we are dealing with time series data, the visible layer is always considered
+ as a set of real units (as binary data would not have much meaning in our
+ case).
+ Then, we evaluate the hidden parts of the networks as being either entirely
+ composed of binary units or entirely composed of real units.
+\end_layout
+
+\begin_layout Standard
+Furthermore, several types of computational units (activation function)
+ can be used in each neuron.
+ To evaluate this aspect, we compare the use of 
+\emph on
+sigmoid, hyperbolic tangent 
+\emph default
+(tanh)
+\emph on
+ 
+\emph default
+or 
+\emph on
+rectified linear 
+\emph default
+(relu) units.
+\end_layout
+
+\begin_layout Subsubsection
+Learning parameters
+\end_layout
+
+\begin_layout Standard
+Each of the models have a wide variety of learning parameters (called hyper-para
+meters), we evaluated the setting of these by using a combination of random
+ search and kernel approximation.
+ 
+\end_layout
+
+\begin_layout Subsection
+Statistical significance
+\end_layout
+
+\begin_layout Standard
+Based on our evaluation framework, we obtain the error rates for each classifier
+ over every datasets.
+ However, as noted by 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "salzberg1997comparing"
+
+\end_inset
+
+, there are several pitfalls to avoid when comparing classifiers.
+ Therefore, in order to assess the relative performances of various classifiers,
+ we compute the statistical significance of these results by following the
+ recommendations of Salzberg 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "salzberg1997comparing"
+
+\end_inset
+
+ and Demsar 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "demvsar2006statistical"
+
+\end_inset
+
+.
+ First, we avoid the 
+\emph on
+multiplicity effect 
+\emph default
+by relying on the Tukey-Kramer Honestly Significant Difference (HSD) test
+ over the results of Friedman's ANOVA 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "demvsar2006statistical"
+
+\end_inset
+
+.
+ Then, we use a post-hoc Nemenyi test to exhibit the critical differences
+ that might exist between classifiers.
+ Finally, we present the 
+\emph on
+critical difference graphs 
+\emph default
+
+\begin_inset CommandInset citation
+LatexCommand citep
+key "demvsar2006statistical"
+
+\end_inset
+
+, which show the statistical differences and eventual cliques of statistical
+ equivalence between various methods.
+ We compute all these statistics between the results provided on the UCR
+ website 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "keoghUCR"
+
+\end_inset
+
+ for the best results of 1-NN on 
+\begin_inset Formula $DTW$
+\end_inset
+
+, time series ensembles 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "lines2014time"
+
+\end_inset
+
+ and all our evaluated models of AE, RBM, SAE, DBN and DBM.
+\end_layout
+
+\begin_layout Subsection
+Hardware
+\end_layout
+
+\begin_layout Standard
+As our testing methodology is computationally intensive, we performed all
+ our calculations on the Mesu supercomputer from the Pierre & Marie Curie
+ University funded by the Equip@Meso project carried by GENCI.
+ The Mesu server is equipped with 64 computes nodes each containing 2 Intel
+ Xeon (Sandy Bridge) with 8 cores and 256 GB RAM.
+ 
+\end_layout
+
+\begin_layout Subsection
+Repeatability
+\end_layout
+
+\begin_layout Standard
+The complete code (distance measures, classification methods and optimization
+ functions) for repeating our experiments is available as an open source
+ package in Matlab at 
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+CHANGE 
+\series default
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+https://github.com/esling/hvmots
+\end_layout
+
+\end_inset
+
+.
+ 
+\series bold
+CHANGE
+\end_layout
+
+\begin_layout Standard
+All the results from this paper can be obtained simply by running the 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+texttt{deepFunction}
+\end_layout
+
+\end_inset
+
+ script with various parameters.
+ The datasets used are either freely available for download from the UCR
+ collection website 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "keoghUCR"
+
+\end_inset
+
+ or the time series ensembles website 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "lines2014time"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Section
+Results
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:Results"
+
+\end_inset
+
+ We start by providing an in-depth analysis of the results depending on
+ the various models, architectures and parameters .
+ Then, we provide a comparison between the best performing deep models and
+ various state-of-art methods (Section
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sub:Global-scale"
+
+\end_inset
+
+)
+\end_layout
+
+\begin_layout Subsection
+\begin_inset CommandInset label
+LatexCommand label
+name "sub:Deep-learning-benchmarking"
+
+\end_inset
+
+Deep learning benchmarking
+\end_layout
+
+\begin_layout Subsubsection
+Models
+\end_layout
+
+\begin_layout Subsubsection
+Architectures
+\end_layout
+
+\begin_layout Standard
+The architecture of the network
+\end_layout
+
+\begin_layout Subsubsection
+Learning variants
+\end_layout
+
+\begin_layout Subsubsection
+Parameters
+\end_layout
+
+\begin_layout Subsection
+\begin_inset CommandInset label
+LatexCommand label
+name "sub:Global-scale"
+
+\end_inset
+
+State-of-art comparison
+\end_layout
+
+\begin_layout Standard
+We provide in Table
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:Comparison-overall-errors"
+
+\end_inset
+
+ the comparison of error rates obtained by different methods on each dataset.
+ We display the results provided by the UCR website 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "keoghUCR"
+
+\end_inset
+
+ for 1-NN selection with DTW with best window (
+\begin_inset Formula $DTW$
+\end_inset
+
+) and time series ensembles (
+\begin_inset Formula $TSE$
+\end_inset
+
+) 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "lines2014time"
+
+\end_inset
+
+.
+ The last columns display the results of the auto-encoder (
+\begin_inset Formula $AE$
+\end_inset
+
+), Restricted Boltzmann Machine (
+\begin_inset Formula $RBM$
+\end_inset
+
+), Stacked auto-encoder (
+\begin_inset Formula $SAE$
+\end_inset
+
+), Deep Belief Network (
+\begin_inset Formula $DBN$
+\end_inset
+
+) and Deep Boltzmann Machine (
+\begin_inset Formula $DBM$
+\end_inset
+
+).
+ Dark grey rows identify the datasets where deep learning models obtain
+ a lower error rate than all state-of-art methods, while light grey rows
+ show an equivalent error rate.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float table
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "tab:Comparison-overall-errors"
+
+\end_inset
+
+Comparison of overall error rates for the DTW with best window (
+\begin_inset Formula $DTW$
+\end_inset
+
+), time series ensembles (
+\begin_inset Formula $TSE$
+\end_inset
+
+) 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "lines2014time"
+
+\end_inset
+
+ and the best performing auto-encoder (
+\begin_inset Formula $AE$
+\end_inset
+
+), Restricted Boltzmann Machine (
+\begin_inset Formula $RBM$
+\end_inset
+
+), Stacked auto-encoder (
+\begin_inset Formula $SAE$
+\end_inset
+
+), Deep Belief Network (
+\begin_inset Formula $DBN$
+\end_inset
+
+) and Deep Boltzmann Machine (
+\begin_inset Formula $DBM$
+\end_inset
+
+).
+\end_layout
+
+\end_inset
+
+
+\begin_inset Tabular
+<lyxtabular version="3" rows="73" columns="7">
+<features rotate="0" tabularvalignment="middle">
+<column alignment="right" valignment="top">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<row>
+<cell multirow="3" alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell multirow="3" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+DTW
+\end_layout
+
+\end_inset
+</cell>
+<cell multirow="3" alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+TSE
+\end_layout
+
+\end_inset
+</cell>
+<cell multirow="3" alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+AE
+\end_layout
+
+\end_inset
+</cell>
+<cell multirow="3" alignment="left" valignment="middle" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+RAE
+\end_layout
+
+\end_inset
+</cell>
+<cell multirow="3" alignment="left" valignment="middle" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+DAE
+\end_layout
+
+\end_inset
+</cell>
+<cell multirow="3" alignment="left" valignment="middle" topline="true" bottomline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+CAE
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="4" alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell multirow="4" alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell multirow="4" alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell multirow="4" alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell multirow="4" alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell multirow="4" alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell multirow="4" alignment="center" valignment="top" topline="true" bottomline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+50Words
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+24.2
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+18.0
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+48.9
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+38.7
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+32.1
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+34.0
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+Adiac
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+39.1
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+35.3
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+34.6
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+31.7
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+31.7
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+31.7
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+ArrowHead
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+21.7
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+16
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+21.2
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+19.9
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+19.9
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+19.3
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+ARSim
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+44.3
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+10.3
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+28.9
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+20.7
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+20.7
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+22.4
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+Beef
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+46.7
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+36.7
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+30.8
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+23.3
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+23.3
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+28.7
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+BeetleFly
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+35
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+40
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+20
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+25
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+15
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+15
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+BirdChicken
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+35
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+35
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+25
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+25
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+25
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+25
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+Car
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+23.3
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+16.7
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+27.9
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+19.3
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+19.3
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+19.8
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+CBF
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+0.5
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+0.2
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+10.3
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+1.4
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+1.4
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+1.4
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+Chlorine
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+35
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+36
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+45.8
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+35.2
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+35.2
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+35.5
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+Cinc_ECG
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+7
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+6.2
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+22.1
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+16.5
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+16.5
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+18.5
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+Coffee
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+17.9
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+0
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+0
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+0
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+0
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+0
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+Computers
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+12.4
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+11.6
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+51.2
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+44.3
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+44.3
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+44.1
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+CricketX
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+23.6
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+20.3
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+52.1
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+43.9
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+43.9
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+44.0
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+CricketY
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+19.7
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+15.6
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+53.3
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+47.5
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+47.5
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+45.8
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+CricketZ
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+18
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+15.6
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+47.8
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+39.3
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+39.3
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+38.5
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+DiatomSize
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+6.5
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+5.9
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+35.1
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+7.3
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+7.3
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+5.4
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+DistalPOA
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+20.1
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+22.3
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+48.6
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+21.6
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+21.6
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+21.6
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+DistalPOC
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+25.4
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+23.2
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+38.6
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+22.9
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+22.9
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+21.7
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+DistalPTW
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+32.4
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+31.7
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+45.6
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+31.7
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+31.7
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+31.2
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+Earthquakes
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+30.9
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+28.1
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+3.6
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+0
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+0
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+0
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+ECGFiveD
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+20.3
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+17.8
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+11.3
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+4.3
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+4.3
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+2.9
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+ElectricDevices
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+29.5
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+27.7
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+38.0
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+31.1
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+31.1
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+32.1
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+Face (all)
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+19.2
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+15.2
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+12.6
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+0
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+0
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+1.7
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+Face (four)
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+11.4
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+9.1
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+29.5
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+17.1
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+17.1
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+16.2
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+FacesUCR
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+8.8
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+6.3
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+27.7
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+17.2
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+17.2
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+20.5
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+Fish
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+16
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+3.4
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+23.1
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+14.9
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+14.9
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+12.8
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+GunPoint
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+8.7
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+7
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+12.6
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+7.3
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+7.3
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+7.5
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+Haptics
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+58.8
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+58.4
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+67.2
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+57.2
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+57.2
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+55.2
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+Herring
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+34.4
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+29.7
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+54.7
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+39.1
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+39.1
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+39.4
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+InlineSkate
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+61.3
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+56.7
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+76.5
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+64.4
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+64.4
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+62.7
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+ItalyPower
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+4.5
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+3.9
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+4.8
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+3.9
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+3.9
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+3.7
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+LargeKitchen
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+26.4
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+23.2
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+36.4
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+23.2
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+23.2
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+22.7
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+Lightning2
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+13.1
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+11.5
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+27.6
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+14.7
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+14.7
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+13.3
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+Lightning7
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+28.8
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+23.3
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+8.7
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+6.8
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+6.8
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+3.6
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+MALLAT
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+8.6
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+5
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+15.6
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+5.6
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+5.6
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+7.7
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+Medical
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+25.3
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+24.5
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+36.7
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+28.9
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+28.9
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+33.9
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+MiddlePOA
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+53.9
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+47.4
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+51.9
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+52.1
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+52.1
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+57.5
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+MiddlePOC
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+19.9
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+21
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+22.4
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+19.1
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+19.1
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+19.1
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+MiddlePTW
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+68.2
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+63
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+57.8
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+49.4
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+49.4
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+50.3
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+MoteStrain
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+13.4
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+11.4
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+26.7
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+12.6
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+12.6
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+12.6
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+N-ECG 1
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+18.5
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+17.8
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+15.9
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+7.1
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+7.1
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+8.2
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+N-ECG 2
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+12.9
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+11.2
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+18.5
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+7.2
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+7.2
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+6.3
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+OliveOil
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+16.7
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+13.3
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+28.8
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+23.3
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+23.3
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+20.4
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+OSU Leaf
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+38.4
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+19.4
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+47.7
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+48.5
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+48.5
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+49.4
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+Phalanges
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+22.8
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+21.7
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+29.5
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+19.1
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+19.1
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+17.6
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+Planes
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+0
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+0
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+2.9
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+2.9
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+2.9
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+0.9
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+ProximalPOA
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+12.7
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+11.7
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+33.9
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+18.1
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+18.1
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+23.8
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+ProximalPOC
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+19.6
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+17.2
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+33.4
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+14.8
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+14.8
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+15.3
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+ProximalPTW
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+27.8
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+24.4
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+28.1
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+20
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+20
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+21.8
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+Refrigeration
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+51.5
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+42.4
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+61
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+61
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+61
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+64.3
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+ScreenTypes
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+44.5
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+44
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+52.8
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+38.1
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+38.1
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+35.7
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+ShapesAll
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+24.7
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+18.7
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+26.1
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+23.2
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+23.2
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+25.1
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+SmallKitchen
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+25.6
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+23.2
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+51.8
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+42
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+42
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+44
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+SonyI
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+30.5
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+29.3
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+36.3
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+25
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+25
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+26.1
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+SonyII
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+14.1
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+12.4
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+27.8
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+15.2
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+15.2
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+16.5
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+StarLight
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+9.5
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+7.9
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+19.0
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+5.7
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+5.7
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+5.7
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+SwedishL
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+15.7
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+8.5
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+27.9
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+14.6
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+14.6
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+17.1
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+Symbols
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+6.2
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+4.9
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+12.7
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+12.7
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+12.7
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+12.0
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+Synthetic
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+1.7
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+1
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+4.8
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+4.4
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+4.4
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+3.8
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+ToeSegment1
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+10.1
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+7.9
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+24.7 
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+12.9
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+12.9
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+15.3
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+ToeSegment2
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+10.8
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+8.5
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+10.2
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+11.5
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+11.5
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+15.8
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+Trace
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+1
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+1
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+5.6
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+1
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+1
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+1.2
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+TwoPatt.
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+0.1
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+0
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+0.1
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+0
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+0
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+0
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+TwoLead
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+13.2
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+6.7
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+18.1
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+11.5
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+11.5
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+13.3
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+uWaveX
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+22.7
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+19.9
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+33.8
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+22.2
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+22.2
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+25.3
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+uWaveY
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+30.1
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+28.3
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+49.6
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+32.1
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+32.1
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+35.0
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+uWaveZ
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+32.2
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+29
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+35.3
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+29.8
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+29.8
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+31.3
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+Wafer
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+0.5
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+0.3
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+5.4
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+0.2
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+0.2
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+0.2
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+Words
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+25.2
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+22.6
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+39.7
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+32.2
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+32.2
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+34.4
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" bottomline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+Yoga
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+15.5
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" bottomline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+12.1
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" bottomline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+29.6
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" bottomline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+17.4
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" bottomline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+17.4
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" bottomline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+18.2
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+As we can see [...]
+\end_layout
+
+\begin_layout Standard
+Finally, we provide in Figure
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Critical-differences-SOA"
+
+\end_inset
+
+
+\series bold
+ 
+\series default
+the
+\emph on
+ critical difference graphs
+\emph default
+ 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "demvsar2006statistical"
+
+\end_inset
+
+, in order to exhibit the true statistical differences between classifiers
+ across all datasets within a single representation.
+ These critical differences are computed with [...]
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename graphics/critical_SOA.pdf
+	scale 42
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Critical-differences-SOA"
+
+\end_inset
+
+Critical differences graphs comparing the performances of the state-of-art
+ approaches (
+\begin_inset Formula $\ell^{2}$
+\end_inset
+
+, 
+\begin_inset Formula $DTW$
+\end_inset
+
+ and 
+\begin_inset Formula $TSE$
+\end_inset
+
+) and the multidimensional assessment of similarity by relying either on
+ a nearest neighbor (
+\begin_inset Formula $1NN_{m}$
+\end_inset
+
+) or hypervolume (HV-MOTS) criterion.
+ These critical differences are computed either between the 
+\emph on
+best
+\emph default
+ distance space (top) or the 
+\emph on
+space 
+\emph default
+automatically selected by the optimization procedure (bottom).
+ 
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection
+Computational efficiency
+\end_layout
+
+\begin_layout Subsubsection
+Interpretability and generalization
+\end_layout
+
+\begin_layout Subsection
+\begin_inset CommandInset label
+LatexCommand label
+name "sub:Motif-discovery"
+
+\end_inset
+
+Motif discovery
+\end_layout
+
+\begin_layout Section
+Discussion
+\end_layout
+
+\begin_layout Standard
+First evidence
+\end_layout
+
+\begin_layout Standard
+* ML For TSC
+\end_layout
+
+\begin_layout Standard
+* Interpretability
+\end_layout
+
+\begin_layout Standard
+* Framework providing simultaneous motifs & classification
+\end_layout
+
+\begin_layout Standard
++ Generic + Computation
+\end_layout
+
+\begin_layout Standard
+=> But we don't even enforce smoothness
+\end_layout
+
+\begin_layout Standard
+We on purpose did not use models such as semi-RBM
+\end_layout
+
+\begin_layout Standard
+Could further improve the results by enforcing ...
+\end_layout
+
+\begin_layout Section
+Conclusion and future work
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:Conclusion"
+
+\end_inset
+
+ We showed in this paper ...
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+balance
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset bibtex
+LatexCommand bibtex
+bibfiles "document,deeplearning"
+options "plain"
+
+\end_inset
+
+
+\end_layout
+
+\end_body
+\end_document

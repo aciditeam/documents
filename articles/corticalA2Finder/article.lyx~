@@ -1,0 +1,1714 @@
+#LyX 2.1 created this file. For more info see http://www.lyx.org/
+\lyxformat 474
+\begin_document
+\begin_header
+\textclass IEEEtran
+\use_default_options true
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_math auto
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing double
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 1
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+When the computer teaches us how we listen: Finding higher order neurons
+ of the auditory cortex
+\end_layout
+
+\begin_layout Author
+Philippe Esling, Stephen McAdams, Léopold Crestel and Carlos Agon
+\end_layout
+
+\begin_layout Abstract
+Concomittent advances in biophysical observations and models of artificial
+ intelligence seem to converge towards a deeper understanding of the human
+ brain.
+ The A1 neurons of the primary auditory cortex seem now well defined and
+ appear to produce Spectro-Temporal Receptive Fields (STRF).
+ We postulate here that the learning mechanisms inside our brain should
+ follow an identical procedure (somehow recursive) to develop all of its
+ processing levels.
+ Hence, our working hypothesis was that if we could develop a computational
+ model able to learn the STRF by itself in an unsupervised manner, then
+ what we truly learned is not only the (already known) STRF, but most importantl
+y 
+\emph on
+how
+\emph default
+ the brain itself learns.
+ Therefore by re-applying this learning model, we could discover the functions
+ of neurons in more advanced (secondary) processing areas of the brain (A2,
+ pSTG and even up to STG).
+ We developed a specific architecture able to learn both the STRF and their
+ plasticity in a fully unsupervised manner.
+ By re-applying this learning to higher-order concepts (outputs of previously
+ learned STRF), we obtain potential functions processed by A2 and pSTG neurons.
+ We validated these functions by comparing the neural activities recorded
+ with a fine-grained MRI of stimuli designed to maximally or minimally activate
+ higher-order cognitive functions while maintaining a constant level of
+ entropy (in terms of information theory).
+ This paper provides the first view over the functions processed by neurons
+ in deeper areas of the auditory cortex.
+\end_layout
+
+\begin_layout Section
+Introduction
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Need to find the latest article on 
+\begin_inset Quotes eld
+\end_inset
+
+topology of the auditory cortex
+\begin_inset Quotes erd
+\end_inset
+
+ (and topotony)
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Neural memory cell = each neuron is 1 template of the 1st layer activation
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Lateral inhibition is already neural ? Where is the limite between innate
+ and learning
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset citation
+LatexCommand cite
+key "elhilali2008cocktail"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The auditory cortex is an extremely complex machinery, able to instantaneously
+ decipher intricate acoustic scenes to extract meaningful information streams
+ even under noisy situations.
+ 
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+<BEGIN>TO PARAPHRASE</BEGIN>
+\end_layout
+
+\begin_layout Standard
+biologically-inspired model maps the acoustic input into a multidimensional
+ cortical representation and an integrative stage that recursively builds
+ up expectations of how streams evolve over time and reconciles its predictions
+ with the incoming sensory input ...
+ emulate the archetypal streaming percepts that have long been tested in
+ human subjects ...
+ development of efficient and robust mathematical models which can match
+ up to the biological performance of auditory ...
+ extract relevant cues from the acoustic mixture in both monaural and binaural
+ pathways, b organize the available sensory information into perceptual
+ streams, c efficiently manage the biological constraints and computational
+ resources to perform this task in real time, and d dynamically adapt the
+ processing parameters to successfully keep up with continuously changing
+ environmental conditions ...
+ biologically inspired systems that can perform intelligent processing of
+ complex sound mixtures ...
+ “behaviorally” realistic, requiring no prior training on specific sounds
+ voices, languages, or other databases ...
+ feature analysis stage that explicitly represents known perceptual features
+ in a multidimensional space, such as tonotopic frequency, harmonicity pitch,
+ and spectral shape and dynamics timbre
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+<END>TO PARAPHRASE</END>
+\end_layout
+
+\begin_layout Standard
+In order to attain such objectives, the model should be bound to grasp and
+ abstract three fundamental properties of the A1 physiology
+\end_layout
+
+\begin_layout Enumerate
+The auditory cortical neurons are known to provide a multidimensional sensitivit
+y to an ordered set of acoustic features (often refered to as 
+\emph on
+receptive fields
+\emph default
+) 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "schreiner1988representation"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+Responses of the A1 neurons display a form of multiscale temporal dynamics
+ 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "miller2002spectrotemporal"
+
+\end_inset
+
+ providing time scales consistent with auditory streams ranging from syllables
+ to melodic contours and other longer perceptual events 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "carlyon2003account"
+
+\end_inset
+
+ (implying an involvement of auditory neurons in temporal perception of
+ acoustic information).
+\end_layout
+
+\begin_layout Enumerate
+Recent physiological studies seem to indicate that cortical receptive fields
+ have a very high degree of plasticity and can rapidly adapt to various
+ events, auditory contexts, cognitive states, and behavioral expectations
+ by changing their own functionalities 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "fritz2005differential"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Overall, neurons provide a 
+\emph on
+multidimensional
+\emph default
+, 
+\emph on
+multiscale
+\emph default
+ and 
+\emph on
+adaptive
+\emph default
+ feature selectivity along the auditory pathway where groups of cells are
+ specifically tuned to different spectral attributes along several dimensions.
+\end_layout
+
+\begin_layout Standard
+We consider here that the early peripheral auditory processing (along the
+ cochlea and midbrain nuclei 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "wang1994self"
+
+\end_inset
+
+) is not driven by a learning process but rather stems from an evolutionnary
+ process directly encoded inside our genome.
+ This is supported by 
+\series bold
+[REFS ? EXPLANATION ? IS IT REALLY SUPPORTED BY ANYTHING ELSE THAN MY GUTS
+ ?]
+\series default
+.
+ However, following this peripheral processing stage, the multiscale spectral
+ analysis performed by the primary auditory cortex 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "schreiner1998spatial"
+
+\end_inset
+
+ is already a learning process that we are willing to target.
+ To investigate this hypothesis and the nature of higher-order auditory
+ cognitive functions, we directly quantified how our set of automatically
+ learned neurons could account for observed neural population responses
+ in nonprimary human auditory cortex.
+\end_layout
+
+\begin_layout Standard
+The knowledge over the nature of higher-order cognitive features in intermediate
+ and deeper parts of the human auditory cortex remains scarce 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "pasley2012reconstructing"
+
+\end_inset
+
+.
+ In these, the posterior superior temporal gyrus (pSTG), is hypothesized
+ to embed a fundamental role as an intermediary processing of acoustic informati
+on into spectro-temporal features essential for auditory object recognition
+ 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "recanzone2010serial"
+
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
+The approach known as 
+\emph on
+stimulus reconstruction
+\emph default
+ 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "bialek1991reading"
+
+\end_inset
+
+ aims at measuring population neural responses to various stimuli and then
+ attempt to reconstruct the stimulus from these responses.
+ In our case, we will not measure the accuracy of a reconstruction but as
+ we model directly the neural population itself, rather try to assess the
+ correlation between our predicted encoding models and how the neural population
+ reacts to various auditory functions.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+???? 
+\series default
+linear and nonlinear STRFs, which are based on the spectrogram and modulation
+ representations, respectively (Figure S4).
+ 
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Maybe trash: 
+\series default
+Consistent with prior recordings from lateral temporal human cortex the
+ ability of the modulation model to account for a rapid decrease in the
+ spectrogram envelope without a corresponding decrease in the neural response.
+ These combined results support the idea of an emergent population-level
+ representation of temporal modulation energy in primate auditory cortex.
+\end_layout
+
+\begin_layout Standard
+It has been shown that sets of nonlinear spectral transforms based on emergent
+ tuning properties can be identified in the auditory cortex
+\begin_inset CommandInset citation
+LatexCommand cite
+key "chi2005multiresolution"
+
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
+Previous works for spectrogram reconstruction based on neural responses
+ from the mammalian auditory cortex 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "mesgarani2009influence"
+
+\end_inset
+
+ or the avian midbrain 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "ramirez2011incorporating"
+
+\end_inset
+
+ have provided successful results.
+ However, additional acoustic processing beyond primary layers obviously
+ occurs in intermediate and higher-order auditory cortex 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "rauschecker2009maps"
+
+\end_inset
+
+, and the human STG, a nonprimary auditory area seem to be based on a nonlinear
+ modulation representation 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "pasley2012reconstructing"
+
+\end_inset
+
+).
+\end_layout
+
+\begin_layout Standard
+The acoustic features extracted by STG and higher-order auditory areas are
+ hypothesized to be information-rich while eliminating irrelevant low-level
+ variance from the acoustic signal .
+\end_layout
+
+\begin_layout Standard
+Previous studies on the characterization of neural representations in the
+ STG suggests that most of the features might be preserved at the pSTG stage,
+ which is consistent with the idea of pSTG being only an intermediate step
+ amongst a multi-layer hierarchy of auditory processing 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "rauschecker2009maps,recanzone2010serial"
+
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+PARAPHRASE + INTRO: 
+\series default
+Hierarchical auditory object processing has been hypothesized to follow
+ a ventral ‘‘what’’ pathway, with an antero-lateral gradient along the superior
+ temporal region [5,9,10,11] where stimulus selectivity increases from pure
+ tones in primary auditory cortex to words and sentences in anterior STG
+ [5].
+ At a more abstract level of representation, a recent functional imaging
+ study also demonstrated that the semantic content of nouns could be used
+ as an effective encoding model across multiple cortical regions [48].
+\end_layout
+
+\begin_layout Standard
+A hierarchically layered approach might allow to decipher successive steps
+ of the auditory cortex as current structural auditory models only partially
+ account for primary and intermediate (A1 and pSTG) responses, but the developme
+nt of higher-level encodings is required to describe anterior areas in the
+ ventral auditory pathway.
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset citation
+LatexCommand cite
+key "depireux2001spectro"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Paraph or trash:
+\series default
+ units in AI are not, in general, fully separable.
+ lack of full separability stems from differences between the upward and
+ downward spectral cross-sections but not from the temporal cross-sections;
+ this places strong constraints on the neural inputs of these AI units
+\end_layout
+
+\begin_layout Standard
+Previous researches measured the amplitude and phase components of each
+ individual neuron response in order to characterize their transfer functions.
+ By applying an inverse-Fourier transform to these transfer functions, they
+ obtained the STRF for each neuron, hence exhibiting their tonotopic axis
+ dynamics and selectivity.
+\end_layout
+
+\begin_layout Standard
+The study of separability of the responses into independent temporal and
+ spectral aspects was shown to exhibit directional sensitivity (in terms
+ of evolution of the spectral envelope, moving either upward or downward
+ in frequency), a property known as 
+\begin_inset Quotes eld
+\end_inset
+
+quandrant separability
+\begin_inset Quotes erd
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Paraph or trash: 
+\series default
+Separability is an important property of the transfer functions.
+ A fully separable transfer function is one that factorizes into a function
+ of w and a function of V over all quadrants.
+ Theoretically, fully separable responses imply an STRF that is fully decomposab
+le into the product of a purely temporal impulse response and a purely spectral
+ response field.
+ It also implies a unit that responds equally well to upward and downward
+ moving ripples and hence has necessarily a symmetric transfer function
+ magnitude with respect to direction We show that there is a directional
+ sensitivity in the response to the upward versus downward moving components
+ of a sound’s spectral envelope.
+ This breaks the symmetry of full spectro-temporal separability and produces
+ quadrant separability.
+ A transfer function may also be only partially separable in that it is
+ separable only for ripples moving in a given direction (upward vs.
+ downward).
+ In this case, the transfer function is called quadrant separable and can
+ be expressed as the product of two independent functions
+\end_layout
+
+\begin_layout Standard
+The A1 units have been shown to respond over a range of disparate velocities
+ and spectral directions usually tuned to a specific spectro-temporal pattern.
+ This wealth of spectro-temporal shapes seems to cover the wide variety
+ of acoustic signals.
+ Hence, each STRF represents the function maximally activating an A1 unit
+ along spectro-temporal dimensions.
+ These display a broad variety of temporal dynamics, target frequencies,
+ bandwidths, direction selectivity and inhibitions.
+\end_layout
+
+\begin_layout Standard
+This property of direction selectivity implies that STRF are inseparable.
+ The property of separability is also strongly tied to the underlying biological
+ system driving the architecture of the auditory cortex.
+ Indeed, full separability would suggest two independent (potentially successive
+) temporal and spectral processing stages with different sets of STRF.
+ Oppositely, inseparability implies spectro-temporal processing within single
+ units of a single layer.
+ Quadrant separability leads to a remarkable constraint on the neural units,
+ as any linear or non-linear neural network with separable inputs will generally
+ produce a totally inseparable output.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+PARAPH: 
+\series default
+cortical neuron can be easily constructed by taking inputs from (potentially)
+ many units with (potentially) different spectral response fields and even
+ with (potentially) different temporal impulse response properties as long
+ as the temporal dynamics of the inputs to the cortical cell are fast compared
+ with the temporal dynamics of the cortical cell itself
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+MASTER ++ PARAPH: 
+\series default
+Significantly, the property of quadrant separability with temporal symmetry
+ does not allow for any cortical inputs unless those inputs have the same
+ temporal behavior as the neuron studied.
+ If, for instance, all neurons in the same cortical column have similar
+ temporal properties, including similar neural delays, this would be consistent
+ with quadrant separability.
+ Otherwise, cortical inputs would break quadrant separability and create
+ a totally inseparable neuron.
+ Total inseparability would be expected for cortical neurons in layers that
+ receive significant input from other cortical columns or from any other
+ neural source with significantly different temporal processing, including
+ (but not limited to) any significant delays.
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset citation
+LatexCommand cite
+key "patil2012music"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+A fundamental goal in trying to model higher-level cognitive network would
+ lay in its ability to reproduce perceptual auditory judgments produced
+ by human listeners.
+ To that end, the joint spectro-temporal features observed in the mammalian
+ primary auditory cortex are the first step towards a representation sufficientl
+y complex to provide perceptual-level judgments.
+\end_layout
+
+\begin_layout Standard
+Previous studies have focused on seeking brain areas potentially selective
+ to various natural sound categories, ranging from speech sounds in secondary
+ cortical areas [22,23] to musical instruments [25] and appears to follow
+ a hierarchical model providing an increasingly refined selectivity to different
+ sound categories.
+ 
+\end_layout
+
+\begin_layout Standard
+Relying on a closed dataset provides description dimensions that are most
+ salient within a given sound set but that may fail to capture other dimensions
+ which could nevertheless be fundamental for generalizing this recognition
+ for sounds outside the set.
+ Traditional studies seek hand-crafted dimensions designed arbitrarily to
+ provide accurate performance in a specific task.
+ Biologically speaking, there is yet no evidence as to which low-level acoustic
+ features are retrieved to target selectivity for high-level sound categories
+ while preserving a form of category-invariance.
+\end_layout
+
+\begin_layout Standard
+It has been shown that the neural responses in the primary auditory cortex
+ (A1) provide an extremely specific selectivity far beyond auditory nerve
+ tonotopy.
+ A1 neurons do not solely respond to the single frequency peaks, but rather
+ to the characteristics of the local spectral shape regarding its bandwidth
+ [31], temporal dynamics [33] and spectral symmetry [32].
+ The functions computed by A1 neurons can be viewed as a multidimensional
+ mapping across three major dimensions, the entire range of audible frequencies,
+ the spectral shapes with a bandwith varying from very wide (2-3 octaves)
+ to narrow spans (1/4 octave) and temporal dynamics going from short to
+ long-term responses.
+\end_layout
+
+\begin_layout Standard
+Based on the theoretical synthetic model of STRF we performed a fine-grained
+ uniform sampling of the cortical space similarly to several physiological
+ studies found in the literature [29, 30, 40]
+\end_layout
+
+\begin_layout Standard
+The response of the A1 neurons form a 4-dimensional map representing time,
+ frequency and both spectral and temporal modulations that can be interpreted
+ as a parallel multi-resolution representation of the auditory spectrogram
+ (similar to a bank of spectral and temporal modulation filters).
+\end_layout
+
+\begin_layout Standard
+a diverse and fine-grained uniform sampling of the neural space seemed critical.
+\end_layout
+
+\begin_layout Standard
+Even though the first perceptual blocks might be based on neural activation
+ patterns in the primary auditory cortex, this does not imply that neural
+ correlates of sound identification are found solely at this low-level of
+ processing.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+PARAPH: 
+\series default
+cortical analysis provides a dynamic view of the spectro-temporal modulations
+ in the signal as they vary over time.
+\end_layout
+
+\begin_layout Standard
+The existence of joint spectro-temporal features appear crucial to provide
+ a general comprehension of timbre.
+ This generalization heavily rely on the premise of the existence of nonlinearit
+ies in our cognitive processing of auditory information (as 
+\emph on
+synaptic depression 
+\emph default
+or 
+\emph on
+divisive normalization
+\emph default
+).
+ In previous studies, the exact nature of these nonlinearities remained
+ uncertain and subsumed to simplified models.
+\end_layout
+
+\begin_layout Standard
+Traditional timbre studies are limited to a hand-selected set of spectral
+ or temporal dimensions.
+ However, no simple sets of neural dimensions could entirely subserve perceptual
+ judgements exhibited by human listeners.
+ It rather appears that ‘opportunistic’ acoustic dimensions [56] are selected
+ and enhanced through a form of neural plasticity, when required, to form
+ the information-rich cortical representation as a spectro-temporal baseline.
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset citation
+LatexCommand cite
+key "fritz2005differential"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Specific STRF might specialize around signature acoustic task dependent
+ on their inherently salient cues.
+ Previous studies found distinct patterns of STRF adaptation, characterized
+ by selective enhancement of task-dependent frequencies and a concomittent
+ selective depression at neighborhing frequencies.
+ This task-dependent plasticity of A1 neuronal responses show their ability
+ to swiftly reflect the incoming sensory content and changing behavioral
+ contexts.
+ This plasticity stemming from attentivity mechanisms is underlying the
+ active listening in cortical processing
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+<END OF 1ST REVIEW HERE !>
+\end_layout
+
+\begin_layout Standard
+When the reference frequency was placed just above the inhibitory area (
+ fR 1 kHz) during behavior, the inhibitory sideband enlarged and almost
+ doubled in strength, and its high frequency border moved upward, displacing
+ the excitatory field.
+ 
+\end_layout
+
+\begin_layout Standard
+two of the STRFs (Fig.
+ 2c,d) reverted to their original prebehavior STRF shapes once the behavior
+ ceased.
+ However, the induced changes in the third cell (Fig.
+ 2e) persisted in an intermediate form after behavior
+\end_layout
+
+\begin_layout Standard
+depression at the reference and potentiation at the target),
+\end_layout
+
+\begin_layout Standard
+a minority of neurons showed no significant changes, either at target or
+ reference 
+\end_layout
+
+\begin_layout Standard
+the behavioral effects cannot be fully explained by sensory adaptation
+\end_layout
+
+\begin_layout Standard
+The specific type of change was influenced by the initial shape of the receptive
+ field, the behavioral task, attention to the salient acoustic cues, and
+ was also likely to be modulated by general influences reflecting the animal’s
+ state of arousal, motor preparation, and reward expectation
+\end_layout
+
+\begin_layout Standard
+This suggests a widespread process of adaptive modulation that affects a
+ broad variety of STRFs throughout A1.
+ However, there was also a stable group of STRFs that did not apparently
+ change during behavior (25% of recorded cells), and it is interesting that,
+ even in behaviorally labile STRFs, the plastic changes modulated the strength
+ of preexisting inhibitory or excitatory STRF fields but seldom caused an
+ outright change of synaptic sign at best frequency
+\end_layout
+
+\begin_layout Standard
+predict that there would be virtually no lasting changes in the A1 tonotopic
+ map, because there was no predominant behavioral focus on any single frequency
+ throughout training.
+ 
+\end_layout
+
+\begin_layout Standard
+fascinating finding: that difficult tone discrimination training (i.e., differenti
+al classical conditioning with closely adjacent CS and CS frequencies) that
+ did not lead to successful behavioral learning still resulted in consistent
+ receptive field changes in A1.
+ In other words, cortical adaptive responses can occur before, or even without,
+ associated behavioral changes.
+\end_layout
+
+\begin_layout Standard
+A1 stimulus-specific adaptation
+\end_layout
+
+\begin_layout Standard
+A speculative explanation for the dominant pattern of behavioral plasticity
+ reported (overall suppression at reference and facilitation for target)
+ is that the auditory system, for voluntary, attentive behavioral tasks,
+ has built on a preexisting set of automatic, preattentive neural mechanisms
+ that are normally used to detect acoustic novelty and show, in miniature,
+ the same response pattern as seen in frequency discrimination behavior.
+\end_layout
+
+\begin_layout Standard
+receptive field properties are continuously being modified
+\end_layout
+
+\begin_layout Standard
+in identifying salient features of the acoustic or the visual scene, regulating
+ adaptive plasticity, enhancing responses, and reshaping neuronal receptive
+ field properties, enabling A1 neurons to multiplex acoustic inputs for
+ different acoustic tasks.
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset citation
+LatexCommand cite
+key "chi2005multiresolution"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+a unified multiresolution representation of the spectral and temporal features
+\end_layout
+
+\begin_layout Standard
+cochlear analysis of sound and the extraction of the acoustic spectrum in
+ the cochlear nucleus are only the earliest stages in a sequence of substantial
+ transformations of the neural representation of sound as it journeys up
+ to the auditory cortex via the midbrain and thalamus.
+\end_layout
+
+\begin_layout Standard
+apparent progressive loss of temporal dynamics from the periphery to the
+ cortex.
+\end_layout
+
+\begin_layout Standard
+Another important change in the nature of the neural responses is the emergence
+ of elaborate selectivity to combined spectral and temporal features, selectivit
+y that is typically much more complex than the relatively simple tuning
+ curves and dynamics of auditory-nerve fiber responses
+\end_layout
+
+\begin_layout Standard
+An early stage captures monaural processing from the cochlea to the midbrain.
+ It transforms the acoustic stimulus to an auditory time-frequency spectrogramli
+ke
+\end_layout
+
+\begin_layout Standard
+.
+ The second is called the cortical stage because it reflects the more complex
+ spectrotemporal analysis presumed to take place in mammalian AI.
+\end_layout
+
+\begin_layout Standard
+A STRF summarizes the way a cell responds to the stimulus.
+ Along its ordinate—“frequency axis”—
+\end_layout
+
+\begin_layout Standard
+.
+ Thus, some STRFs are responsive excited or suppressed over a broad range
+ of frequencies, exceeding an octave ii, while others are quite narrowly
+ tuned iv.
+\end_layout
+
+\begin_layout Standard
+each STRF acts as a modulation selective filter of its input spectrogram,
+ specifically tuned to a particular range of spectral resolutions
+\end_layout
+
+\begin_layout Standard
+The collection of all such STRFs then would constitute a filterbank spanning
+ the broad range of psychoacoustically observed scale and rate sensitivity
+\end_layout
+
+\begin_layout Standard
+The model consists of two major transformations of the acoustic signal:
+ 
+\end_layout
+
+\begin_layout Standard
+1 A frequency analysis stage associated with the cochlea, cochlear nucleus,
+ and response features observed in the midbrain: This stage effectively
+ computes an affine wavelet transform of the acoustic signal with a spectral
+ resolution of about 10% Lyon and Shamma, 1996.
+ 
+\end_layout
+
+\begin_layout Standard
+2 A spectrotemporal multiresolution analysis stage postulated to conclude
+ in the primary auditory cortex: This stage effectively computes a two-dimension
+al affine wavelet transform with a Gabor-like spectrotemporal mother-wavelet
+ 
+\end_layout
+
+\begin_layout Standard
+real cortical STRFs Fig.
+ 1 are far more complex than the simple Gabor-like shapes we have employed
+ in the model.
+ 
+\end_layout
+
+\begin_layout Subsection
+Peripheral auditory processing
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide true
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename figures/peripheralAuditory.pdf
+	scale 50
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Peripheral auditory processing workflow
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The initial stage of the model starts with a transformation of the signal
+ from a pressure time waveform to a spatiotemporal activation pattern.
+ It captures the basic processing taking place at the level of the auditory
+ periphery Pickles, 1988, including cochlear filtering, hair-cell transduction,
+ and auditory-nerve and cochlear-nucleus spectrotemporal sharpening.
+ Briefly, it consists of a cochlear-filter bank of 128 constant-Q highly
+ asymmetric bandpass filters Q= 4 equally spaced on a logarithmic frequency
+ axis x with center frequencies spanning a range of 5.3 octaves i.e., with
+ a resolution of 24 channels per octave.
+ Next, a hair-cell stage transduces the cochlear-filter outputs into auditoryner
+ve patterns via a three-step process consisting of highpass filtering, a
+ nonlinear compression, and low-pass leakage, effectively limiting the temporal
+ fluctuations below 5 kHz.
+ Finally, a lateral inhibitory network performs a sharpening of the filter-bank
+ frequency selectivity mimicking the role of cochlear-nucleus neurons Sacks
+ and Blackburn, 1991; Shamma, 1998.
+ It is modeled as a first difference operation across the frequency channels,
+ followed by a halfwave rectifier, and then a short-term integrator.
+ Extensive details of the biophysical grounds, computational implementation,
+ and perceptual relevance of this model can be found in Wang and Shamma
+ 1994 and Yang et al.
+ 1992.
+ We complement the model above with an additional onset sharpening stage
+ to emphasize the presence of transient events in this spectrographic representa
+tion.
+ We apply a high-pass filter filter cutoff about 400 Hz to the output of
+ each frequency channel to boost the transient energy in the signal.
+\end_layout
+
+\begin_layout Standard
+The processing of the acoustic signal in the cochlea is modeled as a bank
+ of 128 constant-Q asymmetric bandpass filters equally spaced on the logarithmic
+ frequency scale spanning 5.3 octaves.
+ The cochlear output is then transduced into inner hair cells potentials
+ via a high pass and low pass operation.
+ The resulting auditory nerve signals undergo further spectral sharpening
+ via a lateral inhibitory network.
+ Finally, a midbrain model resulting in additional loss in phase locking
+ is performed using short term integration with time constant 4 ms resulting
+ in a time frequency representation called as the auditory spectrogram.
+\end_layout
+
+\begin_layout Standard
+The stages of the early auditory model are illustrated in Fig.
+ 2.
+ In brief, the first operation is an affine wavelet transform of the acoustic
+ signal 
+\begin_inset Formula $s\left(t\right)$
+\end_inset
+
+.
+ It represents the spectral analysis performed by the cochlear filter bank.
+ This analysis stage is implemented by a bank of 128 overlapping constant
+ Q (
+\begin_inset Formula $Q_{10dB}\approx3$
+\end_inset
+
+) bandpass filters with center frequencies CFs that are uniformly distributed
+ along a logarithmic frequency axis x, over 5.3 oct 24 filters/ octave.
+ The impulse response of each filter2 is denoted by 
+\begin_inset Formula $h\left(t;x\right)$
+\end_inset
+
+.
+ These cochlear filter outputs 
+\begin_inset Formula $y_{coch}\left(t,x\right)$
+\end_inset
+
+ are transduced into auditory-nerve patterns 
+\begin_inset Formula $y_{AN}\left(t,x\right)$
+\end_inset
+
+ by a hair cell stage consisting of a highpass filter, a nonlinear compression
+ 
+\begin_inset Formula $g\left(·\right)$
+\end_inset
+
+, and a membrane leakage low-pass filter 
+\begin_inset Formula $w\left(t\right)$
+\end_inset
+
+ accounting for decrease of phase-locking on the auditory nerve beyond 2
+ kHz.
+ The final transformation simulates the action of a lateral inhibitory network
+ LIN postulated to exist in the cochlear nucleus Shamma, 1989, which effectively
+ enhances the frequency selectivity of the cochlear filter bank Lyon and
+ Shamma, 1996; Shamma, 1985b.
+ The LIN is simply approximated by a first-order derivative with respect
+ to the tonotopic axis and followed by a half-wave rectifier to produce
+ 
+\begin_inset Formula $y_{LIN}\left(t,x\right)$
+\end_inset
+
+.
+ The final output of this stage is obtained by integrating 
+\begin_inset Formula $y_{LIN}\left(t,x\right)$
+\end_inset
+
+ over a short window, 
+\begin_inset Formula $\mu\left(t,\tau\right)=e^{−t/\tau}u\left(t\right)$
+\end_inset
+
+, with time constant 
+\begin_inset Formula $\tau$
+\end_inset
+
+ = 8 ms mimicking the further loss of phase locking observed in the midbrain.
+ The mathematical formulation for this model can be summarized as follows:
+ ycocht,x = st
+\begin_inset Formula 
+\[
+y_{coch}\left(t,x\right)=s\left(t\right)\otimes_{t}h\left(t;x\right)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+y_{AN}\left(t,x\right)=g\left(\delta_{t}y_{coch}\left(t,x\right)\right)\otimes_{t}w\left(t\right)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+y_{LIN}\left(t,x\right)=max\left(\delta_{x}y_{AN}\left(t,x\right),0\right)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+y_{final}\left(t,x\right)=y_{LIN}\left(t,x\right)\otimes_{t}\mu\left(t;\tau\right)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+cochlear filtering is essentially linear, lacking such phenomena as two-tone
+ suppression and level-dependent tuning, which are critical in some applications
+ Carney, 1993.
+ The lateral inhibition model is very schematic and lacks details of single
+ neurons Shamma, 1989.
+ We also have no explicit adaptive properties in our current model 
+\end_layout
+
+\begin_layout Subsection
+Cortical processing
+\end_layout
+
+\begin_layout Standard
+Our current understanding of cortical processing reveals that cortical units
+ exhibit a wide variety of receptive field profiles Kowalski et al., 1996;
+ Miller et al., 2002; Elhilali et al., 2007.
+ These response fields, also called spectrotemporal receptive fields STRFs,
+ represent a time-frequency transfer function of each neuron, hence capturing
+ the specific sound features that selectively drive the cell best.
+ Functionally, such rich variety implies that each STRF acts as a selective
+ filter specific to a range of spectral resolutions or scales and tuned
+ to a limited range of temporal modulations or rates, covering the broad
+ span of psychoacoustically observed modulation sensitivities in humans
+ and animals Eddins and Bero, 2007; Green, 1986; Viemeister, 1979.
+\end_layout
+
+\begin_layout Standard
+The central stage further analyzes the spectro-temporal content of the auditory
+ spectrogram using a bank of modulation selective filters centered at each
+ frequency along the tonotopic axis, modeling neurophysiological receptive
+ fields.
+ This step corresponds to a 2D affine wavelet transform, with a spectro-temporal
+ mother wavelet, define as Gabor-shaped in frequency and exponential in
+ time.
+ Each filter is tuned (Q = 1) to a specific rate (v in Hz) of temporal modulatio
+ns and a specific scale of spectral modulations (V in cycles/octave), and
+ a directional orientation (+ for upward and 2 for downward).
+ 
+\end_layout
+
+\begin_layout Standard
+For input spectrogram z(t,f ), the response of each STRF in the model is
+ given by: 
+\begin_inset Formula 
+\[
+r_{\pm}\left(t,f;\omega,\Omega,\theta,\phi\right)=z\left(t,f\right)*_{t,f}STRF_{\pm}\left(t,f;\omega,\Omega,\theta,\phi\right)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+where t,f denotes convolution in time and frequency and h and w are the
+ characteristic phases of the STRF’s which determine the degree of asymmetry
+ in the time and frequency axes respectively.
+ The model filters STRFz(t,f; v,V; h,w) filters can be decomposed in each
+ quadrant (upward + or downward 2) into RF(t; v; h) into SF(f; V; w) correspondi
+ng to rate and scale filters respectively.
+ Details of the design of the filter functions STRFz can be found in [58].
+ The present study uses 11 spectral filters with characteristic scales [0.25,
+ 0.35, 0.50, 0.71, 1.00, 1.41, 2.00, 2.83, 4.00, 5.66, 8.00] (cycles/octave) and 11
+ temporal filters with characteristic rates [4.0, 5.7, 8.0, 11.3, 16.0, 22.6,
+ 32.0, 45.3, 64.0, 90.5, 128.0] (Hz), each with upward and downward directionality.
+ All outputs are integrated over the time duration of each note.
+ In order to simplify the analysis, we limit our computations to the magnitude
+ of the cortical output rz(t,f; v,V; h,w) (i.e.
+ responses corresponding to zero-phase filters).
+ 
+\end_layout
+
+\begin_layout Standard
+The second analysis stage mimics aspects of the responses of higher central
+ auditory stages especially the primary auditory cortex.
+ 
+\end_layout
+
+\begin_layout Standard
+bank of filters that are selective to different spectrotemporal modulation
+ parameters that range from slow to fast rates temporally, and from narrow
+ to broad scales spectrally.
+\end_layout
+
+\begin_layout Standard
+Three features are of particular interest: i it is centered on a particular
+ center frequency CF.
+ The location of the excitatory white and inhibitory black stripes
+\end_layout
+
+\begin_layout Standard
+ii the modulation rate along the time axis is about 16 Hz; and iii the excitator
+y portions are separated on the vertical axis by about 1 oct, giving rise
+ to a spectral “scale” sensitivity to peaks separated by 1 oct, 
+\end_layout
+
+\begin_layout Standard
+The filter output is computed by a convolution of its STRF with the input
+ auditory spectrogram yfinalt,x, i
+\end_layout
+
+\begin_layout Standard
+responses across the filter bank, with different stimuli being differentiated
+ by which filters they activate best.
+ The response map provides a unique characterization of the spectrogram,
+ one that is sensitive to the spectral shape and dynamics of the entire
+ stimulus.
+\end_layout
+
+\begin_layout Standard
+We assume a bank of “idealized” STRFs as depicted in Fig.
+ 5a.
+ Each STRF is selective to a narrow range of temporal and spectral modulations
+ and is also directionally sensitive to either upward or downward drifting
+ modulations.
+ A complete set of such STRFs with a range of temporal and spectral selectivity
+ e.g., 1 – 300 Hz, and 0.25–8 peaks or cycles/octave would be sufficient to
+ decompose and characterize the modulations in the auditory spectrogram.
+ More realistic complex STRFs can be readily formed by superposition of
+ these basic STRFs.
+ We define the STRF as a real function that is formed by combining two complex
+ functions in a manner consistent with extensive physiological data.
+ Specifically, experimental STRFs are not necessarily time-frequency separable.
+ Instead, we have found that they are almost always so-called “quadrant
+ separable.”3 This requires that the STRF be represented as the real of the
+ product of a complex temporal and a complex spectral “impulse response”
+ function, 
+\begin_inset Formula $h_{IRT}\left(t\right)$
+\end_inset
+
+ and 
+\begin_inset Formula $h_{IRS}\left(x\right)$
+\end_inset
+
+, as follows: 
+\begin_inset Formula $STRF=\mathcal{R}\left\{ h_{IRT}\left(t\right)·h_{IRS}\left(x\right)\right\} $
+\end_inset
+
+ , where
+\begin_inset Formula 
+\[
+h_{IRS}\left(x:\Omega,\phi\right)=h_{irs}\left(x;\Omega,\phi\right)+j\hat{h}_{irs}\left(x;\Omega,\phi\right)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+h_{IRT}\left(t;\omega,\theta\right)=h_{irt}\left(t;\omega,\theta\right)+j\hat{h}_{irt}\left(t;\omega,\theta\right)
+\]
+
+\end_inset
+
+
+\begin_inset Formula $\mathcal{R}\left\{ ·\right\} $
+\end_inset
+
+ denotes the real part, and 
+\begin_inset Formula $h\left(·\right)$
+\end_inset
+
+ and 
+\begin_inset Formula $\hat{h}\left(·\right)$
+\end_inset
+
+ denote Hilbert transform pairs.
+ The real functions 
+\begin_inset Formula $h_{irs}\left(·\right)$
+\end_inset
+
+ and 
+\begin_inset Formula $h_{irt}\left(·\right)$
+\end_inset
+
+ are defined by sinusoidally interpolating seed functions 
+\begin_inset Formula $h_{s}\left(·\right)$
+\end_inset
+
+, 
+\begin_inset Formula $h_{t}\left(·\right)$
+\end_inset
+
+ and their Hilbert transforms Wang and Shamma, 1995
+\begin_inset Formula 
+\[
+h_{irs}\left(x:\Omega,\phi\right)=h_{s}\left(x;\Omega\right)cos\mbox{ }\phi+\hat{h}_{s}\left(x;\Omega\right)sin\,\phi
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+h_{irt}\left(t;\omega,\theta\right)=h_{t}\left(t;\omega\right)cos\,\theta+\hat{h}_{t}\left(t;\omega\right)sin\,\theta
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+where 
+\begin_inset Formula $\Omega$
+\end_inset
+
+ and 
+\begin_inset Formula $\omega$
+\end_inset
+
+ are the spectral density and velocity parameters of the filters; 
+\begin_inset Formula $\phi$
+\end_inset
+
+ and 
+\begin_inset Formula $\theta$
+\end_inset
+
+ are characteristic phases; 
+\begin_inset Formula $h_{s}\left(·\right)$
+\end_inset
+
+ and 
+\begin_inset Formula $h_{t}\left(·\right)$
+\end_inset
+
+ are the spectral and temporal functions that determine the modulation selectivi
+ty of the STRF, and 
+\begin_inset Formula $\hat{h_{s}}\left(·\right)$
+\end_inset
+
+ and 
+\begin_inset Formula $\hat{h}_{t}\left(·\right)$
+\end_inset
+
+ are their Hilbert transforms.
+ In addition, the directional sensitivity of the STRF is modeled as 
+\begin_inset Formula 
+\[
+STRF_{\Downarrow}=\mathcal{R}\left\{ h_{IRT}\left(t\right)\text{·}h_{IRS}\left(x\right)\right\} 
+\]
+
+\end_inset
+
+
+\begin_inset Formula 
+\[
+STRF_{\Uparrow}=\mathcal{R}\left\{ h_{IRT}^{*}\left(t\right)\text{·}h_{IRS}\left(x\right)\right\} 
+\]
+
+\end_inset
+
+, where 
+\begin_inset Formula $*$
+\end_inset
+
+ denotes the complex conjugate; 
+\begin_inset Formula $\Downarrow$
+\end_inset
+
+ and 
+\begin_inset Formula $\Uparrow$
+\end_inset
+
+ denote downward and upward moving direction respectively.
+ Note, the downward STRF shown in Fig.
+ 5a is a special case of 
+\begin_inset Formula $\theta=\phi=0$
+\end_inset
+
+.
+ We choose 
+\begin_inset Formula $h_{s}\left(·\right)$
+\end_inset
+
+ to be a Gabor-like function commonly used in the vision literature to describe
+ the analogous spatial aspect of a receptive field Jones and Palmer, 1987.
+ It is defined as the second derivative of a Gaussian function; 
+\begin_inset Formula $h_{t}\left(·\right)$
+\end_inset
+
+ is assumed to be a gamma function e.g., as in Slaney 1998.
+\begin_inset Formula 
+\[
+h_{s}\left(x\right)=\left(1-x^{2}\right)e^{-x^{2}/2}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+h_{t}\left(t\right)=t^{2}e^{-3.5t}sin\left(2\pi t\right)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+And for different scales and rates
+\begin_inset Formula 
+\[
+h_{s}\left(x;\Omega\right)=\Omega h_{s}\left(\Omega x\right)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+h_{t}\left(t;\omega\right)=\omega h_{t}\left(\omega t\right)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Therefore, the STRF in general is an inseparable spectrotemporal function
+ of 
+\begin_inset Formula $h_{s}\left(·\right)$
+\end_inset
+
+ and 
+\begin_inset Formula $h_{t}\left(·\right)$
+\end_inset
+
+, with a specific highly constrained spectrotemporal structure known as
+ “quadrant separable.” The spectrotemporal response of a downward upward
+ cell 
+\begin_inset Formula $c$
+\end_inset
+
+ for an input spectrogram 
+\begin_inset Formula $y\left(t,s\right)$
+\end_inset
+
+ is then given by 
+\begin_inset Formula 
+\[
+r_{c\Downarrow\left(\Uparrow\right)}\left(t,x:\omega_{c},\Omega_{c},\theta_{c},\phi_{c}\right)=y\left(t,x\right)\otimes_{tx}\mathcal{R}\left\{ h_{IRT}^{(*)}\left(t;\omega_{c},\theta_{c}\right)·h_{IRS}^{(*)}\left(x;\Omega_{c},\phi_{c}\right)\right\} 
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+where 
+\begin_inset Formula $\otimes$
+\end_inset
+
+ denotes convolution with respect to both t and x.
+ This multiscale multirate or multiresolution spectrotemporal response is
+ called “cortical representation.” Substituting Eqs.
+ 5–8 into Eq.
+ 9, the cortical representation at downward or upward cell c can be rewritten
+ as
+\begin_inset Formula 
+\[
+r_{c\Downarrow}\left(t,x:\omega_{c},\Omega_{c},\theta_{c},\phi_{c}\right)=y\left(t,x\right)\otimes_{tx}\left[\left(h_{t}h_{s}-\hat{h}_{t}\hat{h}_{s}\right)cos\left(\theta_{c}+\phi_{c}\right)+\left(\hat{h}_{t}h_{s}+h_{t}\hat{h}_{s}\right)sin\left(\theta_{c}+\phi_{c}\right)\right]
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+and
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+r_{c\Uparrow}\left(t,x:\omega_{c},\Omega_{c},\theta_{c},\phi_{c}\right)=y\left(t,x\right)\otimes_{tx}\left[\left(h_{t}h_{s}+\hat{h}_{t}\hat{h}_{s}\right)cos\left(\theta_{c}-\phi_{c}\right)+\left(\hat{h}_{t}h_{s}-h_{t}\hat{h}_{s}\right)sin\left(\theta_{c}-\phi_{c}\right)\right]
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+where 
+\begin_inset Formula $h_{t}\equiv h_{t}\left(t;\omega_{c}\right)$
+\end_inset
+
+ and 
+\begin_inset Formula $h_{s}\equiv h_{s}\left(x;\Omega_{c}\right)$
+\end_inset
+
+ to simplify notation.
+ 
+\end_layout
+
+\begin_layout Subsection
+Integrative and clustering stage
+\end_layout
+
+\begin_layout Standard
+induces stream segregation by reconciling incoming sensory information with
+ gradually formed expectations.
+ This integration process postulates that clusters of A1 neurons with typical
+ multiscale dynamics of 2 – 30 Hz Miller et al., 2002 integrate their sensory
+ inputs to maintain a form of a working memory representation.
+ This memory trace is used to build expectations of how a stream evolves
+ over time and makes predictions about what is expected at the next time
+ instant.
+ By reconciling these expectations with the actual incoming sensory cues,
+ the system is able to assign incoming features to the perceptual group
+ that matches them best Nix and Hohmann, 2007.
+ integrates the input of each cortical array with dynamics typical of time
+ constants of A1, ii uses a Kalman-filter-based estimation to track the
+ evolution of each array/stream over time, and iii utilizes the recent auditory
+ experience to infer what each cluster expects to “hear” next.
+\end_layout
+
+\begin_layout Section
+Results
+\end_layout
+
+\begin_layout Standard
+We explore the model’s ability to mimic human perception as we vary these
+ two critical parameters frequency separation between the two notes FAB
+ and tone repetition time.
+ 
+\end_layout
+
+\begin_layout Standard
+In many circumstances, it is reported that buildup of streaming can range
+ from a few hundreds of milliseconds to several seconds Anstis and Saida,
+ 1985; Bregman, 1978.
+ To reproduce these time scales, it is necessary to incorporate more biological
+ realism to the cortical processing stage via simple adaptation processes
+ or synaptic depression mechanisms known to operate at the level of thalamocorti
+cal projections see Elhilali et al.
+ 2004 for details.
+ Habituation of A1 responses over time has been postulated as a possible
+ neural mechanism responsible for the observed perceptual buildup of streaming
+ Micheyl et al., 2005.
+\end_layout
+
+\begin_layout Standard
+Timbre-based segregation
+\end_layout
+
+\begin_layout Standard
+strengthens the claim that the topographic organization of mammalian auditory
+ cortex with neurons of different spectral resolutions and sensitivities
+ orthogonal to its tonotopic organization does indeed underlie the system’s
+ ability to distinguish between natural sounds of distinct timbres e.g., speech
+ Sutter, 2005.
+\end_layout
+
+\begin_layout Standard
+We stipulate in the current model that cortical time constants play a role
+ in the process of auditory scene organization by facilitating the tracking
+ of sound streams over the course of few to tens of hertz.
+\end_layout
+
+\begin_layout Standard
+Key to this organizational role are the multiple time scales typically observed
+ in cortical responses, as well as an internal representation of recent
+ memory that allows the smooth evolution of streams over time.
+ A powerful aspect of our formulation is its real-time capability because
+ the model forms auditory streams as it receives its input data, requiring
+ no prior training on a specific speech corpus or early exposure to a set
+ of voices, sound categories, and patterns.
+\end_layout
+
+\begin_layout Standard
+can potentially guide our understanding of the brain function in general
+ and biological auditory scene analysis, in particular.
+\end_layout
+
+\begin_layout Standard
+The organization of the auditory pathway up to the auditory cortex indicates
+ that different auditory features are extracted from the incoming sounds
+ at various stages and probably organized into auditory objects at the cortical
+ level Nelken, 2004.
+ This rich image which emerges at the level of A1 effectively projects the
+ acoustic waveform into a higher dimensional perceptual space in a mapping
+ reminiscent of operations taking place in classification, regression and
+ kernel-based classifiers Cristianini and Shawe-Taylor, 2000; Herbrich,
+ 2001.
+\end_layout
+
+\begin_layout Standard
+Evidence from auditory cortical physiology is consistent with this view
+ Woolley et al., 2005 and suggests that the correspondence between cortical
+ tuning and spectrotemporal features in natural sounds constitutes a mapping
+ that effectively enhances discriminability among different sounds.
+ 
+\end_layout
+
+\begin_layout Standard
+Information in sound occurs on multiple time scales with different temporal
+ features having distinct acoustic manifestations, neural instantiations,
+ and perceptual roles.
+ At the level of the central auditory system particularly the primary auditory
+ cortex, numerous physiological investigations have shown that cortical
+ responses appear to be particularly tuned to relatively slow rates of the
+ order of few to tens of hertz.
+ The sluggishness of cortical responses has been postulated to correspond
+ very closely to important information components in speech and music.
+ 
+\end_layout
+
+\begin_layout Standard
+the appropriate choice of time constants for this process is crucial for
+ achieving the desired performance.
+\end_layout
+
+\begin_layout Standard
+.
+ The physiological plausibility of this mechanism rests on the existence
+ of feedback projections that mediate the adaptive representation of biological
+ information under continuously changing behavioral contexts and environments.
+ Adaptive signal processing techniques such as Kalman filtering have been
+ successfully implemented to model many forms of dynamic neural adaptation
+ and plasticity in hippocampal and motor circuits Eden et al., 2004; Srinivasan
+ et al., 2006; Wu et al., 2006.
+\end_layout
+
+\begin_layout Standard
+changes in the spectrotemporal tuning of cortical receptive fields in a
+ direction that promotes streaming and facilitates the formation of two
+ segregated objects Yin et al., 2007.
+ The question remains, however, as to where and how exactly in the model
+ does the adaptive nature of the STRFs emerge and serve functionally to
+ promote streaming? 
+\end_layout
+
+\begin_layout Standard
+This view of the relationship between recurrent feedback and rapid STRF
+ plasticity makes several specific predictions that need to be explored
+ in the future.
+ For instance, STRF changes in the model essentially represent the neural
+ correlate of the so-called “buildup” of streaming.
+\end_layout
+
+\begin_layout Standard
+However, an alternative hypothesis is that the top-down “feedback loop”
+ in the model is enabled only when the listener’s attention is engaged.
+ Clearly, without feedback, clustering ceases and no streams can form.
+ Attention, we postulate, engages the feedback loop and enables streaming.
+ 
+\end_layout
+
+\begin_layout Standard
+further postulate that “selective attention” to one stream or another can
+ modulate the gain in the appropriate feedback loop, and hence favor the
+ formation and perception of one e.g., the foreground stream over the other
+ the background.
+\end_layout
+
+\begin_layout Section
+Applications
+\end_layout
+
+\begin_layout Subsection
+Audio classification
+\end_layout
+
+\begin_layout Standard
+Use it for MIREX evaluation
+\end_layout
+
+\begin_layout Subsection
+Mimicking human perception
+\end_layout
+
+\begin_layout Subsection
+Targeting auditory 
+\end_layout
+
+\begin_layout Section
+Conclusion and future work
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset bibtex
+LatexCommand bibtex
+bibfiles "bibliography"
+options "plain"
+
+\end_inset
+
+
+\end_layout
+
+\end_body
+\end_document

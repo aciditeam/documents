@@ -1,0 +1,493 @@
+#LyX 2.1 created this file. For more info see http://www.lyx.org/
+\lyxformat 474
+\begin_document
+\begin_header
+\textclass article
+\use_default_options true
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_math auto
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 1
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Deep learning ideas
+\end_layout
+
+\begin_layout Enumerate
+Devising a neuron function similarity (how similar is the function approximated
+ by two separate neurons ?)
+\end_layout
+
+\begin_layout Enumerate
+Add neighboring constraints / Add distance constraints <=> Deep SOM ?
+\end_layout
+
+\begin_layout Enumerate
+Theoretically sound parallel learning algorithms need to be developed.
+\end_layout
+
+\begin_layout Enumerate
+Optimally-pruned deep networks (cf.
+ Optimally-pruned extreme learning machine) = If we could generate all random
+ weights configurations and then simply kill the 
+\begin_inset Quotes eld
+\end_inset
+
+useless
+\begin_inset Quotes erd
+\end_inset
+
+ neurons, we would have all optimal neurons (also bring the question of
+ deep vs.
+ wide)
+\end_layout
+
+\begin_layout Enumerate
+Need better approaches to use deep architectures for modeling sequential
+ data
+\end_layout
+
+\begin_layout Enumerate
+TSKM as a connexionnist architecture
+\end_layout
+
+\begin_layout Enumerate
+Apply Genetic programming to the usual workflow : [affine transform] ->
+ [non-linearity] -> [Pooling]
+\end_layout
+
+\begin_layout Enumerate
+What does it take to find back the FFT (analyze & minimize discrepancies)
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+Input = raw signal vector / Reconstruction cost = compare activation of
+ network with the vector of FFT frequencies
+\end_layout
+
+\begin_layout Enumerate
+Globally we could do that for all human-knowledge feature ^^
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+Could we embed DTW in a layer ?
+\end_layout
+
+\begin_layout Enumerate
+=> Simply impose local connections by multiplying the initial weights to
+ fit a form of localized gaussian (around the centered time frame ^^)
+\end_layout
+
+\begin_layout Enumerate
+Autoencoders with fuzzy weights (still searching for accounting DTW in deep
+ learning)
+\end_layout
+
+\begin_layout Enumerate
+Topographic filter maps would allow to use DTW (activation are topographic
+ so time related)
+\end_layout
+
+\begin_layout Enumerate
+Use denoiser AutoEncoder and enforce the 3 types of time series robustness
+ (warp, outlier, noise)
+\end_layout
+
+\begin_layout Enumerate
+Local warping penalties ? Use SOM / Topographic penalties
+\end_layout
+
+\begin_layout Enumerate
++ Forcing invariance by linking nodes weights encoding (
+\begin_inset Formula $w_{ij}=w_{i+\theta j+\theta}$
+\end_inset
+
+, consecutive nodes encode a same shifted version of each other = translation
+ invariance ?)
+\end_layout
+
+\begin_layout Enumerate
+Enforce some sort of windowing / warping over the learning
+\end_layout
+
+\begin_layout Enumerate
+Could we develop a layer-wise goal (semi-supervised feature/motif learning)
+\end_layout
+
+\begin_layout Enumerate
+The common flaw to all deep-learning is to still rely on backprop (finetuning)
+ the final MLP, even if it of course lead to good solution, there is still
+ as much gradient diffusion !
+\end_layout
+
+\begin_layout Enumerate
+Information geometry in deep learning (via manifold learning)
+\end_layout
+
+\begin_layout Enumerate
+CAE as TS distance measure in 
+\begin_inset Formula $\mathbb{R}^{n}$
+\end_inset
+
+ space by inducing the 3 types of major TS robustness
+\end_layout
+
+\begin_layout Enumerate
+Optimize the contraction ratio by 
+\emph on
+enforcing
+\emph default
+ robustness in these points
+\end_layout
+
+\begin_layout Enumerate
+Hellinger-based sparsity to learn specific pathways
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+Compare activations and enforce sparsity through different vectors
+\end_layout
+
+\begin_layout Enumerate
+Multi-granularity :
+\begin_inset Formula 
+\[
+\left[\begin{array}{c}
+11000000000000\\
+00111100000000\\
+00000011111111
+\end{array}\right]\left[\begin{array}{c}
+111100000000\\
+000011110000\\
+000000001111
+\end{array}\right]
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+Compare the traditionnal KL-based sparsity to a Hellinger-based sparsity
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+With time series there is not a single manifold but several manifold to
+ learn (because of various structures) ...
+ and maybe even these manifolds intersect.
+\end_layout
+
+\begin_layout Enumerate
+For multiphonics orchestration, how about we generate 
+\series bold
+lots 
+\series default
+of synthetic examples (mixtures) and learn on that (some kind of huge softmax)
+\end_layout
+
+\begin_layout Enumerate
+Extreme Learning Machine as an intialization step for autoencoders (solve
+ one step of ELM than use these weights as a basis to learn autoencoder
+ ...
+ then alternate ?)
+\end_layout
+
+\begin_layout Enumerate
+Learning machine that could decide its own architecture, based on its own
+ results it could decide to add/remove neurons in order to increase the
+ overall accuracy.
+\end_layout
+
+\begin_layout Enumerate
+Same goes for the learning parameters ...
+ In fact everything should be inter-twined and overall parameter-free.
+\end_layout
+
+\begin_layout Enumerate
+Attentional shift model ?
+\end_layout
+
+\begin_layout Enumerate
+Artificially densifying the data manifold
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+Direct with TS-specific transformations
+\end_layout
+
+\begin_layout Enumerate
+Same TS-specific transformations but embedded in the DAE
+\end_layout
+
+\begin_layout Enumerate
+Other manifold densifications ?
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+Add neighboring constraints to different units (similar to the deep SOM
+ idea)
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+Put constraints on sum of delta squared of weights (minimize accelaration
+ would enforce smoothness on the weights)
+\end_layout
+
+\begin_layout Enumerate
+Add relationships between weights (cf.
+ Semi-RBM)
+\end_layout
+
+\begin_layout Enumerate
+Force correlation between successive units (Wij = W(i+n)(j+n)) d.
+ Locally-connected units ! (similar to forcing weights to zeros or the gaussian
+ inits)
+\end_layout
+
+\begin_layout Enumerate
+Compare the use of patches to full series 
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+For hyperparameter tuning, use a multidimensional gaussian and iteratively
+ re-evaluate the covariance matrix and means in order to directly jump to
+ the best value.
+\end_layout
+
+\begin_layout Enumerate
+The conditional form of RBM can be used to model high-dimensional temporal
+ sequences.
+ Hence they could be plugged on top of convolutional feature learner.
+\end_layout
+
+\begin_layout Enumerate
+Parallel cascade computing in networks (cf.
+ pyramidal wavelet)
+\end_layout
+
+\begin_layout Enumerate
+Weight sharing could help to implement my DTW ideas
+\end_layout
+
+\begin_layout Enumerate
+Invariance is key ...
+ but this is still always human-defined
+\end_layout
+
+\begin_layout Enumerate
+HMM-like RBM = Viterbi decoding on deep learning
+\end_layout
+
+\begin_layout Enumerate
+Try to do MIR from purely raw data !
+\end_layout
+
+\begin_layout Enumerate
+On the incredible success of random ^^
+\end_layout
+
+\begin_layout Enumerate
+We should focus the learning on the architecture not the weights
+\end_layout
+
+\begin_layout Enumerate
+Take inspiration from the neuro-plasticity ! 
+\end_layout
+
+\begin_layout Enumerate
+Randomly connected mesh (the error signal can be randomly rewired to any
+ unit in the network)
+\end_layout
+
+\begin_layout Enumerate
+Backpropagation on the number of units / architecture ?
+\end_layout
+
+\begin_layout Enumerate
+One large softmax for all datasets simultaneously ? (All classes of all
+ datas)
+\end_layout
+
+\begin_layout Enumerate
+Plot the correlation between neurons and data (effect of correlation) +
+ plot them as a N-dimensionnal balls of activation ^^
+\end_layout
+
+\begin_layout Enumerate
+Observe the evolution of weights in a network through each epoch of learning
+ (one video per neuron)
+\end_layout
+
+\begin_layout Enumerate
+Learning the optimal stacking
+\end_layout
+
+\begin_layout Enumerate
+Each unit is a different parameter that is also ought to be learned ! What
+ about all dropping them in (or putting a parameteric sigmoid ...
+ cf.
+ generalized sigmoid or Gamma distribution).
+\end_layout
+
+\begin_layout Enumerate
+Duplicate the 
+\begin_inset Quotes eld
+\end_inset
+
+V1 neuron
+\begin_inset Quotes erd
+\end_inset
+
+ learning hypothesis for sound, by enforcing Shamma's model ...
+ But then try to infer what should be the 
+\begin_inset Quotes eld
+\end_inset
+
+sound V2
+\begin_inset Quotes erd
+\end_inset
+
+ and test it with neuroscientist.
+\end_layout
+
+\begin_layout Enumerate
+Rosetta's stone philosophy ...
+ We do something even if we have no idea wwhat :)
+\end_layout
+
+\begin_layout Enumerate
+Being able to think 
+\begin_inset Quotes eld
+\end_inset
+
+outside of the box
+\begin_inset Quotes erd
+\end_inset
+
+ by questionning your past knowledge => This needs associative memory of
+ facts.
+\end_layout
+
+\begin_layout Enumerate
+Try to 
+\begin_inset Quotes eld
+\end_inset
+
+project
+\begin_inset Quotes erd
+\end_inset
+
+ the results onto human knowledge (ie.
+ can an AE/RBM learn 
+\begin_inset Quotes eld
+\end_inset
+
+back
+\begin_inset Quotes erd
+\end_inset
+
+ our well-known features by itself)
+\end_layout
+
+\begin_layout Enumerate
+How to extend deep architectures to represent information that is not easily
+ represented by vectors (such as trees or graphs)
+\end_layout
+
+\begin_layout Enumerate
+How to embed real feedback loop connections in deep architectures in order
+ to integrate contextual priors.
+\end_layout
+
+\begin_layout Enumerate
+Using tSNE as dimensionality reduction technique prior to deep learning
+\end_layout
+
+\begin_layout Enumerate
+What about 
+\series bold
+reverse 
+\series default
+combinatorics ? Deep learning is based on 
+\begin_inset Quotes eld
+\end_inset
+
+how to exploit regularities to group things
+\begin_inset Quotes erd
+\end_inset
+
+ ...
+ But orchestration (Orchids style) seems a bit opposite, with how to find
+ more complex elements that group into simpler things ?
+\end_layout
+
+\end_body
+\end_document
