@@ -1,0 +1,8 @@
+\begin{thebibliography}{HOT06}
+
+\bibitem[HOT06]{Hinton:2006:FLA:1161603.1161605}
+Geoffrey~E. Hinton, Simon Osindero, and Yee-Whye Teh.
+\newblock A fast learning algorithm for deep belief nets.
+\newblock {\em Neural Comput.}, 18(7):1527--1554, July 2006.
+
+\end{thebibliography}

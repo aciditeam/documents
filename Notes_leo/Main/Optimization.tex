@@ -1,0 +1,69 @@
+\documentclass{report}
+\usepackage{framed}
+\usepackage[outerbars]{changebar}
+
+% Dimensions de la page
+\usepackage{geometry}
+%\geometry{scale=0.8}
+\geometry{a4paper}
+
+% Acronyms
+\usepackage[nonumberlist]{glossaries}
+\setacronymstyle{long-short}
+\makenoidxglossaries
+% Load acronyms list
+\loadglsentries{../acronyms}
+
+% Graphics
+\usepackage{graphicx}
+\graphicspath{{../Figures/}}
+
+% Prettyref
+\usepackage{prettyref}
+\usepackage{hyperref}
+
+% Maths packages
+\usepackage{amsmath,amssymb}
+
+\title{Optimization}
+\author{Aciditeam}
+\begin{document}
+\maketitle
+While being self-sufficient, those notes focus on the recent results in optimization and don't pretend to be an exhaustive review of optimization methods.
+
+\chapter{Error function}
+\section{Euclidean norms}
+\section{Cross-entropy}
+Cross-entropy is a measure between two distribution probability $P$ and $Q$ defined on the same set of events $X$. It measures the average number of bits needed to be able to identify an event drawn from the set if we use a coding scheme optimized for the distribution $Q$, but the data are drawn from the distribution $p$.
+
+The optimal length of the coding message for each event $x_i \in X$  is given by $l_{i} = -log_{2} (q(x_{i})$ if we suppose that $Q$ models the distribution of $X$.
+Hence, H(p,q) is given by
+\begin{equation}
+H(p,q) = \mathbb{E}_{p} \left[ l_{i} \right] = \mathbb{E}_{p} \left[ - log(q) \right]
+\end{equation}
+
+An other interesting writing of this formula is
+\begin{equation}
+H(p,q) = H(p) + D_{KL}(p||q)
+\end{equation}
+which highlight the fact that the minimum of the cross-entropy function is given by the constant term of this formula $H(p)$, since the Kullback-Leibler divergence is non-negative.
+
+However, the "true" distribution $P$ is often unknown. For instance, when defining a cost function in order to train a neural network by gradient descent, $P$ is the distribution we are trying to model.
+Since our data are labelled, there is only one $i$ such that $p(x_{i}) = 1$.
+For a training set $T$
+\begin{equation}
+\hat{H}(T,q) = - \sum_{x_{i} \in T} \frac{1}{| T |} \log _2 q(x_{i})
+\end{equation}
+$T$ will often be a mini-batch.
+
+\chapter{Parameter update}
+\section{Stochastic gradient descent (SGD)}
+\subsection{Momentum}
+\section{Hessian-free optimization}
+\subsection{AdaGrad}
+\subsection{AdaDelta}
+
+\section{}
+
+
+\end{document}

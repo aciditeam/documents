@@ -1,0 +1,10 @@
+\BOOKMARK [1][-]{section.0.1}{HMM}{}% 1
+\BOOKMARK [1][-]{section.0.2}{RNN-RBM}{}% 2
+\BOOKMARK [2][-]{subsection.0.2.1}{Data representation}{section.0.2}% 3
+\BOOKMARK [2][-]{subsection.0.2.2}{Model}{section.0.2}% 4
+\BOOKMARK [1][-]{section.0.3}{Long Short-Term Memory \(LSTM\)}{}% 5
+\BOOKMARK [2][-]{subsection.0.3.1}{Data representation}{section.0.3}% 6
+\BOOKMARK [2][-]{subsection.0.3.2}{Model}{section.0.3}% 7
+\BOOKMARK [1][-]{section.0.4}{Hexadria \(RNN-based architecture\)}{}% 8
+\BOOKMARK [2][-]{subsection.0.4.1}{Data representation}{section.0.4}% 9
+\BOOKMARK [2][-]{subsection.0.4.2}{Model}{section.0.4}% 10
