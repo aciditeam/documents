@@ -57,7 +57,9 @@ Using the braids representation (cf Mattia).
 Still to be read, be very promising in order to obtain a compact meaningful representation. A priori rely on real units.
 
 \section{From sparse binary encoding to compact distributional representations}
+Encoding frames of symbolic music with a binary vector lead to sparse representations that I think is not the most suited in order to discover an underlying structure. In \gls*{NLP}, the same problem arises when dictionary are encoded in a 1-to-D way, which is associating one unit to a word. It leads to highly sparse representation (one unit is active on a vector of the size of the dictionary !). A simple yet efficient solution has been proposed by Mikolov, \cite{mikolov2013efficient,mikolov2013distributed}. It consists in making a network discover an adapted representation through a predictive task. The Skip-gram model, most efficient up to now, consists more specifically to \textit{find representations that are useful for predicting the surrounding words in a sentence or a document}.
+Those predicted words are determined through a projection (representation) layer and a softmax layer to choose the next word. Since the number of words is huge, a simple softmax structure is computationally exhausting. Hence a nice solution is to use a hierarchical softmax layer which is a classifier adapted to Huffman coding of word and require only $\log_{2}(D)$ operations instead of $D$ to find the occurrence probability of a word given the input word.
 
-
+I eventually don't think that those kind of representation in the most adapted for symoblic music since the vector size is not that huge neither sparse in our case, and that intensity information should be kept.
 
 \end{document}
