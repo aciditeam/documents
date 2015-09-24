@@ -36,55 +36,58 @@ Warning--I didn't find a database entry for "MR781536"
 Warning--I didn't find a database entry for "MR781537"
 Reallocated singl_function (elt_size=4) to 100 items from 50.
 Warning--empty address in berlioz_orch
+Warning--no number and no volume in boulanger2012modeling
+Warning--page numbers missing in both pages and numpages fields in boulanger2012modeling
 Warning--no number and no volume in Esling2010
 Warning--no number and no volume in handelman2012automatic
 Warning--require articleno with numpages field in Hinton:2006:FLA:1161603.1161605
 Warning--empty address in koechli_orch
+Warning--page numbers missing in both pages and numpages fields in DBLP:journals/corr/LiuR14a
 Warning--can't use both volume and number fields in mcadams2013timbre
 Warning--empty publisher in mcadams2013timbre
 Warning--empty address in mcadams2013timbre
 Warning--empty publisher in taylor2009factored
 Warning--empty address in taylor2009factored
 Warning--empty address in Truchet2011Constraint-Prog
-You've used 11 entries,
+You've used 15 entries,
             5290 wiz_defined-function locations,
-            1353 strings with 16503 characters,
-and the built_in function-call counts, 10403 in all, are:
-= -- 1418
-> -- 337
+            1375 strings with 17181 characters,
+and the built_in function-call counts, 14579 in all, are:
+= -- 2122
+> -- 456
 < -- 1
-+ -- 94
-- -- 124
-* -- 568
-:= -- 1138
-add.period$ -- 59
-call.type$ -- 11
-change.case$ -- 64
-chr.to.int$ -- 11
-cite$ -- 22
-duplicate$ -- 881
-empty$ -- 624
-format.name$ -- 148
-if$ -- 2573
++ -- 128
+- -- 198
+* -- 801
+:= -- 1547
+add.period$ -- 79
+call.type$ -- 15
+change.case$ -- 87
+chr.to.int$ -- 15
+cite$ -- 29
+duplicate$ -- 1167
+empty$ -- 834
+format.name$ -- 200
+if$ -- 3663
 int.to.chr$ -- 1
 int.to.str$ -- 0
-missing$ -- 36
-newline$ -- 123
-num.names$ -- 88
-pop$ -- 323
+missing$ -- 52
+newline$ -- 157
+num.names$ -- 120
+pop$ -- 430
 preamble$ -- 1
-purify$ -- 119
+purify$ -- 162
 quote$ -- 0
-skip$ -- 278
+skip$ -- 359
 stack$ -- 0
-substring$ -- 794
-swap$ -- 100
-text.length$ -- 1
+substring$ -- 1143
+swap$ -- 124
+text.length$ -- 62
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 136
-warning$ -- 11
-while$ -- 95
+type$ -- 192
+warning$ -- 14
+while$ -- 128
 width$ -- 0
-write$ -- 224
-(There were 40 warnings)
+write$ -- 292
+(There were 43 warnings)

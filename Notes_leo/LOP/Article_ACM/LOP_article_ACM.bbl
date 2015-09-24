@@ -32,11 +32,30 @@
 \ifx \showarticletitle \undefined \def \showarticletitle #1{#1}   \fi
 \ifx \showURL      \undefined \def \showURL       #1{#1}          \fi
 
+\bibitem[\protect\citeauthoryear{Bengio}{Bengio}{2009}]%
+        {bengio2009learning}
+{Yoshua Bengio}. 2009.
+\newblock \showarticletitle{Learning deep architectures for AI}.
+\newblock {\em Foundations and trends in Machine Learning\/} {2}, 1 (2009),
+  1--127.
+\newblock
+
+
 \bibitem[\protect\citeauthoryear{Berlioz}{Berlioz}{1844}]%
         {berlioz_orch}
 {Hector Berlioz}. 1844.
 \newblock {\em Grand trait{\'e} d'instrumentation et d'orchestration modernes}.
 \newblock Schonenberger.
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{Boulanger-Lewandowski, Bengio, and
+  Vincent}{Boulanger-Lewandowski et~al\mbox{.}}{2012}]%
+        {boulanger2012modeling}
+{Nicolas Boulanger-Lewandowski}, {Yoshua Bengio}, {and} {Pascal Vincent}. 2012.
+\newblock \showarticletitle{Modeling temporal dependencies in high-dimensional
+  sequences: Application to polyphonic music generation and transcription}.
+\newblock {\em arXiv preprint arXiv:1206.6392\/} (2012).
 \newblock
 
 
@@ -68,6 +87,15 @@
 \newblock
 
 
+\bibitem[\protect\citeauthoryear{Hinton}{Hinton}{2010}]%
+        {hinton2010practical}
+{Geoffrey Hinton}. 2010.
+\newblock \showarticletitle{A practical guide to training restricted Boltzmann
+  machines}.
+\newblock {\em Momentum\/} {9}, 1 (2010), 926.
+\newblock
+
+
 \bibitem[\protect\citeauthoryear{Hinton}{Hinton}{2002}]%
         {hinton2002training}
 {Geoffrey~E Hinton}. 2002.
@@ -95,6 +123,18 @@
 \newblock {\em Trait{\'e} de l'orchestration}.
 \newblock {\'E}ditions Max Eschig.
 \newblock
+
+
+\bibitem[\protect\citeauthoryear{Liu and Ramakrishnan}{Liu and
+  Ramakrishnan}{2014}]%
+        {DBLP:journals/corr/LiuR14a}
+{I.{-}Ting Liu} {and} {Bhiksha Ramakrishnan}. 2014.
+\newblock \showarticletitle{Bach in 2014: Music Composition with Recurrent
+  Neural Network}.
+\newblock {\em CoRR\/}  {abs/1412.3191} (2014).
+\newblock
+\showURL{%
+\url{http://arxiv.org/abs/1412.3191}}
 
 
 \bibitem[\protect\citeauthoryear{McAdams}{McAdams}{2013}]%
