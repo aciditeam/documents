@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2014) (preloaded format=pdflatex 2015.3.4)  24 SEP 2015 11:58
+This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2014) (preloaded format=pdflatex 2015.3.4)  25 SEP 2015 18:22
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -667,19 +667,19 @@ Package: varioref 2011/10/02 v1.4z package for extended references (FMi)
 (./LOP_article_ACM.aux)
 \openout1 = `LOP_article_ACM.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 51.
-LaTeX Font Info:    ... okay on input line 51.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 51.
-LaTeX Font Info:    ... okay on input line 51.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 51.
-LaTeX Font Info:    ... okay on input line 51.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 51.
-LaTeX Font Info:    ... okay on input line 51.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 51.
-LaTeX Font Info:    ... okay on input line 51.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 51.
-LaTeX Font Info:    ... okay on input line 51.
-LaTeX Font Info:    Try loading font information for T1+pnc on input line 51.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 52.
+LaTeX Font Info:    ... okay on input line 52.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 52.
+LaTeX Font Info:    ... okay on input line 52.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 52.
+LaTeX Font Info:    ... okay on input line 52.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 52.
+LaTeX Font Info:    ... okay on input line 52.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 52.
+LaTeX Font Info:    ... okay on input line 52.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 52.
+LaTeX Font Info:    ... okay on input line 52.
+LaTeX Font Info:    Try loading font information for T1+pnc on input line 52.
 
 (/usr/local/texlive/2014/texmf-dist/tex/latex/psnfss/t1pnc.fd
 File: t1pnc.fd 2001/06/04 font definitions for T1/pnc.
@@ -741,39 +741,39 @@ G,.JBIG2,.JB2,.eps]
 File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
 e
 ))
-LaTeX Font Info:    Try loading font information for OMS+pnc on input line 114.
+LaTeX Font Info:    Try loading font information for OMS+pnc on input line 115.
 
 
 (/usr/local/texlive/2014/texmf-dist/tex/latex/psnfss/omspnc.fd
 File: omspnc.fd 
 )
 LaTeX Font Info:    Font shape `OMS/pnc/m/n' in size <8> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 114.
-LaTeX Font Info:    Try loading font information for T1+cmtt on input line 114.
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 115.
+LaTeX Font Info:    Try loading font information for T1+cmtt on input line 115.
 
 
 (/usr/local/texlive/2014/texmf-dist/tex/latex/base/t1cmtt.fd
 File: t1cmtt.fd 1999/05/25 v2.5h Standard LaTeX font definitions
 )
-LaTeX Font Info:    Try loading font information for T1+phv on input line 116.
+LaTeX Font Info:    Try loading font information for T1+phv on input line 117.
 
 (/usr/local/texlive/2014/texmf-dist/tex/latex/psnfss/t1phv.fd
 File: t1phv.fd 2001/06/04 scalable font definitions for T1/phv.
 )
 LaTeX Font Info:    Font shape `T1/phv/bx/n' in size <12> not available
-(Font)              Font shape `T1/phv/b/n' tried instead on input line 116.
+(Font)              Font shape `T1/phv/b/n' tried instead on input line 117.
 LaTeX Font Info:    Font shape `T1/pnc/bx/n' in size <8> not available
-(Font)              Font shape `T1/pnc/b/n' tried instead on input line 116.
+(Font)              Font shape `T1/pnc/b/n' tried instead on input line 117.
 LaTeX Font Info:    Font shape `T1/phv/bx/n' in size <9> not available
-(Font)              Font shape `T1/phv/b/n' tried instead on input line 118.
+(Font)              Font shape `T1/phv/b/n' tried instead on input line 119.
 
 <Figures/orch.pdf, id=1, 1607.00375pt x 1140.26pt>
 File: Figures/orch.pdf Graphic file (type pdf)
  <use Figures/orch.pdf>
-Package pdftex.def Info: Figures/orch.pdf used on input line 122.
+Package pdftex.def Info: Figures/orch.pdf used on input line 123.
 (pdftex.def)             Requested size: 321.39507pt x 228.04796pt.
 
-Underfull \vbox (badness 3612) has occurred while \output is active []
+Underfull \vbox (badness 2229) has occurred while \output is active []
 
 
 Overfull \vbox (72.27pt too high) has occurred while \output is active []
@@ -785,38 +785,32 @@ Non-PDF special ignored!
 <Figures/RBM.pdf, id=516, 275.0275pt x 249.93375pt>
 File: Figures/RBM.pdf Graphic file (type pdf)
  <use Figures/RBM.pdf>
-Package pdftex.def Info: Figures/RBM.pdf used on input line 154.
+Package pdftex.def Info: Figures/RBM.pdf used on input line 157.
 (pdftex.def)             Requested size: 192.51793pt x 174.95242pt.
-LaTeX Font Info:    Try loading font information for U+lasy on input line 158.
+LaTeX Font Info:    Try loading font information for U+lasy on input line 161.
 
 (/usr/local/texlive/2014/texmf-dist/tex/latex/base/ulasy.fd
 File: ulasy.fd 1998/08/17 v2.2e LaTeX symbol font definitions
 )
 LaTeX Font Info:    Font shape `U/lasy/b/n' in size <7> not available
-(Font)              Font shape `U/lasy/m/n' tried instead on input line 158.
+(Font)              Font shape `U/lasy/m/n' tried instead on input line 161.
 LaTeX Font Info:    Font shape `U/lasy/b/n' in size <5> not available
-(Font)              Font shape `U/lasy/m/n' tried instead on input line 158.
-LaTeX Font Info:    Try loading font information for U+msa on input line 158.
+(Font)              Font shape `U/lasy/m/n' tried instead on input line 161.
+LaTeX Font Info:    Try loading font information for U+msa on input line 161.
 
 (/usr/local/texlive/2014/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Try loading font information for U+msb on input line 158.
+LaTeX Font Info:    Try loading font information for U+msb on input line 161.
 
 (/usr/local/texlive/2014/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
-)
-LaTeX Font Info:    Font shape `T1/pnc/bx/n' in size <10> not available
-(Font)              Font shape `T1/pnc/b/n' tried instead on input line 158.
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [3 <./Figures/RBM.pdf>]
-<Figures/CRBM_orchestration.pdf, id=542, 987.78937pt x 563.15999pt>
+) [3 <./Figures/RBM.pdf>] <Figures/CRBM_orchestration.pdf, id=547, 987.78937pt 
+x 563.15999pt>
 File: Figures/CRBM_orchestration.pdf Graphic file (type pdf)
 
 <use Figures/CRBM_orchestration.pdf>
-Package pdftex.def Info: Figures/CRBM_orchestration.pdf used on input line 186.
+Package pdftex.def Info: Figures/CRBM_orchestration.pdf used on input line 190.
 
 (pdftex.def)             Requested size: 296.3391pt x 168.9493pt.
  [4]
@@ -825,131 +819,127 @@ File: Figures/FGCRBM_orchestration.pdf Graphic file (type pdf)
 
 <use Figures/FGCRBM_orchestration.pdf>
 Package pdftex.def Info: Figures/FGCRBM_orchestration.pdf used on input line 21
-2.
+9.
 (pdftex.def)             Requested size: 358.373pt x 204.9773pt.
+LaTeX Font Info:    Font shape `U/lasy/b/n' in size <8> not available
+(Font)              Font shape `U/lasy/m/n' tried instead on input line 220.
+LaTeX Font Info:    Font shape `U/lasy/b/n' in size <6> not available
+(Font)              Font shape `U/lasy/m/n' tried instead on input line 220.
  [5 <./Figures/CRBM_orchestration.pdf>]
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [6 <./Figures/FGCRBM_orchestration.pdf>]
-<Figures/FGCRBM_sampling.pdf, id=606, 1304.875pt x 993.7125pt>
+[6 <./Figures/FGCRBM_orchestration.pdf>]
+<Figures/FGCRBM_sampling.pdf, id=608, 1304.875pt x 993.7125pt>
 File: Figures/FGCRBM_sampling.pdf Graphic file (type pdf)
 
 <use Figures/FGCRBM_sampling.pdf>
-Package pdftex.def Info: Figures/FGCRBM_sampling.pdf used on input line 245.
+Package pdftex.def Info: Figures/FGCRBM_sampling.pdf used on input line 255.
 (pdftex.def)             Requested size: 391.46552pt x 298.11604pt.
-LaTeX Font Info:    Font shape `U/lasy/b/n' in size <8> not available
-(Font)              Font shape `U/lasy/m/n' tried instead on input line 246.
-LaTeX Font Info:    Font shape `U/lasy/b/n' in size <6> not available
-(Font)              Font shape `U/lasy/m/n' tried instead on input line 246.
- [7]
-<Figures/representation_donnes.pdf, id=611, 2575.25099pt x 1349.04pt>
+
+Underfull \vbox (badness 1527) has occurred while \output is active []
+
+ [7 <./Figures/FGCRBM_sampling.pdf>]
+<Figures/representation_donnes.pdf, id=639, 2575.25099pt x 1349.04pt>
 File: Figures/representation_donnes.pdf Graphic file (type pdf)
 
 <use Figures/representation_donnes.pdf>
 Package pdftex.def Info: Figures/representation_donnes.pdf used on input line 2
-65.
+75.
 (pdftex.def)             Requested size: 386.27098pt x 202.34726pt.
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [8 <./Figures/FGCRBM_sampling.pdf>] [9 <./Figures/representation_donnes.pdf>]
+ [8] [9 <./Figures/representation_donnes.pdf>]
 LaTeX Font Info:    Font shape `T1/phv/m/it' in size <9> not available
-(Font)              Font shape `T1/phv/m/sl' tried instead on input line 301.
+(Font)              Font shape `T1/phv/m/sl' tried instead on input line 312.
+LaTeX Font Info:    Font shape `T1/pnc/bx/n' in size <10> not available
+(Font)              Font shape `T1/pnc/b/n' tried instead on input line 338.
 
 
-LaTeX Warning: Citation `Abril07' on page 10 undefined on input line 327.
+LaTeX Warning: Citation `Abril07' on page 10 undefined on input line 338.
 
 
-LaTeX Warning: Citation `Cohen07' on page 10 undefined on input line 328.
+LaTeX Warning: Citation `Cohen07' on page 10 undefined on input line 339.
 
 
-LaTeX Warning: Citation `JCohen96' on page 10 undefined on input line 328.
+LaTeX Warning: Citation `JCohen96' on page 10 undefined on input line 339.
 
 
-LaTeX Warning: Citation `Kosiur01' on page 10 undefined on input line 329.
+LaTeX Warning: Citation `Kosiur01' on page 10 undefined on input line 340.
 
 
-LaTeX Warning: Citation `Harel79' on page 10 undefined on input line 330.
+LaTeX Warning: Citation `Harel79' on page 10 undefined on input line 341.
 
 
-LaTeX Warning: Citation `Editor00' on page 10 undefined on input line 330.
+LaTeX Warning: Citation `Editor00' on page 10 undefined on input line 341.
 
 
-LaTeX Warning: Citation `Editor00a' on page 10 undefined on input line 332.
+LaTeX Warning: Citation `Editor00a' on page 10 undefined on input line 343.
 
 
-LaTeX Warning: Citation `Spector90' on page 10 undefined on input line 333.
+LaTeX Warning: Citation `Spector90' on page 10 undefined on input line 344.
 
 
-LaTeX Warning: Citation `Douglass98' on page 10 undefined on input line 334.
+LaTeX Warning: Citation `Douglass98' on page 10 undefined on input line 345.
 
 
-LaTeX Warning: Citation `Knuth97' on page 10 undefined on input line 334.
+LaTeX Warning: Citation `Knuth97' on page 10 undefined on input line 345.
 
 
-LaTeX Warning: Citation `Andler79' on page 10 undefined on input line 336.
+LaTeX Warning: Citation `Andler79' on page 10 undefined on input line 347.
 
 
-LaTeX Warning: Citation `Smith10' on page 10 undefined on input line 337.
+LaTeX Warning: Citation `Smith10' on page 10 undefined on input line 348.
 
 
-LaTeX Warning: Citation `VanGundy07' on page 10 undefined on input line 338.
+LaTeX Warning: Citation `VanGundy07' on page 10 undefined on input line 349.
 
 
-LaTeX Warning: Citation `Harel78' on page 10 undefined on input line 339.
+LaTeX Warning: Citation `Harel78' on page 10 undefined on input line 350.
 
 
-LaTeX Warning: Citation `Clarkson85' on page 10 undefined on input line 339.
+LaTeX Warning: Citation `Clarkson85' on page 10 undefined on input line 350.
 
 
-LaTeX Warning: Citation `anisi03' on page 10 undefined on input line 340.
+LaTeX Warning: Citation `anisi03' on page 10 undefined on input line 351.
 
 
-LaTeX Warning: Citation `Thornburg01' on page 10 undefined on input line 340.
+LaTeX Warning: Citation `Thornburg01' on page 10 undefined on input line 351.
 
 
-LaTeX Warning: Citation `Ablamowicz07' on page 10 undefined on input line 340.
+LaTeX Warning: Citation `Ablamowicz07' on page 10 undefined on input line 351.
 
 
-LaTeX Warning: Citation `Poker06' on page 10 undefined on input line 341.
+LaTeX Warning: Citation `Poker06' on page 10 undefined on input line 352.
 
 
-LaTeX Warning: Citation `Obama08' on page 10 undefined on input line 341.
+LaTeX Warning: Citation `Obama08' on page 10 undefined on input line 352.
 
 
-LaTeX Warning: Citation `Novak03' on page 10 undefined on input line 341.
+LaTeX Warning: Citation `Novak03' on page 10 undefined on input line 352.
 
 
-LaTeX Warning: Citation `Lee05' on page 10 undefined on input line 342.
+LaTeX Warning: Citation `Lee05' on page 10 undefined on input line 353.
 
 
-LaTeX Warning: Citation `JoeScientist001' on page 10 undefined on input line 34
-2.
+LaTeX Warning: Citation `JoeScientist001' on page 10 undefined on input line 35
+3.
 
 
-LaTeX Warning: Citation `rous08' on page 10 undefined on input line 343.
+LaTeX Warning: Citation `rous08' on page 10 undefined on input line 354.
 
 
-LaTeX Warning: Citation `SaeediMEJ10' on page 10 undefined on input line 344.
+LaTeX Warning: Citation `SaeediMEJ10' on page 10 undefined on input line 355.
 
 
-LaTeX Warning: Citation `SaeediJETC10' on page 10 undefined on input line 344.
+LaTeX Warning: Citation `SaeediJETC10' on page 10 undefined on input line 355.
 
 
 LaTeX Warning: Citation `Kirschmer:2010:AEI:1958016.1958018' on page 10 undefin
-ed on input line 345.
+ed on input line 356.
 
 
-LaTeX Warning: Citation `MR781536' on page 10 undefined on input line 347.
+LaTeX Warning: Citation `MR781536' on page 10 undefined on input line 358.
 
 
-LaTeX Warning: Citation `MR781537' on page 10 undefined on input line 347.
+LaTeX Warning: Citation `MR781537' on page 10 undefined on input line 358.
 
-
-Underfull \vbox (badness 7081) has occurred while \output is active []
-
- [10]
-(./LOP_article_ACM.bbl [11]) [12]
+[10] (./LOP_article_ACM.bbl [11]) [12]
 
 Package glossaries Warning: No \printnoidxglossary or \printnoidxglossaries
  found. (Remove \makenoidxglossaries if you don't want any glossaries.)
@@ -959,11 +949,11 @@ This document will not have a glossary.
 
 ] (./LOP_article_ACM.aux) ) 
 Here is how much of TeX's memory you used:
- 9575 strings out of 493117
- 132761 string characters out of 6135434
- 374631 words of memory out of 5000000
- 12774 multiletter control sequences out of 15000+600000
- 54930 words of font info for 93 fonts, out of 8000000 for 9000
+ 9570 strings out of 493117
+ 132709 string characters out of 6135434
+ 372631 words of memory out of 5000000
+ 12770 multiletter control sequences out of 15000+600000
+ 51843 words of font info for 90 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  46i,15n,35p,1775b,290s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/local/texlive/2014/texmf-dist/fonts/enc/dvips/
@@ -979,26 +969,27 @@ fb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb
 sr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmmib10.pfb></u
 sr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cmextra/cmmib5.pfb
 ></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cmextra/cmmib7
-.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.p
-fb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmr5.pfb>
-</usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></u
-sr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/
-local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/l
-ocal/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy5.pfb></usr/loc
-al/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/local
-/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/local/t
-exlive/2014/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb></usr/loc
-al/texlive/2014/texmf-dist/fonts/type1/public/cm-super/sftt0800.pfb></usr/local
-/texlive/2014/texmf-dist/fonts/type1/urw/helvetic/uhvb8a.pfb></usr/local/texliv
-e/2014/texmf-dist/fonts/type1/urw/helvetic/uhvr8a.pfb></usr/local/texlive/2014/
-texmf-dist/fonts/type1/urw/helvetic/uhvro8a.pfb></usr/local/texlive/2014/texmf-
-dist/fonts/type1/urw/ncntrsbk/uncb8a.pfb></usr/local/texlive/2014/texmf-dist/fo
-nts/type1/urw/ncntrsbk/uncr8a.pfb></usr/local/texlive/2014/texmf-dist/fonts/typ
-e1/urw/ncntrsbk/uncri8a.pfb>
-Output written on LOP_article_ACM.pdf (13 pages, 1226216 bytes).
+.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cmextra/cm
+mib8.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmr
+10.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmr5.
+pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb
+></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></
+usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></u
+sr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy5.pfb></usr
+/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/l
+ocal/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/loc
+al/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb></usr
+/local/texlive/2014/texmf-dist/fonts/type1/public/cm-super/sftt0800.pfb></usr/l
+ocal/texlive/2014/texmf-dist/fonts/type1/urw/helvetic/uhvb8a.pfb></usr/local/te
+xlive/2014/texmf-dist/fonts/type1/urw/helvetic/uhvr8a.pfb></usr/local/texlive/2
+014/texmf-dist/fonts/type1/urw/helvetic/uhvro8a.pfb></usr/local/texlive/2014/te
+xmf-dist/fonts/type1/urw/ncntrsbk/uncb8a.pfb></usr/local/texlive/2014/texmf-dis
+t/fonts/type1/urw/ncntrsbk/uncr8a.pfb></usr/local/texlive/2014/texmf-dist/fonts
+/type1/urw/ncntrsbk/uncri8a.pfb>
+Output written on LOP_article_ACM.pdf (13 pages, 1236763 bytes).
 PDF statistics:
- 920 PDF objects out of 1000 (max. 8388607)
- 254 compressed objects within 3 object streams
+ 924 PDF objects out of 1000 (max. 8388607)
+ 257 compressed objects within 3 object streams
  0 named destinations out of 1000 (max. 500000)
  31 words of extra memory for PDF output out of 10000 (max. 10000000)
 
