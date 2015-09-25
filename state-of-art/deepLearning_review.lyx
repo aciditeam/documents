@@ -110,9 +110,9 @@ key "humphrey2013feature"
  Even though this stimulating field raised interest for several decades,
  as the notion of 
 \emph on
-intelligence 
+intelligence
 \emph default
-seems daunting to define, researchers focused on the notions of 
+ seems daunting to define, researchers focused on the notions of 
 \emph on
 machine learning 
 \emph default
@@ -157,7 +157,7 @@ Most current machine learning techniques rely on shallow architectures,
  where (notwithstanding eventual data pre-processing), only a single layer
  of nonlinear transformation is applied to a set of features that are in
  turn fed to a discriminative pattern recognition algorithm.
- However, research in human congnition 
+ However, research in human cognition 
 \begin_inset CommandInset citation
 LatexCommand cite
 key "hupe1998cortical"
@@ -5232,6 +5232,10 @@ both
  layers.
 \end_layout
 
+\begin_layout Standard
+
+\end_layout
+
 \begin_layout Section
 Applying deep learning
 \end_layout
@@ -5296,6 +5300,157 @@ Furthermore, dimensionality reduction techniques also provides the advantage
 \end_layout
 
 \begin_layout Subsubsection
+Signal
+\end_layout
+
+\begin_layout Subsubsection
+Symbolic
+\end_layout
+
+\begin_layout Paragraph
+Pianoroll
+\end_layout
+
+\begin_layout Paragraph
+From a sparse binary representation to a real-valued distributed representation
+\end_layout
+
+\begin_layout Standard
+Pianoroll representations are often sparse, which is not a desirable property
+ for the input data of a network.
+ It would be more interesting to work with a distributed real-valued representat
+ion which would be more compact and meaningful.
+ In Natural Language Processing (NLP) the most basic representation consists
+ in encoding each word in a vector of the size of the vocabulary with one
+ unit active.
+ The log-bilinear model (LBL, 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "mnih2007three"
+
+\end_inset
+
+) allows to find the most adapted representation to a context based prediction
+ task while reducing its dimensionality.
+ Besides, it has been shown that it leads to a representation where basic
+ algebraic operations convey a semantic meaning.
+ The word representation is defined by a representation matrix 
+\emph on
+R 
+\emph default
+of size 
+\emph on
+
+\begin_inset Formula $V\times D$
+\end_inset
+
+
+\emph default
+ where 
+\emph on
+V
+\emph default
+ is the size of the vocabulary and 
+\emph on
+D
+\emph default
+ is the word representation size.
+ This matrix 
+\emph on
+R 
+\emph default
+then represent the mapping from the one-hot representation 
+\begin_inset Formula $w$
+\end_inset
+
+ to the distributed representation 
+\begin_inset Formula $r_{\{w\}}$
+\end_inset
+
+
+\begin_inset Formula 
+\[
+r_{\{w\}}=R.w
+\]
+
+\end_inset
+
+Given a sequence of words 
+\begin_inset Formula $w_{\{1\}},...,w_{\{n-1\}}$
+\end_inset
+
+, the LBL model linearly predicts the next word representation
+\begin_inset Formula 
+\[
+\hat{r}=\sum_{i=1}^{n-1}C^{(i)}r_{w_{i}}
+\]
+
+\end_inset
+
+where 
+\begin_inset Formula $C^{(i)},$
+\end_inset
+
+ 
+\begin_inset Formula $i=1,...,n-1$
+\end_inset
+
+ are 
+\begin_inset Formula $D\times D$
+\end_inset
+
+ context parameter matrices.
+ The predictive probability is then given by as softmax layer 
+\begin_inset Formula 
+\[
+P(w_{n}|w_{1},...,w_{n-1})=\frac{{\exp(\hat{r}^{T}r_{i}+b_{i})}}{\sum_{j=1}^{V}\exp(\hat{r}^{T}r_{j}+b_{j})}
+\]
+
+\end_inset
+
+where 
+\begin_inset Formula $\mathbf{b}\in\mathbb{R}^{V}$
+\end_inset
+
+ is the bias vector.
+ The gradients for maximum likelihood learning are then given by
+\begin_inset Formula 
+\[
+\frac{\partial}{\partial C^{(i)}}\log\left[P(w_{n}|w_{1},...,w_{n-1})\right]=\langle R^{T}r_{i}r_{n}^{T}R\rangle_{Data}-\langle R^{T}r_{i}r_{n}^{T}R\rangle_{Model}
+\]
+
+\end_inset
+
+
+\begin_inset Formula 
+\[
+\frac{\partial}{\partial R}\log\left[P(w_{n}|w_{1},...,w_{n-1})\right]=\langle\sum_{i=1}^{n-1}(r_{n}r_{i}^{T}RC^{(i)}+r_{i}r_{n}^{T}RC^{(i)T})+r_{n}b^{T}\rangle_{Data}-\langle\sum_{i=1}^{n-1}(r_{n}r_{i}^{T}RC^{(i)}+r_{i}r_{n}^{T}RC^{(i)T})+r_{n}b^{T}\rangle_{Model}
+\]
+
+\end_inset
+
+where 
+\begin_inset Formula $\langle r_{n}\rangle_{Model}$
+\end_inset
+
+ is the vector feature of the word predicted by the LBL model, i.e.
+ the word 
+\begin_inset Formula $w_{n}$
+\end_inset
+
+ of the dictionary with the highest predictive probability, and 
+\begin_inset Formula $\langle r_{n}\rangle_{Data}$
+\end_inset
+
+ is the vector feature of the ground-truth word, i.e.
+ the word originally in the sequence.
+\end_layout
+
+\begin_layout Subsubsection
+Dimensionality reduction
+\end_layout
+
+\begin_layout Paragraph
 PCA
 \end_layout
 
@@ -5376,7 +5531,7 @@ As
 \end_layout
 
 \begin_layout Standard
-The dimensionnality reduction aspect implies that if we have 
+The dimensionality reduction aspect implies that if we have 
 \begin_inset Formula $n$
 \end_inset
 
@@ -5396,7 +5551,7 @@ The dimensionnality reduction aspect implies that if we have
 \begin_inset Formula $k<n$
 \end_inset
 
-), while incuring a minimum amount of error, we could keep only the first
+), while incurring a minimum amount of error, we could keep only the first
  
 \begin_inset Formula $k$
 \end_inset
@@ -5416,7 +5571,7 @@ recover an approximation
 \begin_inset Formula $x$
 \end_inset
 
- after this dimensionnality reduction, we'd just multiply 
+ after this dimensionality reduction, we'd just multiply 
 \begin_inset Formula $\tilde{x}\in\mathbb{R}^{k}$
 \end_inset
 
@@ -5462,7 +5617,7 @@ A common choice is to pick the
  principal components that retain 99% of the variance.
 \end_layout
 
-\begin_layout Subsubsection
+\begin_layout Paragraph
 Stationarity
 \end_layout
 
@@ -5480,7 +5635,7 @@ stationarity
 .
 \end_layout
 
-\begin_layout Subsubsection
+\begin_layout Paragraph
 Whitening
 \end_layout
 
@@ -5558,7 +5713,7 @@ x_{{\rm white}}^{i}=\frac{x_{{\rm rot}}^{i}}{\sqrt{\lambda_{i}+\epsilon}}
 
 \end_layout
 
-\begin_layout Subsubsection
+\begin_layout Paragraph
 ZCA Whitening
 \end_layout
 
@@ -5594,7 +5749,7 @@ x_{{\rm ZCAwhite}}=Ux_{{\rm white}}
 
 \end_layout
 
-\begin_layout Subsubsection
+\begin_layout Paragraph
 Pre-processing parameters
 \end_layout
 
