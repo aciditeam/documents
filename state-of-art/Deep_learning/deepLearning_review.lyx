@@ -110,9 +110,9 @@ key "humphrey2013feature"
  Even though this stimulating field raised interest for several decades,
  as the notion of 
 \emph on
-intelligence 
+intelligence
 \emph default
-seems daunting to define, researchers focused on the notions of 
+ seems daunting to define, researchers focused on the notions of 
 \emph on
 machine learning 
 \emph default
@@ -3788,6 +3788,14 @@ key "hochreiter1997long"
 \end_inset
 
  that better finds long-term dependencies.
+\end_layout
+
+\begin_layout Paragraph
+LSTM
+\end_layout
+
+\begin_layout Paragraph
+Depth-gated LSTM
 \end_layout
 
 \begin_layout Subsubsection

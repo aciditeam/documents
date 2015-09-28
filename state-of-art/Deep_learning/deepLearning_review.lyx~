@@ -3790,6 +3790,14 @@ key "hochreiter1997long"
  that better finds long-term dependencies.
 \end_layout
 
+\begin_layout Paragraph
+LSTM
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
 \begin_layout Subsubsection
 Convolution and pooling
 \end_layout
