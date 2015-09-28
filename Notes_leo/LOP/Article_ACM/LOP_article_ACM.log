@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2014) (preloaded format=pdflatex 2015.3.4)  25 SEP 2015 18:22
+This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2014) (preloaded format=pdflatex 2015.3.4)  28 SEP 2015 12:26
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -827,119 +827,133 @@ LaTeX Font Info:    Font shape `U/lasy/b/n' in size <6> not available
 (Font)              Font shape `U/lasy/m/n' tried instead on input line 220.
  [5 <./Figures/CRBM_orchestration.pdf>]
 [6 <./Figures/FGCRBM_orchestration.pdf>]
-<Figures/FGCRBM_sampling.pdf, id=608, 1304.875pt x 993.7125pt>
+<Figures/FGCRBM_sampling.pdf, id=608, 1618.045pt x 1076.02pt>
 File: Figures/FGCRBM_sampling.pdf Graphic file (type pdf)
 
 <use Figures/FGCRBM_sampling.pdf>
-Package pdftex.def Info: Figures/FGCRBM_sampling.pdf used on input line 255.
-(pdftex.def)             Requested size: 391.46552pt x 298.11604pt.
+Package pdftex.def Info: Figures/FGCRBM_sampling.pdf used on input line 256.
+(pdftex.def)             Requested size: 485.41725pt x 322.8085pt.
 
-Underfull \vbox (badness 1527) has occurred while \output is active []
+Overfull \hbox (89.41725pt too wide) in paragraph at lines 256--257
+ [][] 
+ []
+
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [7 <./Figures/FGCRBM_sampling.pdf>]
-<Figures/representation_donnes.pdf, id=639, 2575.25099pt x 1349.04pt>
+LaTeX Font Info:    Font shape `T1/phv/m/it' in size <9> not available
+(Font)              Font shape `T1/phv/m/sl' tried instead on input line 267.
+
+Underfull \vbox (badness 6032) has occurred while \output is active []
+
+ [8]
+<Figures/representation_donnes.pdf, id=681, 2575.25099pt x 1349.04pt>
 File: Figures/representation_donnes.pdf Graphic file (type pdf)
 
 <use Figures/representation_donnes.pdf>
 Package pdftex.def Info: Figures/representation_donnes.pdf used on input line 2
-75.
+83.
 (pdftex.def)             Requested size: 386.27098pt x 202.34726pt.
- [8] [9 <./Figures/representation_donnes.pdf>]
-LaTeX Font Info:    Font shape `T1/phv/m/it' in size <9> not available
-(Font)              Font shape `T1/phv/m/sl' tried instead on input line 312.
+
+Underfull \hbox (badness 10000) in paragraph at lines 304--312
+[]\T1/pnc/m/n/10 In our frame-work we chose 14 in-stru-ments in-dexed by :
+ []
+
+[9 <./Figures/representation_donnes.pdf>] [10]
 LaTeX Font Info:    Font shape `T1/pnc/bx/n' in size <10> not available
-(Font)              Font shape `T1/pnc/b/n' tried instead on input line 338.
+(Font)              Font shape `T1/pnc/b/n' tried instead on input line 355.
 
 
-LaTeX Warning: Citation `Abril07' on page 10 undefined on input line 338.
+LaTeX Warning: Citation `Abril07' on page 11 undefined on input line 355.
 
 
-LaTeX Warning: Citation `Cohen07' on page 10 undefined on input line 339.
+LaTeX Warning: Citation `Cohen07' on page 11 undefined on input line 356.
 
 
-LaTeX Warning: Citation `JCohen96' on page 10 undefined on input line 339.
+LaTeX Warning: Citation `JCohen96' on page 11 undefined on input line 356.
 
 
-LaTeX Warning: Citation `Kosiur01' on page 10 undefined on input line 340.
+LaTeX Warning: Citation `Kosiur01' on page 11 undefined on input line 357.
 
 
-LaTeX Warning: Citation `Harel79' on page 10 undefined on input line 341.
+LaTeX Warning: Citation `Harel79' on page 11 undefined on input line 358.
 
 
-LaTeX Warning: Citation `Editor00' on page 10 undefined on input line 341.
+LaTeX Warning: Citation `Editor00' on page 11 undefined on input line 358.
 
 
-LaTeX Warning: Citation `Editor00a' on page 10 undefined on input line 343.
+LaTeX Warning: Citation `Editor00a' on page 11 undefined on input line 360.
 
 
-LaTeX Warning: Citation `Spector90' on page 10 undefined on input line 344.
+LaTeX Warning: Citation `Spector90' on page 11 undefined on input line 361.
 
 
-LaTeX Warning: Citation `Douglass98' on page 10 undefined on input line 345.
+LaTeX Warning: Citation `Douglass98' on page 11 undefined on input line 362.
 
 
-LaTeX Warning: Citation `Knuth97' on page 10 undefined on input line 345.
+LaTeX Warning: Citation `Knuth97' on page 11 undefined on input line 362.
 
 
-LaTeX Warning: Citation `Andler79' on page 10 undefined on input line 347.
+LaTeX Warning: Citation `Andler79' on page 11 undefined on input line 364.
 
 
-LaTeX Warning: Citation `Smith10' on page 10 undefined on input line 348.
+LaTeX Warning: Citation `Smith10' on page 11 undefined on input line 365.
 
 
-LaTeX Warning: Citation `VanGundy07' on page 10 undefined on input line 349.
+LaTeX Warning: Citation `VanGundy07' on page 11 undefined on input line 366.
 
 
-LaTeX Warning: Citation `Harel78' on page 10 undefined on input line 350.
+LaTeX Warning: Citation `Harel78' on page 11 undefined on input line 367.
 
 
-LaTeX Warning: Citation `Clarkson85' on page 10 undefined on input line 350.
+LaTeX Warning: Citation `Clarkson85' on page 11 undefined on input line 367.
 
 
-LaTeX Warning: Citation `anisi03' on page 10 undefined on input line 351.
+LaTeX Warning: Citation `anisi03' on page 11 undefined on input line 368.
 
 
-LaTeX Warning: Citation `Thornburg01' on page 10 undefined on input line 351.
+LaTeX Warning: Citation `Thornburg01' on page 11 undefined on input line 368.
 
 
-LaTeX Warning: Citation `Ablamowicz07' on page 10 undefined on input line 351.
+LaTeX Warning: Citation `Ablamowicz07' on page 11 undefined on input line 368.
 
 
-LaTeX Warning: Citation `Poker06' on page 10 undefined on input line 352.
+LaTeX Warning: Citation `Poker06' on page 11 undefined on input line 369.
 
 
-LaTeX Warning: Citation `Obama08' on page 10 undefined on input line 352.
+LaTeX Warning: Citation `Obama08' on page 11 undefined on input line 369.
 
 
-LaTeX Warning: Citation `Novak03' on page 10 undefined on input line 352.
+LaTeX Warning: Citation `Novak03' on page 11 undefined on input line 369.
 
 
-LaTeX Warning: Citation `Lee05' on page 10 undefined on input line 353.
+LaTeX Warning: Citation `Lee05' on page 11 undefined on input line 370.
 
 
-LaTeX Warning: Citation `JoeScientist001' on page 10 undefined on input line 35
-3.
+LaTeX Warning: Citation `JoeScientist001' on page 11 undefined on input line 37
+0.
 
 
-LaTeX Warning: Citation `rous08' on page 10 undefined on input line 354.
+LaTeX Warning: Citation `rous08' on page 11 undefined on input line 371.
 
 
-LaTeX Warning: Citation `SaeediMEJ10' on page 10 undefined on input line 355.
+LaTeX Warning: Citation `SaeediMEJ10' on page 11 undefined on input line 372.
 
 
-LaTeX Warning: Citation `SaeediJETC10' on page 10 undefined on input line 355.
+LaTeX Warning: Citation `SaeediJETC10' on page 11 undefined on input line 372.
 
 
-LaTeX Warning: Citation `Kirschmer:2010:AEI:1958016.1958018' on page 10 undefin
-ed on input line 356.
+LaTeX Warning: Citation `Kirschmer:2010:AEI:1958016.1958018' on page 11 undefin
+ed on input line 373.
 
 
-LaTeX Warning: Citation `MR781536' on page 10 undefined on input line 358.
+LaTeX Warning: Citation `MR781536' on page 11 undefined on input line 375.
 
 
-LaTeX Warning: Citation `MR781537' on page 10 undefined on input line 358.
+LaTeX Warning: Citation `MR781537' on page 11 undefined on input line 375.
 
-[10] (./LOP_article_ACM.bbl [11]) [12]
+[11] (./LOP_article_ACM.bbl) [12]
 
 Package glossaries Warning: No \printnoidxglossary or \printnoidxglossaries
  found. (Remove \makenoidxglossaries if you don't want any glossaries.)
@@ -949,10 +963,10 @@ This document will not have a glossary.
 
 ] (./LOP_article_ACM.aux) ) 
 Here is how much of TeX's memory you used:
- 9570 strings out of 493117
- 132709 string characters out of 6135434
- 372631 words of memory out of 5000000
- 12770 multiletter control sequences out of 15000+600000
+ 9572 strings out of 493117
+ 132734 string characters out of 6135434
+ 372638 words of memory out of 5000000
+ 12772 multiletter control sequences out of 15000+600000
  51843 words of font info for 90 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  46i,15n,35p,1775b,290s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -986,10 +1000,10 @@ xlive/2014/texmf-dist/fonts/type1/urw/helvetic/uhvr8a.pfb></usr/local/texlive/2
 xmf-dist/fonts/type1/urw/ncntrsbk/uncb8a.pfb></usr/local/texlive/2014/texmf-dis
 t/fonts/type1/urw/ncntrsbk/uncr8a.pfb></usr/local/texlive/2014/texmf-dist/fonts
 /type1/urw/ncntrsbk/uncri8a.pfb>
-Output written on LOP_article_ACM.pdf (13 pages, 1236763 bytes).
+Output written on LOP_article_ACM.pdf (13 pages, 1217747 bytes).
 PDF statistics:
- 924 PDF objects out of 1000 (max. 8388607)
- 257 compressed objects within 3 object streams
+ 961 PDF objects out of 1000 (max. 8388607)
+ 284 compressed objects within 3 object streams
  0 named destinations out of 1000 (max. 500000)
  31 words of extra memory for PDF output out of 10000 (max. 10000000)
 

@@ -218,6 +218,7 @@ The following updates rules are obtained
 \centering
 \includegraphics[scale=0.25]{FGCRBM_orchestration}
 \caption{FGCRBM model. The features units ($bm{z}$) modify the energy landscape of the model by a multiplicative influence over the weights $\bm{A}$, $\bm{B}$ and $\bm{W}$. Here, the role of each units in order to perform orchestration is indicated.}
+\label{fig:FGCRBM}
 \end{figure}
 The Factored Gated Conditional RBM model \cite{taylor2009factored} proposes to extend the Conditional RBM model by adding a layer of feature units $\bm{z}$ which modulate the weights of the conditional architecture in a multiplicative way. Hence, the weights of the networks become $\bm{\Theta} = \left\lbrace \bm{W} , \bm{A} , \bm{B} , \bm{a} , \bm{b} \right\rbrace$, where $\bm{W} = (W)_{ijl}$, $\bm{A}=(A)_{ikl}$ and $\bm{B}=(B)_{jkl}$ are three dimensional tensors.
 
@@ -253,31 +254,41 @@ The FGCRBM model can be trained by contrastive divergence which lead to the foll
 \begin{figure}
 \centering
 \includegraphics[scale=0.3]{FGCRBM_sampling}
-\caption{\textit{Sampling in a FGCRBM}. Context and Features units are respectively clamped to the last ($t-1$ to $t-N$) orchestral frames and the current ($t$) piano frame. Hidden units are randomly initialized. Then, several Gibbs sampling step are performed, typically 50.}
+\caption{\textit{Sampling in a FGCRBM}. Context and Features units are respectively clamped to the last ($t-1$ to $t-N$) orchestral frames and the current ($t$) piano frame. Visible units are randomly initialized. Then, several Gibbs sampling step are performed, in our case 40.}
 \label{fig:FGCRBM_sampling}
 \end{figure}
 %% Role des unités conditionelles et tout le tralala dans les modèles
-The previously introduced models are generative models. After the training phase, the distribution represented by the networks is supposed to be close to the underlying distribution of the data. It is then possible to sample from this distribution to reproduce data that are alike the data of the training set (\prettyref{fig:FGCRBM_sampling}).
-The generation process can be described as follow. After randomly setting the visible units to a binary value, alternate Gibbs sampling is performed in order to reach the equilibrium distribution of the model. One step of alternate Gibbs sampling consists in sampling the hidden  units knowing the visible units, then sampling the visible units knowing the hidden. In theory the visible sample obtained is from the model distribution after an infinite number of step. In practice, 20 to 100 steps are typically used. In our case, we obtained satisfying results with 40 sampling steps.
+The previously introduced models are generative. If a model has been correctly trained, its distribution approximates the underlying distribution of the training data. It is then possible to sample from this distribution in order to generate data that are similar to the data of the training set (\prettyref{fig:FGCRBM_sampling}).
+The generation process can be described as follow. After randomly setting the visible units vector (for each index $i$, $\bm{v}_{i} \sim \mathcal{U}(0,1)$), alternate Gibbs sampling is performed in order to approximate the joint distribution of the hidden and visible units conditionally on the context units. Given the context units, one step of alternate Gibbs sampling consists in sampling the hidden units knowing the visible, then sampling the visible units knowing the hidden. In theory the visible sample obtained is from the model distribution after an infinite number of steps. If theoretically an infinite number of steps is necessary, in practice 20 to 100 steps are typically used. In our case, we obtained satisfying results with 40 sampling steps.
 
 \subsection{Approximations}
-Note that both during learning and generating phase, when evaluating the model driven term, mean-field values for the visible units can be used in order to diminish the sampling noise. This is not possible for the hidden units since it would violate the information bottleneck principle underlying in the RBM \cite{hinton2010practical}. It is noteworthy that during the learning phase, only a small number of sampling step are performed (1 in our case, rarely more than 10) in the contrastive divergence algorithm. This is because the objective is simply to modify the energy of our model in order to represent the data distribution and not to obtain a sample from the model distribution. Indeed, it has been shown that even a small number of sampling steps guarantee to increase a lower bound on the log-likelihood of the training set under the model distribution \cite{bengio2009learning}. When generating data, we really want to obtain a sample as close as possible to the distribution of the model and then perform a larger number of Gibbs sampling steps.
+In practice, several approximation are made both during training and generating phases. During the training phase, we have already seen the two approximations of the CD-K algorithm which consists in performing only a limited number of sampling steps, and starting the Gibbs chain with a sample from the training set.
+
+\subsubsection{Mean-field values} An other common approximation can be made both during training and generating phases, when running the Gibbs chain in order to estimate the model-driven terms. In order to diminish the sampling noise mean-field values can be used for the visible units. This is not possible for the hidden units since it would violate the information bottleneck which is the fact that hidden units can only transmit a limited amount of information to the visible units \cite{hinton2010practical}. Indeed, hidden units can represent $2^{n}$ different states where $n$ is the number of hidden units. 
+
+\subsubsection{Number of sampling steps} It is noteworthy that during the learning phase, only a small number of sampling step are performed (1 in our case, rarely more than 10) in the contrastive divergence algorithm. This is because the objective is simply to modify the energy of our model in order to increase the training set's likelihood under the model distribution. Indeed, it has been shown that even a small number of sampling steps guarantee to increase a lower bound over this quantity \cite{bengio2009learning}. When generating data, we really want to obtain a sample as close as possible to the distribution of the model and then a larger number of Gibbs sampling steps need to be performed.
 
 \section{Projective orchestration}
-Automatic orchestration suffers from the lack of quantitative evaluation. The different work on the domain mainly rely on qualitative evaluation \cite{handelman2012automatic}. To our best knowledge, there has not been any attempt in the automatic orchestration field to define a task associated to a performance measure. We propose here a first attempt in order to fill this gap by defining the orchestration projection task. This task consists in projecting a piano sequence on an orchestra. More precisely, it consists at each time $t$ to generate an orchestral vector knowing the piano frame $Piano(t)$ and the recent past of the orchestral sequence $Orch(t-1),... Orch(t-N)$.
-A projective orchestration task is introduced in this section, along with an evaluation framework and the performances of our model in this framework. The evaluation is a frame-level prediction task that rely on an accuracy measure.
+Automatic orchestration suffers from the lack of quantitative evaluation framework. The different works on the domain mainly rely on qualitative evaluation (REF MAIS LESQUELLES ???).
+To our best knowledge, there has not been any attempt in the automatic orchestration field to define a task associated to a performance measure. We propose here a first attempt in order to fill this gap by defining the orchestration projection task. This task consists in projecting a piano sequence on an orchestra. More precisely, it consists at each time $t$ to generate an orchestral vector knowing the piano frame $Piano(t)$ and the recent past of sequence of orchestral vectors $Orch(t-1),... Orch(t-N)$.
+We define in this section an evaluation framework for projective orchestration based on a frame-level accuracy measure and then present the result of the previously introduced model in this framework.
 
 \subsection{Formalization}
-%% Data representation
-Conditional models allow to generate sequences of data under a certain context. Projective orchestration consists in produce an orchestral score conditionally on a piano score. The first step is to use an adapted representation for the piano an orchestra score.
+Conditional models allow to generate sequences of data under a certain context. Projective orchestration consists in producing an orchestral score conditionally on a piano score. In order to guarantee a certain continuity in the orchestration, voice leading for each instrument, the recent past of the orchestral sequence is also added in the contextual information.
+
+\subsubsection{Data representation}
+\label{sec:data_representation}
+Before adapting the previously introduced models, the first step is to choose an adapted representation for the piano an orchestra scores.
 \begin{figure}
 \centering
 \includegraphics[scale=0.15]{representation_donnes}
 \caption{\textit{Data representation for a single piano}. The pianoroll is a representation of musical events, discrete on both frequency scale (pitch) and the time scale (frames). A pitch $p$ at time $t$ can be either on or off, which is represented by a one or a zero on the pianoroll. To represent an orchestra, the pianorolls of each instruments are simply concatenated along the pitch dimension.}
 \label{fig:pianoroll}
 \end{figure}
-To model sequences of symbolic music, the pianoroll representation is often used. A pianoroll is a matrix whose rows and columns are a discretisation of pitch and time \prettyref{fig:pianoroll}. Note that this discretisation flows naturally from the scores notation in western music since notes are aligned on a discrete pitch scale and rhythmically on the beat. The pitch $p$ being played at time $t$  is then represented in the pianoroll representation by $Pianoroll(p,t) = 1$, $Pianoroll(p,t) = 0$ meaning that pitch $p$ is not played at time $t$. The dynamics are ignored and each time frame is a binary vector that indicates either a pitch is on or off.
-This representation, usually defined for a single polyphonic instrument can easily be extended to an orchestra composed by N instruments by simply concatenating the pianoroll of each instrument over the pitch dimension. 
+To model sequences of symbolic music, the pianoroll representation is often used. 
+This is a binary matrix $Pianoroll(p,t)$ which specify for a certain time quantisation if a pitch $p$ is played at time $t$.
+The dynamics are ignored and each time frame is then represented by a binary vector $Pianoroll(t)$
+This representation, usually defined for a single polyphonic instrument can easily be extended to an orchestra composed by N instruments by simply concatenating the pianoroll of each instrument over the pitch dimension.
 \begin{equation}
 Orch = 
 \begin{bmatrix}
@@ -287,10 +298,11 @@ Instrument \ 2\\
 Instrument \ N\\
 \end{bmatrix}
 \end{equation}
-Note that we respect the usual simplifications used when writing orchestral scores which consists in grouping all the instruments of a same section. For instance, the section \textit{violin 1}, composed by many instrumentalists (about 10), is represented as a unique instrument.
+Each instrument has a different playing range and the size of the pitch dimension is different for each instrument, limited to the pitch observed in the training dataset. For the piano score, the number of pitch is limited to $88$ which is then number of keys on a piano keyboard.
+Note that we respect the usual simplifications used when writing orchestral scores which consists in grouping all the instruments of a same section. For instance, the section \textit{violin 1}, composed by many instrumentalists (10 or more), is represented as a unique instrument.
+For a sequence of music of length $T$ and with $N$ instruments, $Orch$ is then a matrix of dimension $T \times \sum_{n=1}^{N} range(n)$. 
 
-For a sequence of music of length $T$ and with $N$ instruments, $Orch$ is then a matrix of dimension $T \times N.88$. 
-Indeed, we reduce the number of possible pitch to those of a grand piano (88 pitch from ). One can argue that the ambitus of a piccolo for instance goes higher than the highest note of a piano in frequency. This is not the case in symbolic notation, since the score of the piccolo is systematically written several octaves under its real tessitura. In our framework we chose 14 instruments indexed by :
+In our framework we chose 14 instruments indexed by :
 \begin{tabular}{l l l l l}
 1. Violin & & 6. Timpani & & 11. Oboe\\
 2. Viola & & 7. Trumpet & & 12. Bassoon\\
@@ -299,32 +311,38 @@ Indeed, we reduce the number of possible pitch to those of a grand piano (88 pit
 5. Harp & & 10. French horn &\\
 \end{tabular}
 
-%% Dans el CRBM et le FGCRBM ça donne quoi
-This data representation is adapted to the previously introduced conditional models.
+\subsubsection{Modeling orchestral sequences}
+This data representation can be directly used in the previously introduced conditional models.
 In the CRBM model, we consider that the visible units represent the orchestral vector for the time frame $t$, conditional units are be used to model the influence of the past orchestral vectors $Orch(t-1) , ... , Orch(t-N)$ and the influence of the piano frame at time $Piano(t)$ over the visible units. The context units are then defined by the concatenation of the past orchestral frames and the current piano frame
 $ Context(t) = \left[ Piano(t)^{T} , Orch(t-1)^{T} , ... , Orch(t-N)^{T}\right]^{T}$.
 
-The FGCRBM model allows to separate the influence of the current piano frame and the past orchestral frames. The current piano frame defines the feature units ($z$) $ Features(t) = Piano(t)^{T} $, and the concatenation of the past orchestral frames define the context units ($x$) $ Context(t) = \left[ Orch(t-1)^{T} , ... , Orch(t-N)^{T} \right]^{T}$.
+The FGCRBM model allows to separate the influence of the current piano frame and the past orchestral frames. The current piano frame defines the feature units ($z$) $ Features(t) = Piano(t)^{T} $, and the concatenation of the past orchestral frames define the context units ($x$) $ Context(t) = \left[ Orch(t-1)^{T} , ... , Orch(t-N)^{T} \right]^{T}$ (\prettyref{fig:FGCRBM}).
+
+One might be surprised that for each time frame $t$, we do not restrain the possible pitches of each instrument to the pitches seen in the piano score at the same time $t$. This i because orchestrating a piano score can not be reduced to the simple projection of the notes that are already written on the piano score. Instead, the harmonic structure is often densified by adding extra notes, from a simple octaviation to an harmonic expansion (more complex chords with a more specific colour), the melody might be doubled by several instruments at different octave or the rhythmic structure slightly modified (held note instead of a staccato).
 
 \subsection{Evaluation}
-Building a quantitative evaluation framework for generative models is rarely straightforward, especially since computing the likelihood of a test sample is intractable in the model we used. A common practice is to define an auxiliary task. 
+Building a quantitative evaluation framework for generative models is rarely straightforward, especially since computing the likelihood of a test sample is intractable in the models we used. In music automatic generation, a common practice consists in defining an auxiliary task. The most frequently task is a predictive task based on a frame-level accuracy that can be easily extended to the orchestral inference task \cite{DBLP:journals/corr/LiuR14a,boulanger2012modeling,lavrenko2003polyphonic}.
 \subsubsection{Frame-level accuracy}
 The frame level accuracy of a model over a testing set is defined as the mean value of the accuracy measured for each time frame. For each time frame, we try to predict the orchestral frame $\hat{Orch}(t)$ knowing the recent past $Orch(t-1),...,Orch(t-N)$ and the piano frame $Piano(t)$ and compare it to the original frame $Orch(t)$. The accuracy measure the difference between the predicted and original frames \cite{boulanger2012modeling,DBLP:journals/corr/LiuR14a}
 \begin{equation}
 \text{Accuracy}  = \frac{TP(t)}{TP(t) + FP(t) + FN(t)}
+\label{eq:accuracy}
 \end{equation}
 where $TP(t)$ is the number of notes correctly predicted (true positives). $FP(t)$ is the number of notes predicted which are not in the original sequence (false positive) and $FN(t)$ is the number on unreported notes (false negative). 
 
-Instead of binary values, activation probabilities are used for the predicted samples in order to reduce the sampling noise. If this probability is intractable, one should sample many predicted frames for a single time and compute the mean value of those samples.
+Instead of binary values, activation probabilities are used for the predicted samples in order to reduce the sampling noise. In the case this probability is intractable, one should sample many predicted frames for each time frame and compute the mean value of those samples.
 
 \subsubsection{Event-level accuracy}
+A major flaw in the frame-level accuracy measure is its dependence to the rhythmic quantization chosen. Indeed, when the quantization become too small, it becomes highly probable that a frame is simply repeated at the next time frame. Hence, the best predictive model is simply a model which predict that the next time frame is the same as the frame $t-1$. This is not a desirable behaviour, and we propose an evaluation based on an event-level to address that issue.
+
+A musical event is defined as a change in the orchestral score, either a note being switched on or off. The predictive event-level accuracy measure relies on the same accuracy measure previously defined \prettyref{eq:accuracy}. The only difference is that it occurs at each new event instead of each new time frame. Since the task is slightly different, the training phase has been consequently changed so that a model is trained only on new event frames.
 
 \subsection{Database}
-We used a parallel database of piano scores and their orchestration by famous composers. The database consists of 76 \textit{XML} files. Given the complexity of the distribution we wanted to model and the reduced size of the fatabase we have accessed to, we decided to keep as a test dataset only the last half of one track from our database. Hence 75 and a half files were used to train our model. We chose to do so in order to have the best generation ability.
-For each instrument, the pitch range is reduced to the tessitura observed in the training dataset. We used a rhythmic quantization of 8 frame per beat, which means that the smallest symbolic rhythm is a $8^{th}$ note.
+We used a parallel database of piano scores and their orchestration by famous composers. The database consists of 76 \textit{XML} files. Given the complexity of the distribution we wanted to model and the reduced size of the database we have accessed to, we decided to keep as a test dataset only the last half of one track from our database. Hence 75 and a half files were used to train our model. We chose to do so in order to have the best generation ability.
+The contrastive-divergence algorithm has been applied on mini-batches of size $100$ during the training phase. Thus we obtained $335$ mini-batches for the frame-level measure, and $89$ for the event-level measure.
+For each instrument, the pitch range is reduced to the \textit{tessitura} observed in the training dataset (\label{sec:data_representation}). We used a rhythmic quantization of 8 frames per beat.
 
 \subsection{Results}
-
 
 
 \section{Live Orchestral Piano}

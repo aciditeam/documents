@@ -78,15 +78,6 @@
 \newblock
 
 
-\bibitem[\protect\citeauthoryear{Handelman, Sigler, and Donna}{Handelman
-  et~al\mbox{.}}{2012}]%
-        {handelman2012automatic}
-{Eliot Handelman}, {Andie Sigler}, {and} {David Donna}. 2012.
-\newblock \showarticletitle{Automatic orchestration for automatic composition}.
-\newblock {\em In Proc. of MUME\/} (2012), 43--48.
-\newblock
-
-
 \bibitem[\protect\citeauthoryear{Hinton}{Hinton}{2010}]%
         {hinton2010practical}
 {Geoffrey Hinton}. 2010.
@@ -122,6 +113,16 @@
 {Charles Koechlin}. 1941.
 \newblock {\em Trait{\'e} de l'orchestration}.
 \newblock {\'E}ditions Max Eschig.
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{Lavrenko and Pickens}{Lavrenko and
+  Pickens}{2003}]%
+        {lavrenko2003polyphonic}
+{Victor Lavrenko} {and} {Jeremy Pickens}. 2003.
+\newblock \showarticletitle{Polyphonic music modeling with random fields}. In
+  {\em Proceedings of the eleventh ACM international conference on Multimedia}.
+  ACM, 120--129.
 \newblock
 
 

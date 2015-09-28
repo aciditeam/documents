@@ -39,9 +39,10 @@ Warning--empty address in berlioz_orch
 Warning--no number and no volume in boulanger2012modeling
 Warning--page numbers missing in both pages and numpages fields in boulanger2012modeling
 Warning--no number and no volume in Esling2010
-Warning--no number and no volume in handelman2012automatic
 Warning--require articleno with numpages field in Hinton:2006:FLA:1161603.1161605
 Warning--empty address in koechli_orch
+Warning--empty publisher in lavrenko2003polyphonic
+Warning--empty address in lavrenko2003polyphonic
 Warning--page numbers missing in both pages and numpages fields in DBLP:journals/corr/LiuR14a
 Warning--can't use both volume and number fields in mcadams2013timbre
 Warning--empty publisher in mcadams2013timbre
@@ -51,43 +52,43 @@ Warning--empty address in taylor2009factored
 Warning--empty address in Truchet2011Constraint-Prog
 You've used 15 entries,
             5290 wiz_defined-function locations,
-            1375 strings with 17181 characters,
-and the built_in function-call counts, 14579 in all, are:
-= -- 2122
-> -- 456
+            1376 strings with 17221 characters,
+and the built_in function-call counts, 14551 in all, are:
+= -- 2055
+> -- 453
 < -- 1
 + -- 128
-- -- 198
-* -- 801
-:= -- 1547
+- -- 202
+* -- 796
+:= -- 1558
 add.period$ -- 79
 call.type$ -- 15
-change.case$ -- 87
+change.case$ -- 86
 chr.to.int$ -- 15
-cite$ -- 29
-duplicate$ -- 1167
-empty$ -- 834
-format.name$ -- 200
-if$ -- 3663
+cite$ -- 30
+duplicate$ -- 1191
+empty$ -- 847
+format.name$ -- 204
+if$ -- 3615
 int.to.chr$ -- 1
 int.to.str$ -- 0
-missing$ -- 52
-newline$ -- 157
+missing$ -- 53
+newline$ -- 156
 num.names$ -- 120
-pop$ -- 430
+pop$ -- 446
 preamble$ -- 1
-purify$ -- 162
+purify$ -- 161
 quote$ -- 0
-skip$ -- 359
+skip$ -- 365
 stack$ -- 0
-substring$ -- 1143
-swap$ -- 124
+substring$ -- 1154
+swap$ -- 126
 text.length$ -- 62
 text.prefix$ -- 0
 top$ -- 0
 type$ -- 192
-warning$ -- 14
-while$ -- 128
+warning$ -- 15
+while$ -- 132
 width$ -- 0
 write$ -- 292
-(There were 43 warnings)
+(There were 44 warnings)
