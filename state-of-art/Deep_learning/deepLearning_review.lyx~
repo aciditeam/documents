@@ -3732,6 +3732,13 @@ PARAPHRASE + USE OPPOSITION WITH THE STATIONARITY HYPOTHESIS
 
 \begin_layout Subsubsection
 Recurrent Neural Network
+\begin_inset CommandInset label
+LatexCommand label
+name "sub:Recurrent-Neural-Network"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -3794,8 +3801,37 @@ key "hochreiter1997long"
 LSTM
 \end_layout
 
-\begin_layout Standard
+\begin_layout Paragraph
+Depth-gated LSTM
+\end_layout
 
+\begin_layout Standard
+Stacking LSTM is relatively straight-forward.
+ The output of a memory cell at a layer 
+\emph on
+l
+\emph default
+ is simply rooted to the input of the memory cell at the layer 
+\emph on
+l+1
+\emph default
+.
+ A more refined solution to build deep LSTM networks proposes to connect
+ memory cells of adjacent layers via a gating function called 
+\emph on
+depth gate
+\emph default
+.
+ This model is called a 
+\emph on
+depth-gated LSTM 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "DBLP:journals/corr/YaoCVDD15"
+
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Subsubsection
@@ -4058,6 +4094,143 @@ Constructing features learning from raw data has been extensively studied
 Models such as TDNN, cRBM and convolutional RBMs are well suited for being
  applied to raw data, but most works that construct useful features from
  the input data actually still use input data from pre-processed features
+\end_layout
+
+\begin_layout Subsection
+Memory models
+\end_layout
+
+\begin_layout Standard
+Memorizing sequences involving different temporal granularities seems to
+ be troublesome for neural networks.
+ Recent works have tried to address those issues, typically by increasing
+ the complexity of the temporal architectures introduced before (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sub:Recurrent-Neural-Network"
+
+\end_inset
+
+).
+ An other approach consists in modeling separately computing and memory
+ units, as in a computer.
+\end_layout
+
+\begin_layout Subsubsection
+Stacked-augmented recurrent nets
+\end_layout
+
+\begin_layout Standard
+A stack structure is added to recurrent networks (simple RNN or LSTM).
+ Hence, this memory is accessible only trough its top most element and manipulat
+ed with the 
+\emph on
+push
+\emph default
+, and 
+\emph on
+pop 
+\emph default
+operations, plus a 
+\emph on
+no-op 
+\emph default
+instruction.
+ This action is represented by a 3-dimensional variable 
+\begin_inset Formula $a_{t}$
+\end_inset
+
+ which depends on the state of the hidden variable 
+\begin_inset Formula $h_{t}$
+\end_inset
+
+ :
+\begin_inset Formula 
+\[
+a_{t}=f(Ah_{t})
+\]
+
+\end_inset
+
+Given the value of the stack, the hidden layer is updated as :
+\begin_inset Formula 
+\[
+h_{t}=\sigma(Ux_{t}+Rh_{t-1}+\text{P}s_{t-1}^{k})
+\]
+
+\end_inset
+
+ where 
+\begin_inset Formula $P$
+\end_inset
+
+ is a 
+\begin_inset Formula $m\times k$
+\end_inset
+
+ matrix and 
+\begin_inset Formula $s_{t-1}^{k}$
+\end_inset
+
+ are the 
+\begin_inset Formula $k$
+\end_inset
+
+ top-most element of the stack at time 
+\begin_inset Formula $t-1$
+\end_inset
+
+.
+ With 
+\begin_inset Formula $a_{t}[\text{PUSH]}$
+\end_inset
+
+ being the probability of the PUSH action, the stack is modified as follows
+\begin_inset Formula 
+\[
+s_{t}[0]=a_{t}[PUSH]\sigma(Dh_{t})+a_{t}[POP]s_{t-1}[1]+a_{t}[NO-OP]s_{t-1}[\text{0]}
+\]
+
+\end_inset
+
+for the top of the stack, and for every other index
+\begin_inset Formula 
+\[
+s_{t}[i]=a_{t}[PUSH]s_{t-1}[i-1]+a_{t}[POP]s_{t-1}[i+1]+a_{t}[NO-OP]s_{t-1}[\text{i]}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+FIGURES MOTHERFUCKER
+\end_layout
+
+\begin_layout Standard
+This model can be extended in several ways
+\end_layout
+
+\begin_layout Itemize
+Multiple stacks in parallel
+\end_layout
+
+\begin_layout Itemize
+Other data structure for the memory : lists, heap
+\end_layout
+
+\begin_layout Itemize
+Optimization
+\end_layout
+
+\begin_layout Standard
+Note that as pointed out in the article, 
+\emph on
+LSTM 
+\emph default
+actually implement a kind of memory through its forget gate and is then
+ able to count occurences of different events.
 \end_layout
 
 \begin_layout Section
