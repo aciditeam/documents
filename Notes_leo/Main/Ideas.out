@@ -1,8 +1,0 @@
-\BOOKMARK [0][-]{chapter.1}{Music generation}{}% 1
-\BOOKMARK [0][-]{chapter.2}{Orchestral inference}{}% 2
-\BOOKMARK [1][-]{section.2.1}{Projective symbolic orchestration}{chapter.2}% 3
-\BOOKMARK [2][-]{subsection.2.1.1}{Factored Gated Conditional RBM}{section.2.1}% 4
-\BOOKMARK [1][-]{section.2.2}{Signal/symbolic networks}{chapter.2}% 5
-\BOOKMARK [2][-]{subsection.2.2.1}{Learning step}{section.2.2}% 6
-\BOOKMARK [2][-]{subsection.2.2.2}{Generation step}{section.2.2}% 7
-\BOOKMARK [2][-]{subsection.2.2.3}{Unsolved questions}{section.2.2}% 8
