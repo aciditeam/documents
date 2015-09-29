@@ -1281,6 +1281,20 @@ key "liu1989limited"
 .
 \end_layout
 
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Présenter ici les différentes méthode de gradient descent (AdaGrad, Hesian
+ free, Newton...)
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
 \begin_layout Subsection
 Difficulty of training deep architectures
 \end_layout
@@ -2402,6 +2416,10 @@ This will result in a model that is simpler to apply, and can also be more
 Restricted Boltzmann Machine
 \end_layout
 
+\begin_layout Subsubsection
+Energy function
+\end_layout
+
 \begin_layout Standard
 \begin_inset CommandInset citation
 LatexCommand cite
@@ -2420,7 +2438,7 @@ A Restricted Boltzmann Machine (RBM) is a particular type of Markov random
 observable
 \emph default
 ) units.
- Visible and hidden units aare densely connected by undirected and weighted
+ Visible and hidden units are densely connected by undirected and weighted
  links.
  The joint probability distribution of the visible units 
 \begin_inset Formula $v$
@@ -2609,6 +2627,10 @@ Here the visible unit
  and unit variance.
 \end_layout
 
+\begin_layout Subsubsection
+Training procedure
+\end_layout
+
 \begin_layout Standard
 The probability that the network assigns to an input training vector can
  be raised by lowering its energy, which amounts to adjusting the weights
@@ -2728,12 +2750,171 @@ key "hinton2010practical"
 \end_layout
 
 \begin_layout Subsubsection
+Boltzmann Machine
+\end_layout
+
+\begin_layout Standard
+Note that a more general model exists which is called Boltzmann Machine
+ (BM).
+ The energy function is defined by (omitting biases terms) :
+\begin_inset Formula 
+\[
+E(v,h,\theta)=-\frac{1}{2}v^{\top}Lv-v^{\top}Wh-\frac{1}{2}h^{\top}Jh
+\]
+
+\end_inset
+
+It can be seen in this expression that compared with the RBM, within layer
+ connections are not removed.
+ As for the RBM, the learning procedure proposed by Salakhutdinov 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "salakhutdinov2008learning"
+
+\end_inset
+
+ rely on updating the parameters by comparing
+\emph on
+ data-dependent expectations 
+\emph default
+and 
+\emph on
+model's expectation
+\emph default
+s of the different units.
+ The major issue with this model is that exact inference can not be performed,
+ since the hidden units are now dependent from each other.
+ This make the inference of hidden units under data distribution much more
+ difficult to obtain.
+ 
+\end_layout
+
+\begin_layout Standard
+The 
+\emph on
+model's expectations 
+\emph default
+will be estimated through a Persistent Markov Chain, by running at each
+ epoch of the algorithm a k-step Gibbs sampler thanks to the conditional
+ distributions of the visible and hidden units.
+ Note that a given hidden unit (respectively visible unit) depends on the
+ visible units (resp.
+ hidden) 
+\emph on
+and
+\emph default
+ the other hidden units (reps.
+ visible).
+ Hence, the Gibbs sampling process consists in randomly initializing 
+\emph on
+M fantasy particles 
+\emph default
+before the first epoch 
+\emph on
+
+\begin_inset Formula $\{\tilde{v}^{0,1},\tilde{h}^{0,1}\},...,\{\tilde{v}^{0,M},\tilde{h}^{0,M}\}$
+\end_inset
+
+ 
+\emph default
+and run in parallel 
+\emph on
+M 
+\emph default
+Gibbs chains.
+ After those k sampling steps, the value obtained is used to initialize
+ the first terms of the Gibbs sampler for the next epoch 
+\begin_inset Formula $\{\tilde{v}^{t+1,m},\tilde{h}^{t+1,m}\}_{init}=\{\tilde{v}^{t,m},\tilde{h}^{t,m}\}_{k}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The 
+\emph on
+data-dependent expectations 
+\emph default
+cannot be exactly inferred from the visible units, since they are conditionally
+ dependent between each other.
+ A method called variational learning is used, which roughly consists in
+ approximating the true posterior distribution 
+\begin_inset Formula $p(h|v;\theta)$
+\end_inset
+
+ by a for each training vector 
+\begin_inset Formula $v$
+\end_inset
+
+ by an approximate distribution 
+\begin_inset Formula $q(h|v;\mu)$
+\end_inset
+
+.
+ This distribution is learned by trying to maximize a lower bound on the
+ likelihood of the observed data with respect to the parameter 
+\begin_inset Formula $\mu$
+\end_inset
+
+, the parameter 
+\begin_inset Formula $\theta$
+\end_inset
+
+ being fixed.
+ This gives a simple update rule for the variational parameters, given a
+ vector 
+\begin_inset Formula $v^{n}$
+\end_inset
+
+ from the training set 
+\begin_inset Formula $\mu_{j}^{n}\leftarrow\sigma(\sum_{i}W_{ij}v_{i}^{n}+\sum_{m\backslash j}J_{mj}\mu_{m})$
+\end_inset
+
+ which can then be used as the mean-field value for each hidden units in
+ the parameter update rule (here for W only) :
+\begin_inset Formula 
+\[
+W^{t+1}=W^{t}+\alpha_{t}(\frac{1}{N}\sum_{n=1}^{N}v^{n}(\mu^{n})^{\top}-\frac{1}{M}\sum_{m=1}^{M}\tilde{v}^{t+1,m}(\tilde{h}^{t+1,m})^{\top})
+\]
+
+\end_inset
+
+where 
+\emph on
+N
+\emph default
+ is the number of training example.
+ After each epoch 
+\emph on
+t
+\emph default
+, the learning rate 
+\begin_inset Formula $\alpha_{t}$
+\end_inset
+
+ must be decreased with time in order to guarantee the convergence of the
+ algorithm.
+ More details can be found in the reference article 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "salakhutdinov2008learning"
+
+\end_inset
+
+, but a recommended value is 
+\begin_inset Formula $\alpha_{t}=\frac{1}{t}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection
 Different types of unit
 \end_layout
 
 \begin_layout Standard
-Even though the sigmoïd has been historically the most used type of unit
- and that RBMs were disgned for logistic binary units, other types of units
+Even though the sigmoid has been historically the most used type of unit
+ and that RBMs were designed for logistic binary units, other types of units
  can be set in the layers.
  The main goal of these other types of unit is to handle data which might
  be ill-suited to binary logistic visible units.
@@ -2756,7 +2937,7 @@ Even though the sigmoïd has been historically the most used type of unit
 \end_layout
 
 \begin_layout Paragraph
-Sigmoïd and softmax units
+Sigmoid and softmax units
 \end_layout
 
 \begin_layout Standard
@@ -3572,7 +3753,7 @@ p\left(h_{j}^{1}\mid\mathbf{v},\mathbf{h}^{2}\right)=\sigma\left(\sum_{i}W_{ij}^
 
 \begin_layout Standard
 Hence, the major problem with DBM (as compared to RBM) is that these interaction
-s between hidden units make the posterior of hidden units untractable.
+s between hidden units make the posterior of hidden units intractable.
  To solve this problem, 
 \begin_inset CommandInset citation
 LatexCommand cite
@@ -3611,8 +3792,8 @@ variational learning
 \end_layout
 
 \begin_layout Standard
-In order to maximize this lower-bound, developping the zero derivatives
- with respect to the approximated distribution 
+In order to maximize this lower-bound, developing the zero derivatives with
+ respect to the approximated distribution 
 \begin_inset Formula $Q\left(\mathbf{h}^{1},\mathbf{h}^{2}\right)$
 \end_inset
 
@@ -3641,7 +3822,7 @@ Temporal models
 Unsupervised feature learning and deep learning algorithms were initially
  developed for static data and features.
  Hence, in order to apply these methods to datasets with a clear temporal
- nature, these approaches should be adapted to fit the subtelty and challenges
+ nature, these approaches should be adapted to fit the subtlety and challenges
  raised by time series datasets 
 \begin_inset CommandInset citation
 LatexCommand cite
@@ -4182,7 +4363,7 @@ h_{t}=\sigma(Ux_{t}+Rh_{t-1}+\text{P}s_{t-1}^{k})
 
 .
  With 
-\begin_inset Formula $a_{t}[\text{PUSH]}$
+\begin_inset Formula $a_{t}[PUSH]$
 \end_inset
 
  being the probability of the PUSH action, the stack is modified as follows
@@ -4231,6 +4412,10 @@ LSTM
 \emph default
 actually implement a kind of memory through its forget gate and is then
  able to count occurrences of different events.
+\end_layout
+
+\begin_layout Subsection
+Multimodal models
 \end_layout
 
 \begin_layout Section
@@ -6443,6 +6628,10 @@ t-distributed Stochastic Neighbor Embedding (t-SNE)
 
 \series bold
 SUMMARIZE THE FIRST ARTICLE on t-SNE.
+\end_layout
+
+\begin_layout Standard
+
 \end_layout
 
 \begin_layout Section
