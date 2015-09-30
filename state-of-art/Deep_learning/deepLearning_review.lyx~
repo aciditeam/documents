@@ -3695,6 +3695,14 @@ DBN's can be evaluated by a Monte Carlo based technic called Annealed Importance
 , which is often the best way to evaluate the performances of a model.
  We shortly introduce AIS in its most general context before applying it
  to the DBN model.
+ Those two sections are largely inspired by the work of R.Salakhutdinov
+\begin_inset CommandInset citation
+LatexCommand cite
+key "salakhutdinov2008quantitative"
+
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Paragraph
@@ -3752,9 +3760,13 @@ Suppose that we have two distributions defined on the same space
 \end_inset
 
  are not close enough, the results will be very poor (the variance of the
- estimator will be large).
- Annealed importance sampling address this issue by defining a sequence
- of distribution 
+ estimator ( 
+\begin_inset Formula $\mathbb{V}[\text{\hat{r}}_{IS}]$
+\end_inset
+
+ ) will be very large in high dimension spaces).
+ Annealed importance sampling addresses this issue by defining a sequence
+ of K intermediate distributions 
 \begin_inset Formula 
 \[
 p_{A}=p_{0},...,p_{K}=p_{B}
@@ -3762,7 +3774,158 @@ p_{A}=p_{0},...,p_{K}=p_{B}
 
 \end_inset
 
+Those distribution must respect the following rules
+\end_layout
 
+\begin_layout Enumerate
+\begin_inset Formula $\forall x\in\mathcal{X}$
+\end_inset
+
+, 
+\begin_inset Formula $p_{k}(x)\neq0$
+\end_inset
+
+ if 
+\begin_inset Formula $p_{k+1}(x)\neq0$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+For all 
+\begin_inset Formula $k\in\llbracket0,K\rrbracket$
+\end_inset
+
+, the intermediate unnormalized probabilities 
+\begin_inset Formula $p_{k}^{*}(x)$
+\end_inset
+
+, 
+\begin_inset Formula $x\in\mathcal{X}$
+\end_inset
+
+ must be easily evaluated
+\end_layout
+
+\begin_layout Enumerate
+For each 
+\begin_inset Formula $k\in\llbracket0,K-1\rrbracket$
+\end_inset
+
+, a Markov chain transition operator must be defined such that a sample
+ 
+\begin_inset Formula $x'$
+\end_inset
+
+ can be drawn given a sample 
+\begin_inset Formula $x$
+\end_inset
+
+ 
+\begin_inset Formula 
+\[
+p_{k}(x')=\int T_{k}(x',x)p_{k}(x)dx
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+Samples can be independently drawn from the distribution 
+\begin_inset Formula $p_{A}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The intermediate probabilities are typically set to 
+\begin_inset Formula $p_{k}(x)\propto p_{A}^{*}(x)^{1-\beta_{k}}.p_{B}^{*}(x)^{\beta_{k}}$
+\end_inset
+
+ where 
+\begin_inset Formula $0=\beta_{0}<\beta_{1}<...<\beta_{K}=1$
+\end_inset
+
+.
+ 
+\begin_inset Formula $\beta$
+\end_inset
+
+ is often referred to as the temperature coefficient since the distribution
+ 
+\begin_inset Formula $p_{A}$
+\end_inset
+
+ is gradually 
+\emph on
+melted
+\emph default
+ into the distribution 
+\begin_inset Formula $p_{B}$
+\end_inset
+
+.
+ To compute the importance weights 
+\begin_inset Formula $\omega$
+\end_inset
+
+ we run the following procedure
+\end_layout
+
+\begin_layout Enumerate
+Sample from the initial distribution : 
+\begin_inset Formula $x_{1}\sim p_{A}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+Generate the successive particles thanks to the transitions operator : 
+\begin_inset Formula $x_{k+1}$
+\end_inset
+
+ given 
+\begin_inset Formula $x_{k}$
+\end_inset
+
+ using 
+\begin_inset Formula $T_{k}$
+\end_inset
+
+ for 
+\begin_inset Formula $k$
+\end_inset
+
+ from 1 to 
+\begin_inset Formula $K$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+\begin_inset Formula $\omega=\frac{p_{1}^{*}(x_{1})}{p_{0}^{*}(x_{1})}\frac{p_{2}^{*}(x_{2})}{p_{1}^{*}(x_{2})}...\frac{p_{K}^{*}(x_{K})}{p_{K-1}^{*}(x_{K})}(\approx\frac{Z_{1}}{Z_{0}}\frac{Z_{2}}{Z_{1}}...\frac{Z_{K}}{Z_{K-1}})$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+After M iteration, an approximation of the ratio of the two partition function
+ is given by
+\begin_inset Formula 
+\[
+\frac{Z_{B}}{Z_{A}}\approx\frac{1}{M}\sum_{i=1}^{M}\omega^{(i)}=\hat{r}_{AIS}
+\]
+
+\end_inset
+
+The variance over the AIS estimator can be controlled 
 \end_layout
 
 \begin_layout Paragraph
@@ -3787,9 +3950,9 @@ key "salakhutdinov2009deep"
 .
  Similarly to the RBM, a DBM is a specific type of Boltzmann machine wirh
  layered hidden units.
- However, the DBM is composed of multiple layers, in which conditionnal
- independence is imposed between odd-numbered layers and even-numbered layers
- (still without intra-layer connections).
+ However, the DBM is composed of multiple layers, in which conditional independe
+nce is imposed between odd-numbered layers and even-numbered layers (still
+ without intra-layer connections).
  This allow DBM to directly learn increasingly complex representations but
  also resorting directly to massive amounts of unlabeled data.
  However, unlike DBN, their inference procedure can incorporate top-down
