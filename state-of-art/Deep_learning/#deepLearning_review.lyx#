@@ -3677,98 +3677,6 @@ key "tang2010deep"
 Extend this + FIGURE
 \end_layout
 
-\begin_layout Subsubsection
-Evaluating DBN's
-\end_layout
-
-\begin_layout Standard
-DBN's can be evaluated by a Monte Carlo based technic called Annealed Importance
- Sampling (AIS).
- AIS is a technic to evaluate the partition function of a complex probability
- distribution by approximating this distribution with a much simpler one
- for which the partition function is known.
- Knowing the partition function is a requirement to compute the log-likelihood
- over a test set 
-\begin_inset Formula $\ln(p(v_{test};\theta))$
-\end_inset
-
-, which is often the best way to evaluate the performances of a model.
- We shortly introduce AIS in its most general context before applying it
- to the DBN model.
-\end_layout
-
-\begin_layout Paragraph
-Annealed Importance Sampling (AIS)
-\end_layout
-
-\begin_layout Standard
-Suppose that we have two distributions defined on the same space 
-\begin_inset Formula $\mathcal{X}$
-\end_inset
-
-.
- Their probability density functions are given by the ratio of an unnormalized
- probability and a partition function : 
-\begin_inset Formula $p_{A}=\frac{p_{A}^{*}(x)}{Z_{A}}$
-\end_inset
-
- and 
-\begin_inset Formula $p_{B}(x)=\frac{p_{_{B}^{*}(x)}}{Z_{B}}$
-\end_inset
-
-.
- Typically, 
-\begin_inset Formula $p_{A}$
-\end_inset
-
- is defined as a simple distribution for which the partition function 
-\begin_inset Formula $Z_{A}$
-\end_inset
-
- is known.
- 
-\begin_inset Formula $p_{B}$
-\end_inset
-
- is an unknown complex distribution for which the partition function is
- intractable.
- AIS estimates the ratio of the two partition functions 
-\begin_inset Formula $\frac{Z_{A}}{Z_{B}}$
-\end_inset
-
-, from which 
-\begin_inset Formula $Z_{B}$
-\end_inset
-
- is easy to obtain.
- Importance Sampling method consists in directly evaluating this ratio by
- sampling from the distribution equal to the ration of those two functions.
- A major issue with Importance Sampling is that if the distribution 
-\begin_inset Formula $p_{A}$
-\end_inset
-
- and 
-\begin_inset Formula $p_{B}$
-\end_inset
-
- are not close enough, the results will be very poor (the variance of the
- estimator will be large).
- Annealed importance sampling addresses this issue by defining a sequence
- of distribution 
-\begin_inset Formula 
-\[
-p_{A}=p_{0},...,p_{K}=p_{B}
-\]
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Paragraph
-AIS in a DBN
-\end_layout
-
 \begin_layout Subsection
 Deep Boltzmann Machine
 \end_layout
@@ -3881,7 +3789,7 @@ variational learning
 \end_inset
 
  is minimized.
- This is equivalent to maximizing a lower bound on the log-likelihood
+ This is equivalent to maximizing a lower on the log-likelihood
 \begin_inset Formula 
 \[
 \mathcal{L}\left(Q\right)=\sum_{h^{1}}\sum_{h^{2}}Q\left(\mathbf{h}^{1},\mathbf{h}^{2}\right)\mbox{log}\left(\frac{P\left(\mathbf{h}^{1},\mathbf{h}^{2}\mid\mathbf{v}\right)}{Q\left(\mathbf{h}^{1},\mathbf{h}^{2}\right)}\right)
@@ -3923,20 +3831,11 @@ Pre-training DBM's
 A greedy layer-wise unsupervised pre-training step can be used to speed
  up the training phase by initializing the weights to sensible values and
  gives a fast approximate inference of the hidden units which ca be used
- to initialize the mean-field methods 
-\begin_inset CommandInset citation
-LatexCommand cite
-key "salakhutdinov2010efficient,salakhutdinov2009learning"
-
-\end_inset
-
-.
+ to initialize the mean-field methods.
 \end_layout
 
 \begin_layout Standard
 Simply stacking RBM's on top of each other does not form a DBM.
- Instead, it forms an a model called Deep Belief Network (DBN) formed by
- a top undirected RBM (kind of a memory) and a directed sigmoid belief networks.
  Indeed, except the top two layers which form a undirected RBM, all the
  other group of layers are now composed by top-down connections since the
  last modifications their weights suffered was when they were considered
@@ -3971,8 +3870,7 @@ where
 \begin_inset Formula $p(h^{1};W^{2})=\sum_{h^{2}}p(h^{1},h^{2};W^{2})$
 \end_inset
 
-.
- This is what is done in a deep belief network.
+ .
  In a DBM, 
 \begin_inset Formula $h^{1}$
 \end_inset
@@ -3985,7 +3883,7 @@ where
 \begin_inset Formula $W^{2}$
 \end_inset
 
-, and it is possible to roughly approximate the prior over 
+, and it is possible to approximate the prior over 
 \begin_inset Formula $h^{1}$
 \end_inset
 
@@ -4000,59 +3898,8 @@ p(h^{1};W^{1},W^{2})=\frac{1}{2}\sum_{v}p(h^{1},v;W^{1})+\frac{1}{2}\sum_{h^{2}}
 
 \end_layout
 
-\begin_layout Standard
-To eliminate the doubling effect, a solution consists in doubling the visible
- units.
- Hence, two matrices 
-\begin_inset Formula $W^{1}$
-\end_inset
-
- between visible and first layer hidden units are created.
- The weights of those to matrices are tied during the training phase.
- The same trick is used for the top-most RBM, where hidden last layer is
- duplicated.
- For the middle RBM, the weights are simply multiplied by two.
- Once separately trained, the RBM's are simply stacked by dividing the weights
- in the middle layer by two and taking only one of the two matrices for
- the extreme layers.
- The bottom and top most RBM's can not have their weights simply doubled,
- because when stacking the RBM's those layer won't have a lower (respectively
- upper) layer and their weights won't be doubled.
- Indeed, simply doubling the visible-to-first_hidden connections would have
- lead to 
-\begin_inset Formula $p(v|h^{1})=\sigma(\bm{2}\sum_{j}W_{ij}^{1}h_{j}^{1})$
-\end_inset
-
-.
-\end_layout
-
-\begin_layout Standard
-Those initial weights can be used to approximately infer the hidden units
- given a training vector, which is useful to speed-up the mean-field algorithm
- by initializing it in configuration closest to the fixed point than when
- a random initialization is used.
- Inference is performed through a simple bottom-up pass, and the weights
- of the matrices has to be doubled, to compensate the absence of top-down
- influences.
-\end_layout
-
-\begin_layout Standard
-Intuitively, this can be explained by the fact that when trained separately,
- the RBM's compensate the lack of top-down input (respectively bottom-up)
- by doubling its weights.
- Replicating units or doubling weights 
-\emph on
-simulate
-\emph default
- the presence of a top and bottom layer.
-\end_layout
-
 \begin_layout Subsubsection
 Evaluating DBM's
-\end_layout
-
-\begin_layout Standard
-
 \end_layout
 
 \begin_layout Subsection
