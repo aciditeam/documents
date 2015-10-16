@@ -6081,13 +6081,28 @@ Symbolic
 Pianoroll
 \end_layout
 
+\begin_layout Standard
+The most standard representation for symbolic music is probably the pianoroll,
+ which naturally flows from the discrete representation of time and pitches
+ underlying in every written piece of music.
+ In occidental music, this discretization is embodied by the beat and the
+ placement of notes on staves.
+ Hence, a pianoroll is matrix whose column represent successive time frames
+ and lines are associated with a pitch.
+ If the pitch discretization is often an half tone, many different time
+ scale can be used to define the pianoroll.
+ The behavior of a system built on this representation will be highly dependent
+ on this time quantification and this is a hot point.
+\end_layout
+
 \begin_layout Paragraph
 From a sparse binary representation to a real-valued distributed representation
+ ?
 \end_layout
 
 \begin_layout Standard
-Pianoroll representations are often sparse, which is not a desirable property
- for the input data of a network.
+Pianoroll representations leads for each time frame to highly sparse vectors,
+ which is not a desirable property for the input data of a network.
  It would be more interesting to work with a distributed real-valued representat
 ion which would be more compact and meaningful.
  In Natural Language Processing (NLP) the most basic representation consists
@@ -6216,8 +6231,229 @@ where
  the word originally in the sequence.
 \end_layout
 
+\begin_layout Standard
+However, I (Léo) believe that this transformation is not adapted for musical
+ representation.
+ Indeed, to adapt the log-bilinear transformation to musical vectors would
+ first imply that we map the standard representation (over the 88 pitches)
+ on a one-hot encoding.
+ This would imply a dictionary size of the number of possible combination,
+ which is 
+\begin_inset Formula $\begin{pmatrix}88\\
+1
+\end{pmatrix}+\begin{pmatrix}88\\
+2
+\end{pmatrix}+\begin{pmatrix}88\\
+3
+\end{pmatrix}+\begin{pmatrix}88\\
+4
+\end{pmatrix}=2.445.542$
+\end_inset
+
+ for a single instrument restricted to 4 voices and 
+\begin_inset Formula $\begin{pmatrix}360\\
+1
+\end{pmatrix}+...+\begin{pmatrix}360\\
+15
+\end{pmatrix}>1\times10^{26}$
+\end_inset
+
+ for an orchestra of 15 instruments.
+ This is a by considering a very restrictive case where each instrument
+ can only play on two octaves (
+\begin_inset Formula $360=15*24$
+\end_inset
+
+) and they all play a single note at the same time in the worst case (
+\begin_inset Formula $1$
+\end_inset
+
+to
+\begin_inset Formula $15$
+\end_inset
+
+).
+ The size of the dictionary for the orchestral case prevent us from applying
+ directly this technic in the context of automatic orchestration.
+ However, we still believe that a better representation must be found in
+ order to avoid the sparse vector we obtain with a simple pianoroll representati
+on.
+\end_layout
+
+\begin_layout Paragraph
+Voice leading : Partial permutations
+\end_layout
+
+\begin_layout Standard
+The pianoroll representation does not suggest any link between time and
+ harmony.
+ However, the voice leading technic used from the medieval music to many
+ contemporary jazzmen suggests an intimate relation between those two dimension.
+ Being able to include those relations as a prior in our representation
+ can be an interesting lead.
+ The work presented in (REF MATTIA) rely on multiset theory to define a
+ voice leading as a product of partial permutation matrices.
+ If we consider a voice leading of 
+\begin_inset Formula $n$
+\end_inset
+
+ voices, it can be seen as a sequence of chords defined for each time frame.
+ Each chord can be represented by a multiset 
+\begin_inset Formula $M$
+\end_inset
+
+ which is composed by a set and a multiplicity function 
+\begin_inset Formula $(X_{M},\mu_{M})$
+\end_inset
+
+.
+ The set enumerates the pitches present in the chord, and the multiplicity
+ function translates the fact that two different voices can at a certain
+ moment have the exact same pitch (e.g.
+ a 4 voices voice leading collapse into a 3 voices one).
+ If the next chord is represented by the multiset 
+\begin_inset Formula $L=(X_{L},\mu_{L})$
+\end_inset
+
+, then the voice leading between 
+\begin_inset Formula $M$
+\end_inset
+
+ and 
+\begin_inset Formula $L$
+\end_inset
+
+ can be described by a partial permutation 
+\begin_inset Formula $P$
+\end_inset
+
+ in the multiset 
+\begin_inset Formula $M\cup L=(X_{M}\cup X_{L},\mu_{M\cup L})$
+\end_inset
+
+ where 
+\begin_inset Formula $\mu_{M\cup L}=max(\mu_{M},\mu_{L})$
+\end_inset
+
+ (see article for details).
+ 
+\end_layout
+
+\begin_layout Standard
+Those partial permutation matrices 
+\begin_inset Formula $P$
+\end_inset
+
+ could then be used as an other data representation to feed a network.
+ The first obvious step is transform those matrices into one dimensional
+ representations.
+ Considering aa sequence of partial permutation matrices 
+\begin_inset Formula $P_{1}...P_{N}$
+\end_inset
+
+, we can define 
+\begin_inset Formula $N$
+\end_inset
+
+ vectors 
+\begin_inset Formula $\hat{p}_{1}...\hat{p}_{N}$
+\end_inset
+
+, corresponding to the N time frames, by simply concatenating the columns
+ of the permutations matrices.
+ Dynamics can then be added to this representation by introducing multiplicative
+ coefficient instead of 0 and 1 in the matrices.
+ For instance, if the transition between the 
+\begin_inset Formula $i^{th}$
+\end_inset
+
+note and the 
+\begin_inset Formula $j^{th}$
+\end_inset
+
+note exists, instead of describing it as 
+\begin_inset Formula $p(i,j)=1$
+\end_inset
+
+, we would now describe it as 
+\begin_inset Formula $p(i,j)=\frac{d(j,t+1)}{d(i,t)}$
+\end_inset
+
+ if 
+\begin_inset Formula $d(i,t)\neq0$
+\end_inset
+
+ else 
+\begin_inset Formula $p(i,j)=d(j,t+1)$
+\end_inset
+
+ where 
+\begin_inset Formula $d(i,t)$
+\end_inset
+
+ is the dynamic of the note i at the time t.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+PROBLEME : c'est de la merde comme représentation...
+ si 
+\begin_inset Formula $d(i,t)=0$
+\end_inset
+
+, 
+\begin_inset Formula $d(j,t+1)=1$
+\end_inset
+
+ n'a pas du tout le même sens que si 
+\begin_inset Formula $d(i,t)=0,1$
+\end_inset
+
+ et 
+\begin_inset Formula $d(j,t+1)=1$
+\end_inset
+
+ pourtant 
+\begin_inset Formula $d(j,t+1)$
+\end_inset
+
+ a la même valeur dans les deux cas.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+However, some issues must still be resolved in order to use this representation.
+ Indeed, if a voice leading occurs between two multisets 
+\emph on
+M
+\emph default
+ and 
+\emph on
+L, 
+\emph default
+the succession of permutation matrices does not give the successive sets
+ 
+\emph on
+L
+\emph default
+.
+ An other network could be used to dig the next multiset given the previous,
+ but this lead us back to the pianoroll representation...
+\end_layout
+
 \begin_layout Subsubsection
 Dimensionality reduction
+\end_layout
+
+\begin_layout Standard
+PCA POUR DONNEES DISCRETES ????
 \end_layout
 
 \begin_layout Paragraph
