@@ -97,6 +97,22 @@ While being self-sufficient, those notes focus on the recent results in
 \end_layout
 
 \begin_layout Chapter
+Some concepts
+\end_layout
+
+\begin_layout Section
+Neural plasticity
+\end_layout
+
+\begin_layout Standard
+Neuroplasticity refers to the fact that the brain is able to modify its
+ behavior when facing a new event or a modification of its environment.
+ It actually refers to two different things : synaptic and non-synaptic
+ plasticity.
+ Synaptic 
+\end_layout
+
+\begin_layout Chapter
 Music generation
 \end_layout
 
@@ -263,6 +279,10 @@ Which pre-processing ? Cochlear transform
 Symbolic network
 \end_layout
 
+\begin_layout Paragraph
+Data representation
+\end_layout
+
 \begin_layout Itemize
 Can't use Skip-thought vectors : a solution would have been to encode all
  the possible vectors in a one-hot representation and then encode them through
@@ -292,6 +312,11 @@ Can't use Skip-thought vectors : a solution would have been to encode all
 \end_inset
 
  for an orchestral representation.
+\end_layout
+
+\begin_layout Itemize
+Actually, the log-bilinear model is really not adapted, since we have to
+ take dynamics into consideration.
 \end_layout
 
 \begin_layout Itemize

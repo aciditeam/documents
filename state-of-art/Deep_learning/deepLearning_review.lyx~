@@ -932,11 +932,109 @@ These functions are more successful in the case where neural networks are
 \end_layout
 
 \begin_layout Paragraph
-Rectified linear
+Noisy Rectified linear
 \end_layout
 
 \begin_layout Standard
+The original idea of the rectified linear units was to use N units to model
+ a discrete variable that could take N different values.
+ The N units share the same weights and biases, and the outputted number
+ was simply the number of units being on.
+ The inappropriate behavior of those units for extreme values of the activation
+ probability 
+\begin_inset Formula $p$
+\end_inset
 
+lead to another representation Stepped Sigmoid Units (SSU) which still used
+ N units, but with a regularly increasing bias 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "nair2010rectified"
+
+\end_inset
+
+.
+ However, this method require an increasing number of sampling when N increase.
+ A good yet simple approximation of the N unit is given by the Noisy Rectified
+ Linear Unit (NReLU) whose probability distribution is directly given by
+ 
+\begin_inset Formula 
+\[
+\phi(x)=\max(0,x+\mathcal{N}(0,\sigma(x)))
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+where 
+\begin_inset Formula $\mathcal{N}(0,v)$
+\end_inset
+
+ is a Gaussian noise of variance 
+\begin_inset Formula $v$
+\end_inset
+
+ and 
+\begin_inset Formula $x=W.h+b_{v}$
+\end_inset
+
+ is the input of the visible unit.
+\end_layout
+
+\begin_layout Standard
+Just some notes about why does ReLU work : how to model a discrete variable
+ with N states ? With N binary unit, the output is equal to 
+\begin_inset Formula $n\in\{0,N-1\}$
+\end_inset
+
+ where 
+\begin_inset Formula $n$
+\end_inset
+
+ is the number of units being on.
+ Hence, the mean value is 
+\begin_inset Formula $Np$
+\end_inset
+
+ and variance 
+\begin_inset Formula $Np(p-1)$
+\end_inset
+
+.
+ For a small value of 
+\begin_inset Formula $p$
+\end_inset
+
+, this is equivalent to a Poisson unit.
+ The problem is that the variance is exponential in 
+\begin_inset Formula $p$
+\end_inset
+
+ and becomes very close to 0 for 
+\begin_inset Formula $p$
+\end_inset
+
+ close to 1.
+ A solution is to use Stepped Sigmoid Units (SSU) which is a sum of sigmoids
+ units which share the same weights but with a constantly increasing bias.
+ The sum of their probability is approximately equal to 
+\begin_inset Formula $\log(1+\exp(x))$
+\end_inset
+
+ (D = sum SSU
+\begin_inset Formula $\approx\text{integral diff(log(1+exp(x)))}$
+\end_inset
+
+).
+ 
+\begin_inset Formula $\phi$
+\end_inset
+
+ is then a good approximation of this function.
+ 
 \end_layout
 
 \begin_layout Paragraph
@@ -1287,7 +1385,7 @@ status open
 
 \begin_layout Plain Layout
 Présenter ici les différentes méthode de gradient descent (AdaGrad, Hesian
- free, Newton...)
+ free, Newton...) dans Applying deep learning
 \end_layout
 
 \end_inset
@@ -6392,9 +6490,15 @@ note exists, instead of describing it as
 \end_inset
 
  is the dynamic of the note i at the time t.
+ Another solution could be to add a vector of size the number of voices
+ containing the dynamics.
 \end_layout
 
 \begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
 PROBLEME : c'est de la merde comme représentation...
  si 
 \begin_inset Formula $d(i,t)=0$
@@ -6417,6 +6521,11 @@ PROBLEME : c'est de la merde comme représentation...
 \end_inset
 
  a la même valeur dans les deux cas.
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -6762,6 +6871,38 @@ When a variety of pre-processing operations are applied to training data,
 y to preprocess the labeled test data.
  Indeed the algorithm learns to exploit statistical regularities in this
  transformed (rotated) space.
+\end_layout
+
+\begin_layout Subsection
+Optimizations
+\end_layout
+
+\begin_layout Standard
+Most of the training procedure for neural networks are eventually resumed
+ to an optimization problem, either to find the minimum of a cost function
+ 
+\emph on
+E 
+\emph default
+or, in energy models, lower the energy function around training examples.
+ The functions to be optimized are most of the time continuous, non-linear
+ and defined over large multidimensional spaces (the space of the parameters
+ of the network).
+ A first set of non-linear optimization technics make the assumption that
+ the surface defined by the error function on the parameter space is smooth
+ and convex.
+ They indeed consist in following the steepest path on this surface.
+ In this section, we will review the gradient descent algorithm, which is
+ probably the most commonly used, and the many other that derived from it,
+ such as adaptive algorithms and use of second order derivatives.
+ 
+\end_layout
+
+\begin_layout Standard
+The recent trend is to build increasingly large neural network and the dimension
+ of the parameter space over which optimization is performed becomes very
+ high (REFERECNBE).
+ Several consequences follows from this observation
 \end_layout
 
 \begin_layout Subsection
