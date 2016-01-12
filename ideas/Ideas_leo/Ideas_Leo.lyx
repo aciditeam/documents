@@ -87,7 +87,7 @@ Notes
 \end_layout
 
 \begin_layout Author
-Léo
+Léo for 4<!|>!734|v|
 \end_layout
 
 \begin_layout Standard
@@ -97,7 +97,7 @@ While being self-sufficient, those notes focus on the recent results in
 \end_layout
 
 \begin_layout Chapter
-Some concepts
+Existing concepts
 \end_layout
 
 \begin_layout Section
@@ -110,6 +110,116 @@ Neuroplasticity refers to the fact that the brain is able to modify its
  It actually refers to two different things : synaptic and non-synaptic
  plasticity.
  Synaptic 
+\end_layout
+
+\begin_layout Section
+Temporal models
+\end_layout
+
+\begin_layout Subsection
+Time series labelling
+\end_layout
+
+\begin_layout Standard
+Time series labelling is a supervised task which consists in inferring a
+ sequence of labels given an sequence of observations.
+ Markov models rapidly showed their limit.
+ Dynamic programming allows only small discrete state spaces and the temporal
+ modeling is limited to very short-term relations.
+ Recurrent Neural Networks (RNN) and successors (LSTM) are more powerful
+ models which allows to model complex distribution and able to grasp relatively
+ long-range dependencies.
+ Those models are trained thanks to the Back-Propagation Through Time (BPTT)
+ algorithm.
+ It basically consists in propagating the gradient of an error function
+ at time 
+\begin_inset Formula $t$
+\end_inset
+
+ through an unfolded recurrent network.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename /Users/leo/Recherche/GitHub_Aciditeam/documents/figures/Temporal_models/RNN/RNN_unfolded.pdf
+	scale 50
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+At time 
+\begin_inset Formula $t$
+\end_inset
+
+, the input unit i is called
+\begin_inset Formula $x_{i}^{t}$
+\end_inset
+
+, the input of the hidden unit h 
+\begin_inset Formula $net_{h}^{t}$
+\end_inset
+
+, its output 
+\begin_inset Formula $h_{h}^{t}$
+\end_inset
+
+, the input of the unit k in the last layer is 
+\begin_inset Formula $a_{k}$
+\end_inset
+
+ and its output 
+\begin_inset Formula $y_{k}$
+\end_inset
+
+.
+ If the objective function at time
+\begin_inset Formula $T$
+\end_inset
+
+ is given by 
+\begin_inset Formula $O=\mathcal{L}(\bm{z}-\text{\bm{y)}}$
+\end_inset
+
+ where 
+\begin_inset Formula $\text{\bm{z}}$
+\end_inset
+
+ is the target and 
+\begin_inset Formula $\mathcal{L}$
+\end_inset
+
+ any measure between the two sequences, we call 
+\begin_inset Formula $\delta_{h}^{t}=\frac{\partial O}{\partial net_{h}^{t}}$
+\end_inset
+
+ the derivative of the cost function with respect to the input of the 
+\begin_inset Formula $j^{th}$
+\end_inset
+
+ hidden unit at any time 
+\begin_inset Formula $t\le T$
+\end_inset
+
+.
+ 
+\begin_inset Formula $\delta_{k}^{t}=\frac{\partial O}{\partial a_{k}}$
+\end_inset
+
+ is defined for the last layer and can be computed as in any non recursive
+ layer.
+ Hence the chain rule derived in the unfolded network give the following
+ recursive expression
+\begin_inset Formula 
+\[
+\delta_{h}^{t}=\theta^{'}(net_{h}^{t}).(\sum_{k}\delta_{k}^{t}W_{hk}+\sum_{h'}\delta_{h'}^{t+1}W_{h'h})
+\]
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Chapter

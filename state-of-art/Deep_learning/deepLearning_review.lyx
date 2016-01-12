@@ -2797,7 +2797,7 @@ key "hinton2006fast"
  given number of full steps.
  Interestingly, even though this Gibbs chain should be runned to infinity,
  it appears that a single full step is sufficient to obtain satisfactory
- results.
+ results (cf annexe, MCMC).
  A “reconstruction” is produced by setting each visible unit 
 \begin_inset Formula $v_{i}$
 \end_inset
@@ -3188,6 +3188,10 @@ Even though
  of binary units with shared weights and fixed bias offsets.
  This set has no more parameters than an ordinary binary unit, but it provides
  a much more expressive variable.
+\end_layout
+
+\begin_layout Subsubsection
+Sampling from a RBM
 \end_layout
 
 \begin_layout Subsubsection
@@ -4029,6 +4033,10 @@ The variance over the AIS estimator can be easily controlled
 AIS in a DBN
 \end_layout
 
+\begin_layout Subsubsection
+Sampling from a DBN
+\end_layout
+
 \begin_layout Subsection
 Deep Boltzmann Machine
 \end_layout
@@ -4045,7 +4053,7 @@ key "salakhutdinov2009deep"
 \end_inset
 
 .
- Similarly to the RBM, a DBM is a specific type of Boltzmann machine wirh
+ Similarly to the RBM, a DBM is a specific type of Boltzmann machine with
  layered hidden units.
  However, the DBM is composed of multiple layers, in which conditional independe
 nce is imposed between odd-numbered layers and even-numbered layers (still
@@ -4514,6 +4522,10 @@ key "DBLP:journals/corr/YaoCVDD15"
 \end_inset
 
 .
+\end_layout
+
+\begin_layout Paragraph
+Grammar cells
 \end_layout
 
 \begin_layout Subsubsection
@@ -6905,6 +6917,18 @@ The recent trend is to build increasingly large neural network and the dimension
 \end_layout
 
 \begin_layout Subsection
+Training mechanisms
+\end_layout
+
+\begin_layout Subsubsection
+Attention learning
+\end_layout
+
+\begin_layout Subsubsection
+Adversarial nets
+\end_layout
+
+\begin_layout Subsection
 Hyper-parameters analysis
 \end_layout
 
@@ -7786,6 +7810,14 @@ key "olshausen1997sparse,kavukcuoglu2009learning"
 \end_inset
 
 , or semi-supervised embedding 
+\end_layout
+
+\begin_layout Section
+Annexes
+\end_layout
+
+\begin_layout Subsection
+Hybrid Monte-Carlo
 \end_layout
 
 \begin_layout Section
