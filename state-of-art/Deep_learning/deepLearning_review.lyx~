@@ -7813,6 +7813,136 @@ key "olshausen1997sparse,kavukcuoglu2009learning"
 \end_layout
 
 \begin_layout Section
+Annexes
+\end_layout
+
+\begin_layout Subsection
+Hybrid Monte-Carlo sampling
+\end_layout
+
+\begin_layout Standard
+See
+\begin_inset CommandInset href
+LatexCommand href
+name "tutorial HMC Theano"
+target "http://deeplearning.net/tutorial/hmc.html#neal93"
+
+\end_inset
+
+ for details.
+ Negative particles in energy based models are usually obtained through
+ block Gibbs sampling.
+ In some particular cases, the conditional distributions 
+\begin_inset Formula $p(v|h)$
+\end_inset
+
+ and 
+\begin_inset Formula $p(h|v)$
+\end_inset
+
+ that defines the transition operators for the MCMC cannot be sampled from.
+ An alternative solution when sampling from continuous variables is to use
+ Hybrid Monte Carlo (HMC).
+ Samples drawn from the model are represented as particles 
+\begin_inset Formula $\chi$
+\end_inset
+
+ in a physical system, with a state 
+\begin_inset Formula $s$
+\end_inset
+
+ and a speed 
+\begin_inset Formula $\phi$
+\end_inset
+
+.
+ Hence, the Hamiltonian of the system is defined as the sum of the potential
+ (
+\begin_inset Formula $E)$
+\end_inset
+
+ and kinetic (
+\begin_inset Formula $K)$
+\end_inset
+
+ energies :
+\begin_inset Formula 
+\[
+\mathcal{H}(s,\phi)=E(s)+K(\phi)=E(s)+\frac{1}{2}\sum_{i}\phi_{i}^{2}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The potential energy is the one defined in the model by the architecture
+ and value of the different units.
+ The goal is to estimate the distribution 
+\begin_inset Formula $p(s,\phi)=\frac{1}{Z}\exp(-\mathcal{H}(s,\phi))=p(s)p(\phi)$
+\end_inset
+
+ from which it is easy to recover 
+\begin_inset Formula $p(s)$
+\end_inset
+
+.
+ The Hamiltonian obey a certain dynamic given by two differential equations.
+ The leap-frog algorithm is a discretization along the time axis of those
+ equations which allow us set to deterministically compute 
+\begin_inset Formula $s$
+\end_inset
+
+ and 
+\begin_inset Formula $\phi$
+\end_inset
+
+ at the next time step 
+\begin_inset Formula $t+\epsilon$
+\end_inset
+
+ knowing them at time 
+\begin_inset Formula $t$
+\end_inset
+
+.
+ The algorithm consists in alternating 
+\end_layout
+
+\begin_layout Itemize
+Gibbs sampling of the velocity 
+\begin_inset Formula $\phi\sim p(\phi|s)=p(\phi)$
+\end_inset
+
+, since those two variables are independent.
+ A uni-variate gaussians is often chosen for 
+\begin_inset Formula $p(\phi)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Itemize
+n step of the leap-frog algorithm to obtain a new position 
+\begin_inset Formula $\chi'=(s',\phi')$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Itemize
+perform accept/reject move of 
+\begin_inset Formula $\chi'$
+\end_inset
+
+.
+ Rounding errors and the use of a discrete time step in the leap-frog algorithm
+ can introduce important biases.
+ The Mtropolis rejecting criterion 
+\end_layout
+
+\begin_layout Section
 General infos
 \end_layout
 
